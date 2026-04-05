@@ -1,0 +1,232 @@
+// This Pine Script™ is subject to the terms of the Mozilla Public License 2.0
+// https://mozilla.org/MPL/2.0/
+// © Bot- Project
+
+//@version=5
+indicator("BTC 5min Support & Resistance - Polymarket Signal", overlay=true, max_lines_count=500, max_labels_count=500)
+
+// ─── INPUTS ───────────────────────────────────────────────────────────────────
+lookbackPeriod    = input.int(12,   "Lookback Perioden (5min Kerzen)",  minval=3, maxval=50)
+pivotStrength     = input.int(2,    "Pivot Stärke",                     minval=1, maxval=5)
+zoneThreshold     = input.float(0.15, "Zonen-Zusammenführung (%)",      minval=0.01, maxval=1.0, step=0.01)
+showZones         = input.bool(true,  "Support/Resistance Zonen anzeigen")
+showSignals       = input.bool(true,  "UP/DOWN Signale anzeigen")
+showDashboard     = input.bool(true,  "Dashboard anzeigen")
+
+// Farben
+colorResistance   = input.color(color.new(color.red, 70),    "Resistance Farbe")
+colorSupport      = input.color(color.new(color.green, 70),  "Support Farbe")
+colorBullish      = input.color(color.new(color.lime, 0),    "Bullish Signal")
+colorBearish      = input.color(color.new(color.red, 0),     "Bearish Signal")
+
+// ─── PIVOT BERECHNUNG ─────────────────────────────────────────────────────────
+pivotHigh = ta.pivothigh(high, pivotStrength, pivotStrength)
+pivotLow  = ta.pivotlow(low, pivotStrength, pivotStrength)
+
+// ─── SUPPORT/RESISTANCE ARRAYS ────────────────────────────────────────────────
+var float[] resistanceLevels = array.new_float(0)
+var float[] supportLevels    = array.new_float(0)
+var int[]   resistanceTouches = array.new_int(0)
+var int[]   supportTouches    = array.new_int(0)
+
+// Neue Pivot Highs als Resistance hinzufügen
+if not na(pivotHigh)
+    merged = false
+    if array.size(resistanceLevels) > 0
+        for i = 0 to array.size(resistanceLevels) - 1
+            existing = array.get(resistanceLevels, i)
+            if math.abs(pivotHigh - existing) / existing * 100 < zoneThreshold
+                // Zone zusammenführen (Durchschnitt)
+                array.set(resistanceLevels, i, (existing + pivotHigh) / 2)
+                array.set(resistanceTouches, i, array.get(resistanceTouches, i) + 1)
+                merged := true
+                break
+    if not merged
+        array.push(resistanceLevels, pivotHigh)
+        array.push(resistanceTouches, 1)
+
+// Neue Pivot Lows als Support hinzufügen
+if not na(pivotLow)
+    merged = false
+    if array.size(supportLevels) > 0
+        for i = 0 to array.size(supportLevels) - 1
+            existing = array.get(supportLevels, i)
+            if math.abs(pivotLow - existing) / existing * 100 < zoneThreshold
+                array.set(supportLevels, i, (existing + pivotLow) / 2)
+                array.set(supportTouches, i, array.get(supportTouches, i) + 1)
+                merged := true
+                break
+    if not merged
+        array.push(supportLevels, pivotLow)
+        array.push(supportTouches, 1)
+
+// Alte Levels entfernen (max lookback beibehalten)
+maxLevels = lookbackPeriod
+if array.size(resistanceLevels) > maxLevels
+    array.shift(resistanceLevels)
+    array.shift(resistanceTouches)
+if array.size(supportLevels) > maxLevels
+    array.shift(supportLevels)
+    array.shift(supportTouches)
+
+// ─── NÄCHSTE S/R LEVELS FINDEN ────────────────────────────────────────────────
+float nearestResistance = na
+float nearestSupport    = na
+int   resTouches        = 0
+int   supTouches        = 0
+
+if array.size(resistanceLevels) > 0
+    for i = 0 to array.size(resistanceLevels) - 1
+        level = array.get(resistanceLevels, i)
+        if level > close
+            if na(nearestResistance) or level < nearestResistance
+                nearestResistance := level
+                resTouches := array.get(resistanceTouches, i)
+
+if array.size(supportLevels) > 0
+    for i = 0 to array.size(supportLevels) - 1
+        level = array.get(supportLevels, i)
+        if level < close
+            if na(nearestSupport) or level > nearestSupport
+                nearestSupport := level
+                supTouches := array.get(supportTouches, i)
+
+// ─── DISTANZ-BERECHNUNG ───────────────────────────────────────────────────────
+distToResistance = not na(nearestResistance) ? (nearestResistance - close) / close * 100 : na
+distToSupport    = not na(nearestSupport) ? (close - nearestSupport) / close * 100 : na
+
+// ─── MOMENTUM & TREND INDIKATOREN ─────────────────────────────────────────────
+ema9      = ta.ema(close, 9)
+ema21     = ta.ema(close, 21)
+rsi       = ta.rsi(close, 14)
+macdLine  = ta.ema(close, 12) - ta.ema(close, 26)
+signalLine = ta.ema(macdLine, 9)
+macdHist  = macdLine - signalLine
+
+// Volume-Analyse
+avgVol       = ta.sma(volume, 20)
+volRatio     = volume / avgVol
+highVolume   = volRatio > 1.5
+
+// ─── SIGNAL-LOGIK (UP/DOWN für 5min Bet) ──────────────────────────────────────
+// Bullish Score (0-100)
+bullScore = 0.0
+bullScore += close > ema9 ? 15.0 : 0.0
+bullScore += ema9 > ema21 ? 15.0 : 0.0
+bullScore += rsi > 50 and rsi < 70 ? 15.0 : 0.0
+bullScore += macdHist > 0 ? 10.0 : 0.0
+bullScore += macdHist > macdHist[1] ? 10.0 : 0.0
+bullScore += not na(nearestSupport) and distToSupport < 0.1 ? 15.0 : 0.0   // Nahe Support = Bounce
+bullScore += not na(nearestResistance) and distToResistance > 0.3 ? 10.0 : 0.0  // Weit von Resistance
+bullScore += highVolume and close > open ? 10.0 : 0.0
+
+// Bearish Score (0-100)
+bearScore = 0.0
+bearScore += close < ema9 ? 15.0 : 0.0
+bearScore += ema9 < ema21 ? 15.0 : 0.0
+bearScore += rsi < 50 and rsi > 30 ? 15.0 : 0.0
+bearScore += macdHist < 0 ? 10.0 : 0.0
+bearScore += macdHist < macdHist[1] ? 10.0 : 0.0
+bearScore += not na(nearestResistance) and distToResistance < 0.1 ? 15.0 : 0.0  // Nahe Resistance = Abprall
+bearScore += not na(nearestSupport) and distToSupport > 0.3 ? 10.0 : 0.0  // Weit von Support
+bearScore += highVolume and close < open ? 10.0 : 0.0
+
+// Signal-Bestimmung
+signalThreshold = 60.0
+isBullish = bullScore >= signalThreshold and bullScore > bearScore
+isBearish = bearScore >= signalThreshold and bearScore > bullScore
+
+// Nur bei neuen Signalen (kein Wiederholen)
+bullSignal = isBullish and not isBullish[1]
+bearSignal = isBearish and not isBearish[1]
+
+// ─── ZONEN ZEICHNEN ───────────────────────────────────────────────────────────
+if showZones and barstate.islast
+    // Resistance Zonen
+    if array.size(resistanceLevels) > 0
+        for i = 0 to math.min(array.size(resistanceLevels) - 1, 9)
+            level = array.get(resistanceLevels, i)
+            if level > close
+                touches = array.get(resistanceTouches, i)
+                zoneWidth = close * 0.0005
+                line.new(bar_index - lookbackPeriod, level, bar_index + 5, level,
+                     color=colorResistance, width=math.min(touches, 4))
+                label.new(bar_index + 6, level,
+                     "R " + str.tostring(level, "#.0") + " (" + str.tostring(touches) + "x)",
+                     color=color.new(color.red, 80), textcolor=color.red, size=size.tiny, style=label.style_label_left)
+
+    // Support Zonen
+    if array.size(supportLevels) > 0
+        for i = 0 to math.min(array.size(supportLevels) - 1, 9)
+            level = array.get(supportLevels, i)
+            if level < close
+                touches = array.get(supportTouches, i)
+                line.new(bar_index - lookbackPeriod, level, bar_index + 5, level,
+                     color=colorSupport, width=math.min(touches, 4))
+                label.new(bar_index + 6, level,
+                     "S " + str.tostring(level, "#.0") + " (" + str.tostring(touches) + "x)",
+                     color=color.new(color.green, 80), textcolor=color.green, size=size.tiny, style=label.style_label_left)
+
+// ─── SIGNAL-PFEILE ───────────────────────────────────────────────────────────
+plotshape(showSignals and bullSignal ? low : na, "UP Signal",
+     shape.triangleup, location.belowbar, colorBullish, size=size.normal)
+plotshape(showSignals and bearSignal ? high : na, "DOWN Signal",
+     shape.triangledown, location.abovebar, colorBearish, size=size.normal)
+
+// ─── ALERT CONDITIONS ─────────────────────────────────────────────────────────
+alertcondition(bullSignal, "5min UP Signal", "BTC 5min: UP Signal - Bull Score {{plot_0}}")
+alertcondition(bearSignal, "5min DOWN Signal", "BTC 5min: DOWN Signal - Bear Score {{plot_1}}")
+alertcondition(bullSignal or bearSignal, "Jedes Signal", "BTC 5min Signal erkannt")
+
+// ─── DASHBOARD ────────────────────────────────────────────────────────────────
+if showDashboard and barstate.islast
+    var table dash = table.new(position.top_right, 2, 10,
+         bgcolor=color.new(color.black, 85), border_width=1, border_color=color.gray)
+
+    // Header
+    table.cell(dash, 0, 0, "BTC 5min Signal", text_color=color.white, text_size=size.normal, bgcolor=color.new(color.blue, 70))
+    table.cell(dash, 1, 0, "Wert", text_color=color.white, text_size=size.normal, bgcolor=color.new(color.blue, 70))
+
+    // Signal
+    signalText = isBullish ? "UP ▲" : isBearish ? "DOWN ▼" : "NEUTRAL ─"
+    signalColor = isBullish ? color.lime : isBearish ? color.red : color.gray
+    table.cell(dash, 0, 1, "Signal", text_color=color.white, text_size=size.small)
+    table.cell(dash, 1, 1, signalText, text_color=signalColor, text_size=size.normal)
+
+    // Scores
+    table.cell(dash, 0, 2, "Bull Score", text_color=color.white, text_size=size.small)
+    table.cell(dash, 1, 2, str.tostring(bullScore, "#") + "/100", text_color=color.lime, text_size=size.small)
+    table.cell(dash, 0, 3, "Bear Score", text_color=color.white, text_size=size.small)
+    table.cell(dash, 1, 3, str.tostring(bearScore, "#") + "/100", text_color=color.red, text_size=size.small)
+
+    // S/R Levels
+    table.cell(dash, 0, 4, "Nächster Support", text_color=color.white, text_size=size.small)
+    table.cell(dash, 1, 4, not na(nearestSupport) ? str.tostring(nearestSupport, "#.0") + " (" + str.tostring(distToSupport, "#.##") + "%)" : "—",
+         text_color=color.green, text_size=size.small)
+    table.cell(dash, 0, 5, "Nächste Resistance", text_color=color.white, text_size=size.small)
+    table.cell(dash, 1, 5, not na(nearestResistance) ? str.tostring(nearestResistance, "#.0") + " (" + str.tostring(distToResistance, "#.##") + "%)" : "—",
+         text_color=color.red, text_size=size.small)
+
+    // Indikatoren
+    table.cell(dash, 0, 6, "RSI (14)", text_color=color.white, text_size=size.small)
+    table.cell(dash, 1, 6, str.tostring(rsi, "#.0"),
+         text_color=rsi > 70 ? color.red : rsi < 30 ? color.green : color.white, text_size=size.small)
+    table.cell(dash, 0, 7, "MACD Hist", text_color=color.white, text_size=size.small)
+    table.cell(dash, 1, 7, str.tostring(macdHist, "#.0"),
+         text_color=macdHist > 0 ? color.lime : color.red, text_size=size.small)
+    table.cell(dash, 0, 8, "Volumen", text_color=color.white, text_size=size.small)
+    table.cell(dash, 1, 8, str.tostring(volRatio, "#.#") + "x Avg" + (highVolume ? " 🔥" : ""),
+         text_color=highVolume ? color.yellow : color.white, text_size=size.small)
+    table.cell(dash, 0, 9, "EMA 9/21", text_color=color.white, text_size=size.small)
+    table.cell(dash, 1, 9, ema9 > ema21 ? "Bullish" : "Bearish",
+         text_color=ema9 > ema21 ? color.lime : color.red, text_size=size.small)
+
+// ─── PLOTS FÜR ALERTS ────────────────────────────────────────────────────────
+plot(bullScore, "Bull Score", color=color.new(color.lime, 100), display=display.none)
+plot(bearScore, "Bear Score", color=color.new(color.red, 100), display=display.none)
+plot(nearestSupport, "Support", color=color.new(color.green, 100), display=display.none)
+plot(nearestResistance, "Resistance", color=color.new(color.red, 100), display=display.none)
+
+// ─── EMA LINIEN ───────────────────────────────────────────────────────────────
+plot(ema9, "EMA 9", color=color.new(color.yellow, 30), linewidth=1)
+plot(ema21, "EMA 21", color=color.new(color.orange, 30), linewidth=1)
