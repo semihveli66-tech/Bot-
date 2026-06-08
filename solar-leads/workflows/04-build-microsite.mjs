@@ -29,9 +29,14 @@ const STORE = join(OUTPUT_DIR, 'prospects.json');
 // Wirtschaftlichkeits-Annahmen (Startwerte des Rechners) — wie in .env / Workflow 1.
 const ECON = {
   costPerKwp:       num(process.env.COST_PER_KWP_EUR, 1400),
-  electricityPrice: num(process.env.ELECTRICITY_PRICE_EUR, 0.25),
+  electricityPrice: num(process.env.ELECTRICITY_PRICE_EUR, 0.28),
   feedInTariff:     num(process.env.FEED_IN_TARIFF_EUR, 0.07),
   selfConsumption:  num(process.env.SELF_CONSUMPTION_RATE, 0.30),
+  annualConsumption: num(process.env.ANNUAL_CONSUMPTION_KWH, 4500),
+  // Batteriespeicher-Annahmen (AT 2025)
+  batteryKwh:          num(process.env.BATTERY_KWH, 8),            // typ. Heimspeicher
+  batteryCostPerKwh:   num(process.env.BATTERY_COST_PER_KWH, 800), // €/kWh schluesselfertig
+  selfWithBattery:     num(process.env.SELF_CONSUMPTION_BATTERY, 0.65), // 55-70 % mit Speicher
 };
 
 async function main() {
@@ -136,6 +141,16 @@ async function renderSite(p) {
   .row label{flex:0 0 220px;font-size:14px;color:#334155}
   .row input[type=range]{flex:1;accent-color:var(--green)}
   .row .out{flex:0 0 90px;text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+  .batt{display:flex;align-items:center;gap:14px;margin:20px 0 4px;padding:14px 16px;
+    background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px}
+  .batt-txt b{display:block;font-size:14.5px}
+  .batt-txt span{display:block;font-size:12.5px;color:var(--muted);margin-top:2px}
+  .switch{position:relative;display:inline-block;width:48px;height:28px;flex:0 0 48px}
+  .switch input{opacity:0;width:0;height:0}
+  .slider-sw{position:absolute;cursor:pointer;inset:0;background:#cbd5e1;border-radius:999px;transition:.2s}
+  .slider-sw:before{content:"";position:absolute;height:22px;width:22px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s}
+  .switch input:checked + .slider-sw{background:var(--green)}
+  .switch input:checked + .slider-sw:before{transform:translateX(20px)}
   .result{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px;
     background:linear-gradient(135deg,#ecfdf5,#f0fdf4);border:1px solid #bbf7d0;border-radius:14px;padding:20px}
   .result .b{text-align:center}
@@ -197,6 +212,17 @@ async function renderSite(p) {
         <div class="out" id="feedOut"></div>
       </div>
 
+      <div class="batt">
+        <label class="switch">
+          <input type="checkbox" id="batt">
+          <span class="slider-sw"></span>
+        </label>
+        <div class="batt-txt">
+          <b>🔋 Mit Batteriespeicher (${nf(ECON.batteryKwh)} kWh)</b>
+          <span>Mehr Strom selbst nutzen statt günstig einspeisen — deutlich mehr Ersparnis. Aufpreis ca. € ${nf(ECON.batteryKwh*ECON.batteryCostPerKwh)}.</span>
+        </div>
+      </div>
+
       <div class="result">
         <div class="b"><div class="v" id="rSave">–</div><div class="l">Ersparnis pro Jahr</div></div>
         <div class="b"><div class="v" id="rPay">–</div><div class="l">Amortisation</div></div>
@@ -255,22 +281,38 @@ async function renderSite(p) {
   // Dieselbe ROI-Logik wie im Backend (Workflow 1), nur live im Browser.
   var YEARLY_KWH = ${yearlyKwh};
   var COST = ${cost};
+  var CONSUMPTION = ${ECON.annualConsumption};           // Haushaltsverbrauch kWh/Jahr
+  var BATTERY_COST = ${ECON.batteryKwh * ECON.batteryCostPerKwh};
+  var BATTERY_SELF = ${ECON.selfWithBattery};            // Eigenverbrauch mit Speicher
   function eur(n){return '€ ' + new Intl.NumberFormat('de-AT').format(Math.round(n));}
   function calc(){
     var price = +document.getElementById('price').value;
     var self  = +document.getElementById('self').value/100;
     var feed  = +document.getElementById('feed').value;
+    var batt  = document.getElementById('batt').checked;
+
+    // Mit Speicher: hoeherer Eigenverbrauch + Aufpreis. Slider wird "ausgegraut".
+    var effSelf = batt ? Math.max(self, BATTERY_SELF) : self;
+    var cost    = batt ? COST + BATTERY_COST : COST;
+    document.getElementById('self').disabled = batt;
+
     document.getElementById('priceOut').textContent = price.toFixed(2).replace('.',',');
-    document.getElementById('selfOut').textContent  = Math.round(self*100) + ' %';
+    document.getElementById('selfOut').textContent  = Math.round(effSelf*100) + ' %';
     document.getElementById('feedOut').textContent  = feed.toFixed(2).replace('.',',');
-    var save = YEARLY_KWH*self*price + YEARLY_KWH*(1-self)*feed;
-    var pay  = save>0 ? (COST/save) : 0;
+
+    // WICHTIG: Eigenverbrauch durch echten Haushaltsverbrauch deckeln (wie im Backend).
+    var selfKwh = Math.min(YEARLY_KWH*effSelf, CONSUMPTION);
+    var feedKwh = Math.max(0, YEARLY_KWH - selfKwh);
+    var save = selfKwh*price + feedKwh*feed;
+    var pay  = save>0 ? (cost/save) : 0;
+
     document.getElementById('rSave').textContent = eur(save);
     document.getElementById('rPay').textContent  = pay>0 ? pay.toFixed(1).replace('.',',') + ' Jahre' : '–';
-    document.getElementById('r20').textContent   = eur(save*20);
+    document.getElementById('r20').textContent   = eur(save*20 - (batt?BATTERY_COST:0));
   }
-  ['price','self','feed'].forEach(function(id){
+  ['price','self','feed','batt'].forEach(function(id){
     document.getElementById(id).addEventListener('input', calc);
+    document.getElementById(id).addEventListener('change', calc);
   });
   calc();
 </script>
