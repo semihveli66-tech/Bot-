@@ -1,0 +1,265 @@
+// ============================================================================
+//  Workflow 4 — Microsite-Generator
+// ============================================================================
+//
+//  Macht aus einem geprüften Haus (aus output/prospects.json) eine fertige,
+//  eigenständige HTML-Seite mit:
+//    - echtem Satellitenbild (direkt in die Datei eingebettet)
+//    - interaktivem ROI-Rechner (Strompreis/Eigenverbrauch live verstellbar)
+//    - Stat-Kacheln, QR-Bereich und Buchungs-Button
+//
+//  So startest du es (im Ordner solar-leads/):
+//    node workflows/04-build-microsite.mjs                  # baut Seiten fuer ALLE Haeuser
+//    node workflows/04-build-microsite.mjs <slug>           # nur ein bestimmtes Haus
+//
+//  Ergebnis: output/sites/<slug>.html  -> einfach im Browser oeffnen.
+//  Die Seite ist "self-contained": ein einziges File, laeuft ueberall.
+// ============================================================================
+
+try { await import('dotenv/config'); } catch {}
+import { readFile, writeFile, mkdir, access } from 'node:fs/promises';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const OUTPUT_DIR = join(__dirname, '..', 'output');
+const SITES_DIR = join(OUTPUT_DIR, 'sites');
+const STORE = join(OUTPUT_DIR, 'prospects.json');
+
+// Wirtschaftlichkeits-Annahmen (Startwerte des Rechners) — wie in .env / Workflow 1.
+const ECON = {
+  costPerKwp:       num(process.env.COST_PER_KWP_EUR, 1400),
+  electricityPrice: num(process.env.ELECTRICITY_PRICE_EUR, 0.25),
+  feedInTariff:     num(process.env.FEED_IN_TARIFF_EUR, 0.07),
+  selfConsumption:  num(process.env.SELF_CONSUMPTION_RATE, 0.30),
+};
+
+async function main() {
+  const onlySlug = process.argv[2];
+
+  let list;
+  try {
+    list = JSON.parse(await readFile(STORE, 'utf8'));
+  } catch {
+    console.error('❌ output/prospects.json nicht gefunden. Erst Workflow 1 laufen lassen.');
+    process.exit(1);
+  }
+
+  let targets = Array.isArray(list) ? list : [];
+  if (onlySlug) targets = targets.filter(p => p.slug === onlySlug);
+  // Nur geeignete Haeuser bekommen eine Microsite.
+  targets = targets.filter(p => p.roof_suitable);
+
+  if (targets.length === 0) {
+    console.error('❌ Keine passenden (geeigneten) Haeuser gefunden.');
+    process.exit(1);
+  }
+
+  await mkdir(SITES_DIR, { recursive: true });
+
+  for (const p of targets) {
+    const html = await renderSite(p);
+    const out = join(SITES_DIR, `${p.slug}.html`);
+    await writeFile(out, html);
+    console.log(`🌐 Microsite erstellt: output/sites/${p.slug}.html`);
+  }
+  console.log(`\n✅ Fertig: ${targets.length} Microsite(s).`);
+}
+
+// ----------------------------------------------------------------------------
+//  Eine Microsite erzeugen
+// ----------------------------------------------------------------------------
+async function renderSite(p) {
+  // Satellitenbild als Base64 einbetten (so ist die HTML-Datei eigenstaendig).
+  const img = await imageDataUri(p);
+
+  // Werte fuer den Rechner.
+  const kwp = p.system_size_kwp || 0;
+  const yearlyKwh = p.yearly_energy_kwh || Math.round(kwp * 1000);
+  const cost = p.install_cost_eur || Math.round(kwp * ECON.costPerKwp);
+  const streetTitle = p.street
+    ? `${p.street}${p.house_number ? ' ' + p.house_number : ''}`
+    : (p.address || '').split(',')[0];
+
+  // Hinweis: Der Rechner unten nutzt dieselbe Logik wie Workflow 1, nur im Browser.
+  return `<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ihr Solar-Potenzial · ${escapeHtml(streetTitle)}</title>
+<style>
+  :root{
+    --green:#16a34a; --green-d:#15803d; --ink:#0f172a; --muted:#64748b;
+    --bg:#f8fafc; --card:#ffffff; --line:#e2e8f0; --sun:#f59e0b;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.5}
+  .wrap{max-width:920px;margin:0 auto;padding:0 20px}
+  header.hero{position:relative;color:#fff;text-align:center;padding:64px 20px 120px;
+    background:linear-gradient(135deg,#0f766e,#15803d 60%,#166534)}
+  header.hero .badge{display:inline-block;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);
+    padding:6px 14px;border-radius:999px;font-size:13px;letter-spacing:.04em;margin-bottom:18px}
+  header.hero h1{margin:0 0 10px;font-size:30px;line-height:1.2}
+  header.hero p{margin:0;opacity:.92;font-size:17px}
+  .photo{margin:-90px auto 0;max-width:760px;background:var(--card);border-radius:18px;overflow:hidden;
+    box-shadow:0 20px 50px rgba(2,6,23,.18);border:1px solid var(--line)}
+  .photo .imgbox{position:relative;aspect-ratio:1/1;background:#0b1220}
+  .photo img{width:100%;height:100%;object-fit:cover;display:block}
+  .photo .cap{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 16px;font-size:13px;color:var(--muted)}
+  .photo .cap b{color:var(--ink)}
+  .tag-suit{position:absolute;top:14px;left:14px;background:var(--green);color:#fff;font-weight:700;
+    font-size:13px;padding:6px 12px;border-radius:999px;box-shadow:0 4px 12px rgba(22,163,74,.4)}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:34px 0}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;text-align:center}
+  .stat .v{font-size:24px;font-weight:800}
+  .stat .v.green{color:var(--green-d)}
+  .stat .l{font-size:12.5px;color:var(--muted);margin-top:4px}
+  section.calc{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px;margin:24px 0}
+  section.calc h2{margin:0 0 4px;font-size:20px}
+  section.calc .sub{color:var(--muted);font-size:14px;margin-bottom:20px}
+  .row{display:flex;align-items:center;gap:14px;margin:16px 0}
+  .row label{flex:0 0 220px;font-size:14px;color:#334155}
+  .row input[type=range]{flex:1;accent-color:var(--green)}
+  .row .out{flex:0 0 90px;text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+  .result{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px;
+    background:linear-gradient(135deg,#ecfdf5,#f0fdf4);border:1px solid #bbf7d0;border-radius:14px;padding:20px}
+  .result .b{text-align:center}
+  .result .b .v{font-size:22px;font-weight:800;color:var(--green-d)}
+  .result .b .l{font-size:12.5px;color:#3f6212;margin-top:2px}
+  .cta{display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;
+    background:var(--ink);color:#fff;border-radius:18px;padding:26px;margin:24px 0 50px}
+  .cta .txt h3{margin:0 0 6px;font-size:19px}
+  .cta .txt p{margin:0;opacity:.8;font-size:14px}
+  .cta a.btn{background:var(--sun);color:#1f2937;font-weight:800;text-decoration:none;
+    padding:14px 26px;border-radius:12px;white-space:nowrap}
+  .qr{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin:0 0 40px}
+  .qr .ph{width:84px;height:84px;border:2px dashed var(--line);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:11px;text-align:center}
+  .qr .t{font-size:13px;color:var(--muted)}
+  footer{color:var(--muted);font-size:12px;text-align:center;padding:0 20px 40px}
+  @media(max-width:680px){.stats{grid-template-columns:repeat(2,1fr)}.result{grid-template-columns:1fr}.row label{flex-basis:140px}header.hero h1{font-size:24px}}
+</style>
+</head>
+<body>
+  <header class="hero">
+    <div class="badge">☀️ Ihr persönliches Solar-Potenzial</div>
+    <h1>So viel Strom kann Ihr Dach erzeugen</h1>
+    <p>${escapeHtml(streetTitle)} · ${escapeHtml(p.zip || '')} ${escapeHtml(p.city || 'Wien')}</p>
+  </header>
+
+  <div class="wrap">
+    <div class="photo">
+      <div class="imgbox">
+        ${img ? `<img src="${img}" alt="Satellitenbild Ihres Dachs">` : `<div style="color:#64748b;display:flex;height:100%;align-items:center;justify-content:center">Satellitenbild nicht gefunden</div>`}
+        <div class="tag-suit">✓ Dach geeignet · Score ${p.suitability_score ?? '–'}/100</div>
+      </div>
+      <div class="cap"><span>Echtes Satellitenbild Ihres Hauses</span><b>Dachausrichtung ${fmtAz(p.best_roof_azimuth)} · ${p.annual_sunshine_hours ?? '–'} Sonnenstunden/Jahr</b></div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="v">${nf(p.system_size_kwp)} kWp</div><div class="l">Anlagengröße</div></div>
+      <div class="stat"><div class="v">${nf(yearlyKwh)} kWh</div><div class="l">Stromertrag / Jahr</div></div>
+      <div class="stat"><div class="v">€ ${nf(cost)}</div><div class="l">Investition</div></div>
+      <div class="stat"><div class="v green">€ ${nf(p.annual_savings_eur)}</div><div class="l">Ersparnis / Jahr</div></div>
+    </div>
+
+    <section class="calc">
+      <h2>Ihr persönlicher Spar-Rechner</h2>
+      <div class="sub">Bewegen Sie die Regler — alle Werte aktualisieren sich sofort.</div>
+
+      <div class="row">
+        <label>Strompreis (€/kWh)</label>
+        <input id="price" type="range" min="0.15" max="0.45" step="0.01" value="${ECON.electricityPrice}">
+        <div class="out" id="priceOut"></div>
+      </div>
+      <div class="row">
+        <label>Eigenverbrauch (%)</label>
+        <input id="self" type="range" min="20" max="80" step="5" value="${Math.round(ECON.selfConsumption*100)}">
+        <div class="out" id="selfOut"></div>
+      </div>
+      <div class="row">
+        <label>Einspeise­vergütung (€/kWh)</label>
+        <input id="feed" type="range" min="0.03" max="0.15" step="0.01" value="${ECON.feedInTariff}">
+        <div class="out" id="feedOut"></div>
+      </div>
+
+      <div class="result">
+        <div class="b"><div class="v" id="rSave">–</div><div class="l">Ersparnis pro Jahr</div></div>
+        <div class="b"><div class="v" id="rPay">–</div><div class="l">Amortisation</div></div>
+        <div class="b"><div class="v" id="r20">–</div><div class="l">Ersparnis über 20 Jahre</div></div>
+      </div>
+    </section>
+
+    <div class="cta">
+      <div class="txt">
+        <h3>Kostenlose Vor-Ort-Beratung</h3>
+        <p>Unverbindlich & individuell — ein lokaler Installateur prüft Ihr Dach.</p>
+      </div>
+      <a class="btn" href="#">Beratungstermin buchen →</a>
+    </div>
+
+    <div class="qr">
+      <div class="ph">QR-Code</div>
+      <div class="t">Diesen QR-Code drucken wir auf Ihre Postkarte — er führt direkt hierher.</div>
+    </div>
+  </div>
+
+  <footer>
+    Schätzwerte auf Basis von Google-Solar-Daten · keine verbindliche Zusage.<br>
+    Absender / Datenschutz: hier Ihre Firmenangaben einfügen.
+  </footer>
+
+<script>
+  // Dieselbe ROI-Logik wie im Backend (Workflow 1), nur live im Browser.
+  var YEARLY_KWH = ${yearlyKwh};
+  var COST = ${cost};
+  function eur(n){return '€ ' + new Intl.NumberFormat('de-AT').format(Math.round(n));}
+  function calc(){
+    var price = +document.getElementById('price').value;
+    var self  = +document.getElementById('self').value/100;
+    var feed  = +document.getElementById('feed').value;
+    document.getElementById('priceOut').textContent = price.toFixed(2).replace('.',',');
+    document.getElementById('selfOut').textContent  = Math.round(self*100) + ' %';
+    document.getElementById('feedOut').textContent  = feed.toFixed(2).replace('.',',');
+    var save = YEARLY_KWH*self*price + YEARLY_KWH*(1-self)*feed;
+    var pay  = save>0 ? (COST/save) : 0;
+    document.getElementById('rSave').textContent = eur(save);
+    document.getElementById('rPay').textContent  = pay>0 ? pay.toFixed(1).replace('.',',') + ' Jahre' : '–';
+    document.getElementById('r20').textContent   = eur(save*20);
+  }
+  ['price','self','feed'].forEach(function(id){
+    document.getElementById(id).addEventListener('input', calc);
+  });
+  calc();
+</script>
+</body>
+</html>`;
+}
+
+// ----------------------------------------------------------------------------
+//  Hilfsfunktionen
+// ----------------------------------------------------------------------------
+async function imageDataUri(p) {
+  // Das Satellitenbild liegt unter output/<slug>.png (von Workflow 1).
+  const candidate = join(OUTPUT_DIR, `${p.slug}.png`);
+  try {
+    await access(candidate);
+    const buf = await readFile(candidate);
+    return `data:image/png;base64,${buf.toString('base64')}`;
+  } catch {
+    return null;
+  }
+}
+
+function fmtAz(a){
+  if (a == null) return '–';
+  if (a >= 157 && a <= 202) return 'Süd';
+  if (a > 112 && a < 157) return 'Südost';
+  if (a > 202 && a < 247) return 'Südwest';
+  return a + '°';
+}
+function nf(n){ return n == null ? '–' : new Intl.NumberFormat('de-AT').format(Math.round(n)); }
+function num(v,d){ const n=Number(v); return Number.isFinite(n)?n:d; }
+function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+main().catch(err => { console.error('❌ Fehler:', err.message); process.exit(1); });
