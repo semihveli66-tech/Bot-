@@ -70,8 +70,9 @@ async function main() {
 //  Eine Microsite erzeugen
 // ----------------------------------------------------------------------------
 async function renderSite(p) {
-  // Satellitenbild als Base64 einbetten (so ist die HTML-Datei eigenstaendig).
-  const img = await imageDataUri(p);
+  // Bilder als Base64 einbetten (so ist die HTML-Datei eigenstaendig).
+  const img = await imageDataUri(p, `${p.slug}.png`);            // Satellit (leeres Dach)
+  const rendered = await imageDataUri(p, `${p.slug}-rendered.png`); // KI: Dach mit Solar
 
   // Werte fuer den Rechner.
   const kwp = p.system_size_kwp || 0;
@@ -108,7 +109,20 @@ async function renderSite(p) {
   .photo img{width:100%;height:100%;object-fit:cover;display:block}
   .photo .cap{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 16px;font-size:13px;color:var(--muted)}
   .photo .cap b{color:var(--ink)}
-  .tag-suit{position:absolute;top:14px;left:14px;background:var(--green);color:#fff;font-weight:700;
+  /* Vorher/Nachher-Schieberegler */
+  .ba{position:absolute;inset:0;overflow:hidden;user-select:none}
+  .ba img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+  .ba-before{position:absolute;inset:0;width:50%;overflow:hidden;border-right:2px solid #fff}
+  .ba-before img{position:absolute;left:0;top:0;height:100%;width:auto;max-width:none}
+  .ba-handle{position:absolute;top:0;bottom:0;left:50%;width:40px;transform:translateX(-50%);
+    cursor:ew-resize;display:flex;align-items:center;justify-content:center}
+  .ba-handle span{background:#fff;color:#0f172a;border-radius:999px;width:38px;height:38px;
+    display:flex;align-items:center;justify-content:center;font-weight:800;box-shadow:0 4px 12px rgba(0,0,0,.35)}
+  .ba-lbl{position:absolute;bottom:14px;font-size:12px;font-weight:700;color:#fff;
+    background:rgba(15,23,42,.6);padding:4px 10px;border-radius:999px}
+  .ba-lbl-l{left:14px}
+  .ba-lbl-r{right:14px}
+  .tag-suit{position:absolute;top:14px;left:14px;background:var(--green);color:#fff;font-weight:700;z-index:3;
     font-size:13px;padding:6px 12px;border-radius:999px;box-shadow:0 4px 12px rgba(22,163,74,.4)}
   .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:34px 0}
   .stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;text-align:center}
@@ -150,10 +164,10 @@ async function renderSite(p) {
   <div class="wrap">
     <div class="photo">
       <div class="imgbox">
-        ${img ? `<img src="${img}" alt="Satellitenbild Ihres Dachs">` : `<div style="color:#64748b;display:flex;height:100%;align-items:center;justify-content:center">Satellitenbild nicht gefunden</div>`}
+        ${photoBlock(img, rendered)}
         <div class="tag-suit">✓ Dach geeignet · Score ${p.suitability_score ?? '–'}/100</div>
       </div>
-      <div class="cap"><span>Echtes Satellitenbild Ihres Hauses</span><b>Dachausrichtung ${fmtAz(p.best_roof_azimuth)} · ${p.annual_sunshine_hours ?? '–'} Sonnenstunden/Jahr</b></div>
+      <div class="cap"><span>${rendered ? 'Schieberegler bewegen: Ihr Dach vorher ↔ mit Solaranlage' : 'Echtes Satellitenbild Ihres Hauses'}</span><b>Dachausrichtung ${fmtAz(p.best_roof_azimuth)} · ${p.annual_sunshine_hours ?? '–'} Sonnenstunden/Jahr</b></div>
     </div>
 
     <div class="stats">
@@ -210,6 +224,34 @@ async function renderSite(p) {
   </footer>
 
 <script>
+  // Vorher/Nachher-Schieberegler (nur wenn vorhanden).
+  (function(){
+    var ba = document.getElementById('ba');
+    if(!ba) return;
+    var before = document.getElementById('baBefore');
+    var handle = document.getElementById('baHandle');
+    var innerImg = before.querySelector('img');
+    function fit(){ innerImg.style.width = ba.clientWidth + 'px'; }
+    function setPos(x){
+      var r = ba.getBoundingClientRect();
+      var pct = Math.max(0, Math.min(100, ((x - r.left)/r.width)*100));
+      before.style.width = pct + '%';
+      handle.style.left = pct + '%';
+    }
+    fit(); window.addEventListener('resize', fit);
+    var dragging = false;
+    function down(){ dragging = true; }
+    function up(){ dragging = false; }
+    function move(e){ if(!dragging) return; var x = (e.touches?e.touches[0].clientX:e.clientX); setPos(x); }
+    handle.addEventListener('mousedown', down);
+    handle.addEventListener('touchstart', down, {passive:true});
+    window.addEventListener('mouseup', up);
+    window.addEventListener('touchend', up);
+    window.addEventListener('mousemove', move);
+    window.addEventListener('touchmove', move, {passive:true});
+    ba.addEventListener('click', function(e){ setPos(e.clientX); });
+  })();
+
   // Dieselbe ROI-Logik wie im Backend (Workflow 1), nur live im Browser.
   var YEARLY_KWH = ${yearlyKwh};
   var COST = ${cost};
@@ -239,9 +281,8 @@ async function renderSite(p) {
 // ----------------------------------------------------------------------------
 //  Hilfsfunktionen
 // ----------------------------------------------------------------------------
-async function imageDataUri(p) {
-  // Das Satellitenbild liegt unter output/<slug>.png (von Workflow 1).
-  const candidate = join(OUTPUT_DIR, `${p.slug}.png`);
+async function imageDataUri(p, filename) {
+  const candidate = join(OUTPUT_DIR, filename);
   try {
     await access(candidate);
     const buf = await readFile(candidate);
@@ -249,6 +290,20 @@ async function imageDataUri(p) {
   } catch {
     return null;
   }
+}
+
+// Vorher/Nachher-Schieberegler, wenn ein Render-Bild da ist — sonst nur Satellit.
+function photoBlock(img, rendered) {
+  if (!img) return `<div style="color:#64748b;display:flex;height:100%;align-items:center;justify-content:center">Satellitenbild nicht gefunden</div>`;
+  if (!rendered) return `<img src="${img}" alt="Satellitenbild Ihres Dachs">`;
+  return `
+    <div class="ba" id="ba">
+      <img class="ba-after" src="${rendered}" alt="Dach mit Solaranlage">
+      <div class="ba-before" id="baBefore"><img src="${img}" alt="Dach ohne Solaranlage"></div>
+      <div class="ba-handle" id="baHandle"><span>‹ ›</span></div>
+      <div class="ba-lbl ba-lbl-l">Vorher</div>
+      <div class="ba-lbl ba-lbl-r">Mit Solar</div>
+    </div>`;
 }
 
 function fmtAz(a){
