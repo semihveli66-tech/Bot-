@@ -46,10 +46,13 @@ const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
 // Wirtschaftlichkeits-Annahmen (siehe .env.example fuer Erklaerungen)
 const ECON = {
   costPerKwp:         num(process.env.COST_PER_KWP_EUR, 1400),
-  electricityPrice:   num(process.env.ELECTRICITY_PRICE_EUR, 0.25),
+  electricityPrice:   num(process.env.ELECTRICITY_PRICE_EUR, 0.28),
   feedInTariff:       num(process.env.FEED_IN_TARIFF_EUR, 0.07),
   selfConsumption:    num(process.env.SELF_CONSUMPTION_RATE, 0.30),
   panelWatts:         num(process.env.PANEL_WATTS, 400),
+  // NEU: realistische Begrenzung fuer Einfamilienhaeuser.
+  maxHomeKwp:         num(process.env.MAX_HOME_KWP, 10),         // typ. Anlage 5-12 kWp
+  annualConsumption:  num(process.env.ANNUAL_CONSUMPTION_KWH, 4500), // 4-Pers.-Haushalt
 };
 
 // Schwellenwerte fuer die Dach-Eignung (Oesterreich = Nordhalbkugel -> Sueden ist optimal)
@@ -314,34 +317,38 @@ function computeEconomics(roof) {
     };
   }
 
-  // Anlagengroesse: Panel-Anzahl * Wattzahl pro Panel -> kWp.
   const panelWatts = roof.panelWatts || ECON.panelWatts;
-  const systemSizeKwp = roof.maxPanelCount
-    ? round((roof.maxPanelCount * panelWatts) / 1000, 1)
-    : round((roof.maxArrayAreaM2 || roof.southFacingAreaM2 || 0) * 0.2, 1); // ~0.2 kWp/m² Faustregel
 
-  // Jahresertrag: bevorzugt aus der besten Solar-API-Konfiguration,
-  // sonst Faustregel ~1000 kWh pro kWp/Jahr (Wien).
-  let yearlyEnergyKwh = null;
+  // (1) Was passt MAXIMAL aufs Dach? (Dachkapazitaet)
+  const roofKwp = roof.maxPanelCount
+    ? (roof.maxPanelCount * panelWatts) / 1000
+    : (roof.maxArrayAreaM2 || roof.southFacingAreaM2 || 0) * 0.2;
+
+  // (2) Spezifischer Ertrag (kWh pro kWp/Jahr) aus der besten Solar-API-Config.
+  //     So koennen wir den Ertrag auf JEDE Anlagengroesse hochrechnen.
+  let specificYield = 1000; // Faustregel Wien, falls keine Config da ist
   if (roof.configs?.length) {
     const best = roof.configs.reduce((a, b) =>
       (b.yearlyEnergyDcKwh || 0) > (a.yearlyEnergyDcKwh || 0) ? b : a
     );
-    yearlyEnergyKwh = best.yearlyEnergyDcKwh || null;
+    const bestKwp = (best.panelsCount * panelWatts) / 1000;
+    if (bestKwp > 0 && best.yearlyEnergyDcKwh) specificYield = best.yearlyEnergyDcKwh / bestKwp;
   }
-  if (yearlyEnergyKwh == null) {
-    yearlyEnergyKwh = systemSizeKwp * 1000;
-  }
-  yearlyEnergyKwh = round(yearlyEnergyKwh, 0);
 
-  // Kosten = Groesse * Kosten pro kWp.
+  // (3) REALISTISCH dimensionieren: nicht das ganze Dach vollpflastern, sondern
+  //     auf Haushalts-Maß begrenzen (Standard 10 kWp), aber nie groesser als das Dach.
+  const systemSizeKwp = round(Math.min(roofKwp, ECON.maxHomeKwp), 1);
+
+  // (4) Jahresertrag der gewaehlten (begrenzten) Anlage.
+  const yearlyEnergyKwh = round(systemSizeKwp * specificYield, 0);
+
+  // (5) Kosten = Groesse * Kosten pro kWp.
   const installCostEur = round(systemSizeKwp * ECON.costPerKwp, 0);
 
-  // Ersparnis:
-  //   selbst verbrauchter Strom spart den vollen Strompreis,
-  //   eingespeister Ueberschuss bringt die Einspeiseverguetung.
-  const selfKwh = yearlyEnergyKwh * ECON.selfConsumption;
-  const feedKwh = yearlyEnergyKwh * (1 - ECON.selfConsumption);
+  // (6) Ersparnis — WICHTIG: Eigenverbrauch durch echten Haushaltsverbrauch deckeln.
+  //     Man kann nicht mehr Strom selbst nutzen, als man ueberhaupt verbraucht.
+  const selfKwh = Math.min(yearlyEnergyKwh * ECON.selfConsumption, ECON.annualConsumption);
+  const feedKwh = Math.max(0, yearlyEnergyKwh - selfKwh);
   const annualSavingsEur = round(
     selfKwh * ECON.electricityPrice + feedKwh * ECON.feedInTariff, 0
   );
@@ -350,7 +357,10 @@ function computeEconomics(roof) {
     ? round(installCostEur / annualSavingsEur, 1)
     : null;
 
-  return { systemSizeKwp, installCostEur, yearlyEnergyKwh, annualSavingsEur, paybackYears };
+  return {
+    systemSizeKwp, installCostEur, yearlyEnergyKwh, annualSavingsEur, paybackYears,
+    roofKwp: round(roofKwp, 1), // Info: was max. aufs Dach passt
+  };
 }
 
 
