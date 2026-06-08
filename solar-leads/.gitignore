@@ -1,0 +1,15 @@
+# Geheimnisse — niemals committen!
+.env
+.env.local
+
+# Abhaengigkeiten
+node_modules/
+
+# Generierte Bilder / Ausgaben
+output/
+*.png
+*.jpg
+!docs/**/*.png
+
+# System
+.DS_Store

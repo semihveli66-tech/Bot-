@@ -1,0 +1,16 @@
+{
+  "name": "solar-leads-at",
+  "version": "0.1.0",
+  "description": "Hyperpersonalisiertes Solar-Lead-System fuer Oesterreich (Start: Wien)",
+  "type": "module",
+  "scripts": {
+    "fetch": "node workflows/01-fetch-property.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "dotenv": "^16.4.5"
+  }
+}
