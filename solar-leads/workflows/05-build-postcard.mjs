@@ -67,7 +67,7 @@ async function renderPostcard(p) {
   const front = await imageDataUri(`${p.slug}-rendered.png`) || await imageDataUri(`${p.slug}.png`);
 
   // QR-Code auf die Microsite des Hauses.
-  const url = p.microsite_url || `${BASE_URL}/${p.slug}`;
+  const url = p.microsite_url || `${BASE_URL}/${p.slug}.html`;
   const qr = await QRCode.toDataURL(url, { margin: 1, width: 360, errorCorrectionLevel: 'M' });
 
   const streetTitle = p.street
