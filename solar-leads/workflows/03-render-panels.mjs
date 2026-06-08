@@ -29,19 +29,20 @@ const STORE = join(OUTPUT_DIR, 'prospects.json');
 
 const FAL_KEY = process.env.FAL_KEY;
 
-// Das Flux-Kontext-Modell bei fal.ai (Bild-zu-Bild-Bearbeitung).
-const FAL_MODEL = 'fal-ai/flux-pro/kontext';
+// Flux-Kontext-Modell bei fal.ai (Bild-zu-Bild-Bearbeitung).
+// "max" = hoechste Qualitaet. Per .env (FLUX_MODEL) ueberschreibbar.
+const FAL_MODEL = process.env.FLUX_MODEL || 'fal-ai/flux-pro/kontext/max';
 
 // Der Render-Auftrag an die KI. Klar formuliert: NUR Panels aufs Dach,
 // sonst nichts veraendern.
-const PROMPT =
-  'Add realistic dark blue-black monocrystalline solar photovoltaic panels, ' +
-  'neatly arranged in clean rectangular rows on the main south-facing roof ' +
-  'surface of this house. Aerial top-down satellite view, photorealistic, ' +
-  'panels precisely aligned with the roof edges and slope, matching the ' +
-  'existing lighting, shadows and perspective. Do not change anything else ' +
-  'in the image — keep the garden, neighbouring houses, streets and trees ' +
-  'exactly the same.';
+const PROMPT = process.env.RENDER_PROMPT ||
+  'Add photorealistic black monocrystalline solar photovoltaic panels with thin ' +
+  'silver frames, installed in neat rectangular rows that follow the exact shape ' +
+  'and slope of the existing south-facing roof pitches of this house. Keep the ' +
+  'aerial top-down satellite perspective. The panels must sit flush on the roof, ' +
+  'with realistic reflections, shadows and lighting matching the rest of the ' +
+  'photo. Photorealistic, high detail. Do NOT change anything else: keep the ' +
+  'roof shape, garden, cars, neighbouring houses, streets and trees exactly the same.';
 
 async function main() {
   if (!FAL_KEY) {
