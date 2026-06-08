@@ -371,30 +371,62 @@ function parseAustrianAddress(geo, fallback) {
 
 
 // ----------------------------------------------------------------------------
-//  Schritt 7 — In Supabase speichern (oder nur anzeigen)
+//  Schritt 7 — Speichern
 // ----------------------------------------------------------------------------
+//  Wir speichern IMMER lokal (output/prospects.json) — das funktioniert ueberall,
+//  auch wenn eine Firewall Supabase blockiert. Wenn Supabase erreichbar ist,
+//  speichern wir zusaetzlich dorthin. Schlaegt das fehl (z.B. Allowlist), geht
+//  trotzdem nichts verloren — die Daten liegen lokal und koennen spaeter mit
+//  "import-to-supabase.mjs" hochgeladen werden.
+// ----------------------------------------------------------------------------
+const LOCAL_STORE = join(OUTPUT_DIR, 'prospects.json');
+
 async function saveProspect(record) {
+  // (a) Immer lokal speichern (upsert nach slug).
+  await saveLocal(record);
+
+  // (b) Zusaetzlich Supabase versuchen, falls konfiguriert.
   if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
-    console.log('\nℹ️  Supabase nicht konfiguriert — Datensatz wird nur angezeigt:\n');
-    console.log(JSON.stringify(record, (k, v) => (k === 'solar_api_raw' ? '[…]' : v), 2));
+    console.log('ℹ️  Supabase nicht konfiguriert — nur lokal gespeichert.');
     return;
   }
-  // Erst hier importieren, damit das Skript ohne Supabase-Paket lauffaehig bleibt.
-  const { createClient } = await import('@supabase/supabase-js');
-  const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
-
-  // "upsert" auf slug: gleiche Adresse aktualisiert den bestehenden Datensatz.
-  const { data, error } = await supabase
-    .from('prospects')
-    .upsert(record, { onConflict: 'slug' })
-    .select('id, slug, status')
-    .single();
-
-  if (error) {
-    console.error('❌ Supabase-Fehler:', error.message);
-    return;
+  try {
+    const { createClient } = await import('@supabase/supabase-js');
+    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
+    const { data, error } = await supabase
+      .from('prospects')
+      .upsert(record, { onConflict: 'slug' })
+      .select('id, slug, status')
+      .single();
+    if (error) throw new Error(error.message);
+    console.log(`💾 Zusaetzlich in Supabase gespeichert (id: ${data.id})`);
+  } catch (e) {
+    // Haeufig hier: "Host not in allowlist" (Firewall der Cloud-Umgebung).
+    console.warn(`⚠️  Supabase nicht erreichbar (${e.message}) — Daten liegen sicher lokal.`);
   }
-  console.log(`\n💾 In Supabase gespeichert (id: ${data.id})`);
+}
+
+// Lokaler Speicher: liest die JSON-Liste, ersetzt/ergaenzt nach slug, schreibt zurueck.
+async function saveLocal(record) {
+  await mkdir(OUTPUT_DIR, { recursive: true });
+  let list = [];
+  try {
+    const { readFile } = await import('node:fs/promises');
+    const txt = await readFile(LOCAL_STORE, 'utf8');
+    list = JSON.parse(txt);
+    if (!Array.isArray(list)) list = [];
+  } catch { /* Datei existiert noch nicht — leere Liste */ }
+
+  // Riesiges Rohdaten-Feld lokal weglassen, damit die Datei lesbar bleibt.
+  const slim = { ...record };
+  delete slim.solar_api_raw;
+  slim.saved_at = new Date().toISOString();
+
+  const idx = list.findIndex(r => r.slug === slim.slug);
+  if (idx >= 0) list[idx] = slim; else list.push(slim);
+
+  await writeFile(LOCAL_STORE, JSON.stringify(list, null, 2));
+  console.log(`💾 Lokal gespeichert: output/prospects.json (${list.length} Haus/Haeuser gesamt)`);
 }
 
 
