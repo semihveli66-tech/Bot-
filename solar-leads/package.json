@@ -13,6 +13,7 @@
     "@supabase/supabase-js": "^2.45.0",
     "dotenv": "^16.4.5",
     "jimp": "^0.22.12",
+    "puppeteer": "^23.0.0",
     "qrcode": "^1.5.4"
   }
 }
