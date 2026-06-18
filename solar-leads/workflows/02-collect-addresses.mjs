@@ -54,10 +54,9 @@ async function main() {
 
   console.log(`🔎 Suche Einfamilienhaeuser in PLZ ${plz} ${broad ? '(breit)' : ''}...`);
 
-  const res = await fetch(OVERPASS, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: 'data=' + encodeURIComponent(query),
+  const overpassUrl = OVERPASS + '?data=' + encodeURIComponent(query);
+  const res = await fetch(overpassUrl, {
+    headers: { 'User-Agent': 'solar-leads-app/1.0 (contact@solarwien.at)' },
   });
   if (!res.ok) {
     console.error(`❌ Overpass-Fehler: HTTP ${res.status} (evtl. ueberlastet — kurz warten & erneut).`);

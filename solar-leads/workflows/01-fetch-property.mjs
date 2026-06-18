@@ -172,28 +172,53 @@ async function geocode(address) {
 
 
 // ----------------------------------------------------------------------------
-//  Schritt 2 — Satellitenbild via Google Maps Static API
+//  Schritt 2 — Satellitenbild via Google Maps Tiles (kein Static API Key nötig)
 // ----------------------------------------------------------------------------
 async function downloadSatellite(lat, lng, slug) {
-  const url = new URL('https://maps.googleapis.com/maps/api/staticmap');
-  url.searchParams.set('center', `${lat},${lng}`);
-  url.searchParams.set('zoom', '20');          // sehr nah -> Dachdetails sichtbar
-  url.searchParams.set('size', '640x640');     // max. ohne "scale"
-  url.searchParams.set('scale', '2');          // verdoppelt die Aufloesung (1280x1280)
-  url.searchParams.set('maptype', 'satellite');
-  url.searchParams.set('key', GOOGLE_MAPS_KEY);
+  const zoom = 19;
+  const { tx, ty } = latLngToTile(lat, lng, zoom);
 
-  const res = await fetch(url);
-  if (!res.ok) {
-    throw new Error(`Maps Static API Fehler: HTTP ${res.status}`);
-  }
-  const buf = Buffer.from(await res.arrayBuffer());
+  // 3×3 Tiles (je 256px) -> 768×768 -> auf 1280×1280 skaliert
+  const TILE = 256;
+  const { createCanvas, loadImage } = await import('canvas').catch(() => null) || {};
 
+  // Fallback: Python-basiertes Stitching wenn node-canvas fehlt
+  const { execFileSync } = await import('node:child_process');
+  const outPath = join(OUTPUT_DIR, `${slug}.png`);
   await mkdir(OUTPUT_DIR, { recursive: true });
-  const path = join(OUTPUT_DIR, `${slug}.png`);
-  await writeFile(path, buf);
-  // TODO (spaeter): Bild stattdessen nach Cloudflare R2 hochladen und URL zurueckgeben.
-  return path;
+
+  const script = `
+import math, io, urllib.request
+from PIL import Image
+
+def tile(x,y,z):
+    url=f"https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}"
+    req=urllib.request.Request(url,headers={"User-Agent":"Mozilla/5.0"})
+    with urllib.request.urlopen(req,timeout=15) as r:
+        return Image.open(io.BytesIO(r.read())).convert("RGB")
+
+tx,ty,zoom=${tx},${ty},${zoom}
+canvas=Image.new("RGB",(${TILE}*3,${TILE}*3))
+for dy in range(-1,2):
+    for dx in range(-1,2):
+        canvas.paste(tile(tx+dx,ty+dy,zoom),((dx+1)*${TILE},(dy+1)*${TILE}))
+w,h=canvas.size
+crop=canvas.crop(((w-640)//2,(h-640)//2,(w+640)//2,(h+640)//2))
+final=crop.resize((1280,1280),Image.LANCZOS)
+final.save(r"${outPath.replace(/\\/g, '/')}")
+print("ok")
+`;
+
+  const result = execFileSync('python3', ['-c', script], { encoding: 'utf8', timeout: 30000 });
+  if (!result.includes('ok')) throw new Error('Tile-Download fehlgeschlagen');
+  return outPath;
+}
+
+function latLngToTile(lat, lng, zoom) {
+  const n = 2 ** zoom;
+  const tx = Math.floor((lng + 180) / 360 * n);
+  const ty = Math.floor((1 - Math.log(Math.tan(lat * Math.PI / 180) + 1 / Math.cos(lat * Math.PI / 180)) / Math.PI) / 2 * n);
+  return { tx, ty };
 }
 
 
