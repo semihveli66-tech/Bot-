@@ -32,9 +32,17 @@ const STORE = join(OUTPUT_DIR, 'prospects.json');
 const BASE_URL = (process.env.MICROSITE_BASE_URL || 'https://solar-wien.at').replace(/\/$/, '');
 
 async function main() {
+  // Optionaler Bezirks-Filter: nur Haeuser einer PLZ exportieren (saubere Kampagne).
+  //   node workflows/08-export-mailing.mjs 1230
+  const plzFilter = (process.argv[2] || '').trim();
+
   let list = JSON.parse(await readFile(STORE, 'utf8'));
-  const targets = list.filter(p => p.roof_suitable);
-  if (targets.length === 0) { console.error('❌ Keine geeigneten Haeuser.'); process.exit(1); }
+  let targets = list.filter(p => p.roof_suitable);
+  if (/^\d{4}$/.test(plzFilter)) {
+    targets = targets.filter(p => String(p.zip) === plzFilter);
+    console.log(`📍 Filter: nur PLZ ${plzFilter}`);
+  }
+  if (targets.length === 0) { console.error('❌ Keine geeigneten Haeuser (ggf. PLZ pruefen).'); process.exit(1); }
 
   await mkdir(MAIL_DIR, { recursive: true });
 
