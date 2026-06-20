@@ -33,7 +33,9 @@ const STORE = join(OUTPUT_DIR, 'prospects.json');
 
 const GOOGLE_KEY = process.env.GOOGLE_SOLAR_API_KEY || process.env.GOOGLE_MAPS_API_KEY;
 const FAL_KEY = process.env.FAL_KEY;
-const FAL_FILL_MODEL = process.env.FLUX_FILL_MODEL || 'fal-ai/flux-pro/v1/fill';
+// Flux Kontext rendert ZUVERLAESSIG sichtbare Panels (besser als Fill bei kleinen Flaechen);
+// die Maske beschraenkt sie danach aufs Dach.
+const FAL_MODEL = process.env.FLUX_MODEL || 'fal-ai/flux-pro/kontext/max';
 
 // Bild-Geometrie — MUSS exakt zu Workflow 1 (downloadSatellite) passen!
 const ZOOM = 19, TILE = 256, IMG = 1280;
@@ -41,9 +43,10 @@ const CROP = 640;            // 3x3=768 -> zentral 640 ausgeschnitten -> auf 128
 const SCALE = IMG / CROP;    // 2.0
 
 const PROMPT = process.env.RENDER_PROMPT ||
-  'Photorealistic black monocrystalline solar panels in neat rows on the roof, ' +
-  'thin silver frames, realistic reflections and shadows matching the aerial photo, ' +
-  'top-down satellite view.';
+  'Add many photorealistic black monocrystalline solar panels in neat rectangular ' +
+  'rows onto the pitched roof of the central house, following the roof slope. Thin ' +
+  'silver frames, realistic reflections and shadows, top-down aerial satellite view, ' +
+  'high detail.';
 
 async function main() {
   if (!GOOGLE_KEY) { console.error('❌ GOOGLE_MAPS_API_KEY fehlt.'); process.exit(1); }
@@ -72,9 +75,13 @@ async function main() {
 
       if (render) {
         if (!FAL_KEY) { console.warn('     ⚠️  --render, aber FAL_KEY fehlt — uebersprungen.'); continue; }
-        const url = await falFill(satPath, maskPath);
-        await download(url, join(OUTPUT_DIR, `${p.slug}-rendered.png`));
-        console.log('     🎨 mit Dach-Maske gerendert');
+        // 1) Panels aufs ganze Bild rendern (Kontext = zuverlaessig sichtbar)
+        const fullUrl = await falKontext(satPath);
+        const fullPath = join(OUTPUT_DIR, `${p.slug}-rendered-full.png`);
+        await download(fullUrl, fullPath);
+        // 2) Per Maske auf das erkannte Dach beschraenken
+        await composite(satPath, fullPath, maskPath, join(OUTPUT_DIR, `${p.slug}-rendered.png`));
+        console.log('     🎨 Panels gerendert + per Maske aufs Dach beschraenkt');
       }
     } catch (e) {
       console.warn(`  ⚠️  ${p.slug}: ${e.message}`);
@@ -160,21 +167,43 @@ async function buildMask(p, segs, maskPath, satPath) {
 }
 
 // ----------------------------------------------------------------------------
-//  fal.ai Flux Fill (Inpainting) — nur auf dem Mac
+//  fal.ai Flux Kontext (ganzes Bild) — nur auf dem Mac
 // ----------------------------------------------------------------------------
-async function falFill(satPath, maskPath) {
+async function falKontext(satPath) {
   const img = `data:image/png;base64,${(await readFile(satPath)).toString('base64')}`;
-  const msk = `data:image/png;base64,${(await readFile(maskPath)).toString('base64')}`;
-  const res = await fetch(`https://fal.run/${FAL_FILL_MODEL}`, {
+  const res = await fetch(`https://fal.run/${FAL_MODEL}`, {
     method: 'POST',
     headers: { 'Authorization': `Key ${FAL_KEY}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ prompt: PROMPT, image_url: img, mask_url: msk, num_images: 1, output_format: 'png' }),
+    body: JSON.stringify({ prompt: PROMPT, image_url: img, guidance_scale: 3.5, num_images: 1, output_format: 'png' }),
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(data?.detail || `fal HTTP ${res.status}`);
   const url = data?.images?.[0]?.url;
   if (!url) throw new Error('keine Bild-URL von fal');
   return url;
+}
+
+// ----------------------------------------------------------------------------
+//  Composite: Panels NUR auf dem Dach behalten (weiche Masken-Kanten)
+// ----------------------------------------------------------------------------
+async function composite(origPath, fullPath, maskPath, outPath) {
+  const orig = await Jimp.read(origPath);
+  const full = await Jimp.read(fullPath);
+  const mask = await Jimp.read(maskPath);
+  for (const im of [orig, full, mask]) {
+    if (im.bitmap.width !== IMG || im.bitmap.height !== IMG) im.resize(IMG, IMG);
+  }
+  mask.blur(6); // weiche Kanten -> nahtloser Uebergang
+
+  const out = orig.clone();
+  const od = out.bitmap.data, fd = full.bitmap.data, md = mask.bitmap.data;
+  for (let i = 0; i < od.length; i += 4) {
+    const m = md[i] / 255; // 0 (Original) .. 1 (Render mit Panels)
+    od[i]     = Math.round(od[i]     * (1 - m) + fd[i]     * m);
+    od[i + 1] = Math.round(od[i + 1] * (1 - m) + fd[i + 1] * m);
+    od[i + 2] = Math.round(od[i + 2] * (1 - m) + fd[i + 2] * m);
+  }
+  await out.writeAsync(outPath);
 }
 async function download(url, dest) {
   const res = await fetch(url);
