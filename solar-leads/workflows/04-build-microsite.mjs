@@ -386,7 +386,7 @@ async function renderSite(p) {
         } else if (MAIL) {
           var lines = [];
           new FormData(f).forEach(function(v,k){ if(k!=='access_key'&&k!=='subject'&&v) lines.push(k+': '+v); });
-          window.location.href = 'mailto:'+MAIL+'?subject='+encodeURIComponent('Solar-Terminanfrage')+'&body='+encodeURIComponent(lines.join('\n'));
+          window.location.href = 'mailto:'+MAIL+'?subject='+encodeURIComponent('Solar-Terminanfrage')+'&body='+encodeURIComponent(lines.join(String.fromCharCode(10)));
         } else {
           throw new Error('kein Empfänger konfiguriert');
         }
