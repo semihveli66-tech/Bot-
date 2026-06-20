@@ -75,6 +75,22 @@
   .qr{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin:0 0 40px}
   .qr .ph{width:84px;height:84px;border:2px dashed var(--line);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:11px;text-align:center}
   .qr .t{font-size:13px;color:var(--muted)}
+  /* Termin-Buchung */
+  .book{background:#fff;border:1px solid var(--line);border-radius:18px;padding:26px;margin:24px 0}
+  .book h2{margin:0 0 4px;font-size:21px}
+  .book .bsub{color:var(--muted);font-size:14px;margin:0 0 18px}
+  .frow{display:flex;gap:12px;margin-bottom:12px}
+  .book input[type=text],.book input[type=tel],.book input[type=email],.book select,.book input:not([type]){
+    flex:1;width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:10px;font-size:15px;font-family:inherit;background:#fff}
+  .book .chk{display:flex;align-items:center;gap:9px;font-size:14px;color:#334155;margin:4px 0 16px;cursor:pointer}
+  .book .chk input{width:18px;height:18px;accent-color:var(--green)}
+  .book button{width:100%;background:var(--green);color:#fff;font-weight:800;font-size:16px;border:0;
+    border-radius:12px;padding:15px;cursor:pointer}
+  .book button:hover{background:var(--green-d)}
+  .book .calalt{display:block;text-align:center;margin-top:12px;font-size:14px;color:var(--green-d)}
+  .book .fnote{font-size:11.5px;color:var(--muted);margin-top:12px;text-align:center}
+  .bookok{background:#f0fdf4;border:1px solid #bbf7d0;color:#15803d;border-radius:14px;padding:22px;text-align:center;font-size:16px;font-weight:700;margin:24px 0}
+  @media(max-width:560px){.frow{flex-direction:column}}
   footer{color:var(--muted);font-size:12px;text-align:center;padding:0 20px 40px}
   @media(max-width:680px){.stats{grid-template-columns:repeat(2,1fr)}.result{grid-template-columns:1fr}.row label{flex-basis:140px}header.hero h1{font-size:24px}}
 </style>
@@ -147,13 +163,39 @@
       </div>
     </section>
 
-    <div class="cta">
-      <div class="txt">
-        <h3>Kostenlose Vor-Ort-Beratung</h3>
-        <p>Unverbindlich & individuell — ein lokaler Installateur prüft Ihr Dach.</p>
-      </div>
-      <a class="btn" href="#">Beratungstermin buchen →</a>
-    </div>
+    <section class="book" id="termin">
+      <h2>Kostenlose Solar-Beratung sichern</h2>
+      <p class="bsub">Ein geprüfter lokaler Solar-Partner prüft Ihr Dach und erstellt Ihr persönliches Angebot — kostenlos & unverbindlich.</p>
+      <form id="bookform">
+        <div class="frow">
+          <input type="text" name="name" placeholder="Ihr Name" required>
+          <input type="tel" name="telefon" placeholder="Telefonnummer" required>
+        </div>
+        <div class="frow">
+          <input type="email" name="email" placeholder="E-Mail (optional)">
+          <select name="wunschzeit">
+            <option value="">Wann passt es Ihnen? (optional)</option>
+            <option>Vormittag</option>
+            <option>Nachmittag</option>
+            <option>Abend</option>
+            <option>egal</option>
+          </select>
+        </div>
+        <label class="chk"><input type="checkbox" name="eigentuemer" value="ja" required> Ich bin Eigentümer:in dieses Hauses</label>
+
+        <input type="hidden" name="access_key" value="3895b79f-7872-4afe-b690-b93bbda3d9f9">
+        <input type="hidden" name="subject" value="Solar-Terminanfrage: Perchtoldsdorfer Straße 18">
+        <input type="hidden" name="adresse" value="Perchtoldsdorfer Straße 18, 1230 Wien">
+        <input type="hidden" name="anlage_kwp" value="10 kWp">
+        <input type="hidden" name="ersparnis_jahr" value="€ 1 294">
+        <input type="hidden" name="amortisation" value="10,8 Jahre">
+
+        <button type="submit">Kostenlose Beratung anfragen →</button>
+        
+        <div class="fnote">Wir vermitteln Sie an einen geprüften lokalen Solar-Partner. Ihre Daten werden nur dafür genutzt; Sie können jederzeit widersprechen.</div>
+      </form>
+      <div class="bookok" id="bookok" hidden>✅ Danke! Ein geprüfter Solar-Partner meldet sich in Kürze bei Ihnen.</div>
+    </section>
 
     <div class="qr">
       <div class="ph">QR-Code</div>
@@ -232,6 +274,38 @@
     document.getElementById(id).addEventListener('change', calc);
   });
   calc();
+
+  // Termin-Buchung absenden (Web3Forms; ohne Key -> mailto-Rückfall).
+  (function(){
+    var f = document.getElementById('bookform');
+    if (!f) return;
+    var KEY = "3895b79f-7872-4afe-b690-b93bbda3d9f9";
+    var MAIL = "semihvelioez@icloud.com";
+    f.addEventListener('submit', async function(e){
+      e.preventDefault();
+      var btn = f.querySelector('button[type=submit]');
+      btn.disabled = true; btn.textContent = 'Wird gesendet…';
+      try {
+        if (KEY) {
+          var res = await fetch('https://api.web3forms.com/submit', { method:'POST', body: new FormData(f) });
+          var j = await res.json();
+          if (!j.success) throw new Error('web3forms');
+        } else if (MAIL) {
+          var lines = [];
+          new FormData(f).forEach(function(v,k){ if(k!=='access_key'&&k!=='subject'&&v) lines.push(k+': '+v); });
+          window.location.href = 'mailto:'+MAIL+'?subject='+encodeURIComponent('Solar-Terminanfrage')+'&body='+encodeURIComponent(lines.join('
+'));
+        } else {
+          throw new Error('kein Empfänger konfiguriert');
+        }
+        f.hidden = true;
+        document.getElementById('bookok').hidden = false;
+      } catch(err) {
+        btn.disabled = false; btn.textContent = 'Kostenlose Beratung anfragen →';
+        alert('Senden hat leider nicht geklappt. Bitte später erneut versuchen.');
+      }
+    });
+  })();
 </script>
 </body>
 </html>
