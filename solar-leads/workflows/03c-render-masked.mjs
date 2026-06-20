@@ -43,10 +43,11 @@ const CROP = 640;            // 3x3=768 -> zentral 640 ausgeschnitten -> auf 128
 const SCALE = IMG / CROP;    // 2.0
 
 const PROMPT = process.env.RENDER_PROMPT ||
-  'Add many photorealistic black monocrystalline solar panels in neat rectangular ' +
-  'rows onto the pitched roof of the central house, following the roof slope. Thin ' +
-  'silver frames, realistic reflections and shadows, top-down aerial satellite view, ' +
-  'high detail.';
+  'Add many photorealistic dark navy blue monocrystalline solar panels in a dense ' +
+  'rectangular grid onto the pitched roof of the central house, following the roof slope. ' +
+  'Silver aluminum frame borders, glossy reflective surface, visible cell grid lines, ' +
+  'panels flush on roof tiles, top-down aerial satellite view, realistic shadows, ' +
+  'high contrast, clearly visible panels.';
 
 async function main() {
   if (!GOOGLE_KEY) { console.error('❌ GOOGLE_MAPS_API_KEY fehlt.'); process.exit(1); }
