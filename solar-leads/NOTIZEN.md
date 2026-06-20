@@ -51,17 +51,21 @@ skalierbares, wiederkehrendes Modell (oder beides parallel anbieten).
 
 ---
 
-## 🖼️ 3. Bild-Qualität verbessern (für morgen geplant)
+## 🖼️ 3. Bild-Qualität — KAPITEL ABGESCHLOSSEN (20.06.)
 
-Reihenfolge nach Wirkung:
-1. **Straßenansicht / Schrägluftbild** statt Top-Down (Google Street View Static
-   API; emotional am stärksten: „Das ist MEIN Haus mit Solar") → neuer Workflow
-2. **Präzise Dach-Maske** aus Solar-API-Polygonen → Panels sitzen exakt (Inpainting)
-3. **Hochskalieren** (Real-ESRGAN) + **Referenzbild** echter Anlagen → realistischer Look
-4. **Hybrid:** geometrisch korrekte Lage + KI für Fotorealismus
-5. Profi-Liga: 3D-Modell aus Höhendaten + echte 3D-Panels (mehr Aufwand)
+**Entscheidung:** Produktions-Render = **Workflow 3 (Flux Kontext, ganzes Bild)**
+— Stand von letzter Woche. Das ist die beste Qualität, die wir hinbekommen.
 
-US-Anbieter rendern das Dach NICHT fotorealistisch → hier sind wir voraus.
+Getestet & VERWORFEN (brachten KEINE Verbesserung):
+- Straßenansicht (W11): in AT oft Dach nicht sichtbar / Haus verdeckt
+- Dach-Maske + Flux Fill (W3c): Inpainting erzeugte keine sichtbaren Panels
+- Hybrid Kontext + Masken-Composite: Panels zu blass, schlechter als W3
+- Geometrischer Render (W3b): sah künstlich aus
+
+-> Experiment-Workflows bleiben im Repo, werden aber NICHT genutzt.
+Falls je nötig: nur Workflow 3 verwenden. Kapitel Rendern ist zu.
+
+Die guten Renders von letzter Woche stecken bereits in der Live-Demo (docs/).
 
 ---
 
