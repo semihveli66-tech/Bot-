@@ -57,12 +57,14 @@ const ECON = {
 
 // Schwellenwerte fuer die Dach-Eignung (Oesterreich = Nordhalbkugel -> Sueden ist optimal)
 const SUITABILITY = {
-  // Azimut: 180° = exakt Sueden. Wir akzeptieren Suedost bis Suedwest.
-  minAzimuth: 110,   // ca. Ost-Suedost
-  maxAzimuth: 250,   // ca. West-Suedwest
-  idealAzimuth: 180, // Sueden
-  minRoofAreaM2: 20, // Mindest-Dachflaeche, damit sich eine Anlage lohnt
-  minSunshineHours: 1000, // Mindest-Sonnenstunden/Jahr am besten Punkt
+  // Azimut: 180° = exakt Sueden (Score-Optimum).
+  idealAzimuth: 180,
+  // NUTZBAR: Ost (ca. 90°) bis West (ca. 270°) — auch Ost/West-Daecher lohnen sich
+  // (nur ~10–20 % weniger Ertrag als Sued). Nur reine NORD-Daecher fallen raus.
+  usableMinAzimuth: 80,
+  usableMaxAzimuth: 280,
+  minRoofAreaM2: 20,      // Mindest nutzbare Dachflaeche
+  minSunshineHours: 800,  // Mindest-Sonnenstunden/Jahr am besten Punkt
 };
 
 
@@ -270,14 +272,14 @@ function analyzeRoof(solar) {
   // Gesamte Dachflaeche
   const roofAreaM2 = p.wholeRoofStats?.areaMeters2 ?? sum(segments.map(s => s.stats?.areaMeters2 || 0));
 
-  // Sued-orientierte Flaeche aufsummieren (Azimut zwischen min und max).
-  const southSegs = segments.filter(s =>
-    s.azimuthDegrees >= SUITABILITY.minAzimuth && s.azimuthDegrees <= SUITABILITY.maxAzimuth
+  // Nutzbare Flaeche aufsummieren (Ost bis West — nur reine Nord-Daecher raus).
+  const usableSegs = segments.filter(s =>
+    s.azimuthDegrees >= SUITABILITY.usableMinAzimuth && s.azimuthDegrees <= SUITABILITY.usableMaxAzimuth
   );
-  const southFacingAreaM2 = sum(southSegs.map(s => s.stats?.areaMeters2 || 0));
+  const usableAreaM2 = sum(usableSegs.map(s => s.stats?.areaMeters2 || 0));
 
-  // Bestes Segment = groesste Sued-Flaeche (oder groesstes ueberhaupt).
-  const ranked = (southSegs.length ? southSegs : segments)
+  // Bestes Segment = groesste nutzbare Flaeche (oder groesstes ueberhaupt).
+  const ranked = (usableSegs.length ? usableSegs : segments)
     .slice()
     .sort((a, b) => (b.stats?.areaMeters2 || 0) - (a.stats?.areaMeters2 || 0));
   const best = ranked[0];
@@ -288,7 +290,7 @@ function analyzeRoof(solar) {
   const roof = {
     available: true,
     roofAreaM2: round(roofAreaM2, 1),
-    southFacingAreaM2: round(southFacingAreaM2, 1),
+    southFacingAreaM2: round(usableAreaM2, 1), // nutzbare (Ost–Sued–West) Flaeche
     bestAzimuth: best ? round(best.azimuthDegrees, 0) : null,
     bestPitch: best ? round(best.pitchDegrees, 0) : null,
     maxPanelCount: p.maxArrayPanelsCount ?? null,
@@ -299,31 +301,28 @@ function analyzeRoof(solar) {
   };
 
   // --- Eignung bewerten -----------------------------------------------------
-  // Score 0–100 aus drei Faktoren: Ausrichtung, Flaeche, Sonnenstunden.
+  // Score 0–100: Ausrichtung (45) + Flaeche (35) + Sonnenstunden (20).
   let score = 0;
+  const hasUsable = usableAreaM2 > 0 && roof.bestAzimuth != null;
 
-  // (a) Ausrichtung: je naeher an Sued (180°), desto besser.
-  const hasSouth = southFacingAreaM2 > 0 && roof.bestAzimuth != null;
-  if (hasSouth) {
-    const off = Math.abs(roof.bestAzimuth - SUITABILITY.idealAzimuth); // 0 = perfekt
-    score += Math.max(0, 40 - (off / 70) * 40); // bis 40 Punkte
+  // (a) Ausrichtung: Sued optimal, Ost/West noch gut, Nord schlecht.
+  if (hasUsable) {
+    const off = Math.abs(roof.bestAzimuth - SUITABILITY.idealAzimuth); // 0 = Sued
+    score += Math.max(0, 45 * (1 - off / 120)); // Sued 45, Ost/West ~11, Nord 0
   }
-
-  // (b) Flaeche: bis 60 m² Sued-Flaeche skaliert auf 35 Punkte.
-  score += Math.min(35, (southFacingAreaM2 / 60) * 35);
-
-  // (c) Sonnenstunden: ab minSunshineHours skaliert auf 25 Punkte.
+  // (b) Flaeche: bis 60 m² nutzbare Flaeche -> 35 Punkte.
+  score += Math.min(35, (usableAreaM2 / 60) * 35);
+  // (c) Sonnenstunden -> 20 Punkte.
   if (roof.maxSunshineHours != null) {
     const s = (roof.maxSunshineHours - SUITABILITY.minSunshineHours) / 600;
-    score += Math.max(0, Math.min(25, s * 25));
+    score += Math.max(0, Math.min(20, s * 20));
   }
-
   roof.score = Math.round(score);
 
-  // Harte Mindestkriterien fuer "geeignet":
+  // Geeignet: genug nutzbare Flaeche + genug Sonne (Ost/West zaehlt mit).
   roof.suitable = Boolean(
-    hasSouth &&
-    southFacingAreaM2 >= SUITABILITY.minRoofAreaM2 &&
+    hasUsable &&
+    usableAreaM2 >= SUITABILITY.minRoofAreaM2 &&
     (roof.maxSunshineHours == null || roof.maxSunshineHours >= SUITABILITY.minSunshineHours)
   );
 
@@ -475,7 +474,7 @@ function printRoof(roof) {
     return;
   }
   console.log(`  Gesamte Dachflaeche : ${roof.roofAreaM2} m²`);
-  console.log(`  Sued-Flaeche        : ${roof.southFacingAreaM2} m²`);
+  console.log(`  Nutzbare Flaeche    : ${roof.southFacingAreaM2} m²`);
   console.log(`  Beste Ausrichtung   : ${roof.bestAzimuth}°  (180° = Sueden)`);
   console.log(`  Dachneigung         : ${roof.bestPitch}°`);
   console.log(`  Sonnenstunden/Jahr  : ${roof.maxSunshineHours}`);
