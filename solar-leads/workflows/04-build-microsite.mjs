@@ -128,11 +128,11 @@ async function renderSite(p) {
   .ba{position:absolute;inset:0;overflow:hidden;user-select:none}
   .ba img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
   .ba-before{position:absolute;inset:0;width:50%;overflow:hidden;border-right:2px solid #fff}
-  .ba-before img{position:absolute;left:0;top:0;height:100%;width:auto;max-width:none}
-  .ba-handle{position:absolute;top:0;bottom:0;left:50%;width:40px;transform:translateX(-50%);
-    cursor:ew-resize;display:flex;align-items:center;justify-content:center}
-  .ba-handle span{background:#fff;color:#0f172a;border-radius:999px;width:38px;height:38px;
-    display:flex;align-items:center;justify-content:center;font-weight:800;box-shadow:0 4px 12px rgba(0,0,0,.35)}
+  .ba-before img{position:absolute;left:0;top:0;width:100%;height:100%;object-fit:cover}
+  .ba-handle{position:absolute;top:0;bottom:0;left:50%;width:48px;transform:translateX(-50%);
+    cursor:ew-resize;display:flex;align-items:center;justify-content:center;touch-action:none}
+  .ba-handle span{background:#fff;color:#0f172a;border-radius:999px;width:44px;height:44px;
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;box-shadow:0 4px 12px rgba(0,0,0,.35)}
   .ba-lbl{position:absolute;bottom:14px;font-size:12px;font-weight:700;color:#fff;
     background:rgba(15,23,42,.6);padding:4px 10px;border-radius:999px}
   .ba-lbl-l{left:14px}
@@ -190,9 +190,26 @@ async function renderSite(p) {
   .book .calalt{display:block;text-align:center;margin-top:12px;font-size:14px;color:var(--green-d)}
   .book .fnote{font-size:11.5px;color:var(--muted);margin-top:12px;text-align:center}
   .bookok{background:#f0fdf4;border:1px solid #bbf7d0;color:#15803d;border-radius:14px;padding:22px;text-align:center;font-size:16px;font-weight:700;margin:24px 0}
-  @media(max-width:560px){.frow{flex-direction:column}}
   footer{color:var(--muted);font-size:12px;text-align:center;padding:0 20px 40px}
-  @media(max-width:680px){.stats{grid-template-columns:repeat(2,1fr)}.result{grid-template-columns:1fr}.row label{flex-basis:140px}header.hero h1{font-size:24px}}
+  @media(max-width:680px){
+    .wrap{padding:0 12px}
+    header.hero{padding:40px 16px 100px}
+    header.hero h1{font-size:22px}
+    header.hero p{font-size:15px}
+    .photo{margin:-70px auto 0;border-radius:14px}
+    .stats{grid-template-columns:repeat(2,1fr);gap:10px;margin:24px 0}
+    .stat{padding:14px}
+    .stat .v{font-size:20px}
+    section.calc{padding:18px}
+    .row{flex-wrap:wrap;gap:8px}
+    .row label{flex:0 0 100%;font-size:13px}
+    .row input[type=range]{flex:1}
+    .row .out{flex:0 0 60px}
+    .result{grid-template-columns:1fr}
+    .frow{flex-direction:column}
+    .cta{flex-direction:column;gap:14px}
+    .cta a.btn{width:100%;text-align:center}
+  }
 </style>
 </head>
 <body>
@@ -308,25 +325,19 @@ async function renderSite(p) {
     if(!ba) return;
     var before = document.getElementById('baBefore');
     var handle = document.getElementById('baHandle');
-    var innerImg = before.querySelector('img');
-    function fit(){ innerImg.style.width = ba.clientWidth + 'px'; }
     function setPos(x){
       var r = ba.getBoundingClientRect();
-      var pct = Math.max(0, Math.min(100, ((x - r.left)/r.width)*100));
+      var pct = Math.max(2, Math.min(98, ((x - r.left)/r.width)*100));
       before.style.width = pct + '%';
       handle.style.left = pct + '%';
     }
-    fit(); window.addEventListener('resize', fit);
     var dragging = false;
-    function down(){ dragging = true; }
-    function up(){ dragging = false; }
-    function move(e){ if(!dragging) return; var x = (e.touches?e.touches[0].clientX:e.clientX); setPos(x); }
-    handle.addEventListener('mousedown', down);
-    handle.addEventListener('touchstart', down, {passive:true});
-    window.addEventListener('mouseup', up);
-    window.addEventListener('touchend', up);
-    window.addEventListener('mousemove', move);
-    window.addEventListener('touchmove', move, {passive:true});
+    handle.addEventListener('mousedown', function(e){ dragging=true; e.preventDefault(); });
+    handle.addEventListener('touchstart', function(e){ dragging=true; e.preventDefault(); }, {passive:false});
+    window.addEventListener('mouseup', function(){ dragging=false; });
+    window.addEventListener('touchend', function(){ dragging=false; });
+    window.addEventListener('mousemove', function(e){ if(dragging) setPos(e.clientX); });
+    window.addEventListener('touchmove', function(e){ if(dragging){ e.preventDefault(); setPos(e.touches[0].clientX); } }, {passive:false});
     ba.addEventListener('click', function(e){ setPos(e.clientX); });
   })();
 
