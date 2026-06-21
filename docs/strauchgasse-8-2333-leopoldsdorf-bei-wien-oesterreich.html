@@ -130,16 +130,16 @@
       <div class="ba-lbl ba-lbl-l">Vorher</div>
       <div class="ba-lbl ba-lbl-r">Mit Solar</div>
     </div>
-        <div class="tag-suit">✓ Dach geeignet · Score 10/100</div>
+        <div class="tag-suit">✓ Dach geeignet · Score 66/100</div>
       </div>
       <div class="cap"><span>Schieberegler bewegen: Ihr Dach vorher ↔ mit Solaranlage</span><b>Dachausrichtung 104° · 1245 Sonnenstunden/Jahr</b></div>
     </div>
 
     <div class="stats">
-      <div class="stat"><div class="v">– kWp</div><div class="l">Anlagengröße</div></div>
-      <div class="stat"><div class="v">0 kWh</div><div class="l">Stromertrag / Jahr</div></div>
-      <div class="stat"><div class="v">€ 0</div><div class="l">Investition</div></div>
-      <div class="stat"><div class="v green">€ –</div><div class="l">Ersparnis / Jahr</div></div>
+      <div class="stat"><div class="v">10 kWp</div><div class="l">Anlagengröße</div></div>
+      <div class="stat"><div class="v">10 684 kWh</div><div class="l">Stromertrag / Jahr</div></div>
+      <div class="stat"><div class="v">€ 14 000</div><div class="l">Investition</div></div>
+      <div class="stat"><div class="v green">€ 1 325</div><div class="l">Ersparnis / Jahr</div></div>
     </div>
 
     <section class="calc">
@@ -203,9 +203,9 @@
         <input type="hidden" name="access_key" value="3895b79f-7872-4afe-b690-b93bbda3d9f9">
         <input type="hidden" name="subject" value="Solar-Terminanfrage: Strauchgasse 8">
         <input type="hidden" name="adresse" value="Strauchgasse 8, 2333 Leopoldsdorf bei Wien">
-        <input type="hidden" name="anlage_kwp" value="– kWp">
-        <input type="hidden" name="ersparnis_jahr" value="">
-        <input type="hidden" name="amortisation" value="">
+        <input type="hidden" name="anlage_kwp" value="10 kWp">
+        <input type="hidden" name="ersparnis_jahr" value="€ 1 325">
+        <input type="hidden" name="amortisation" value="10,6 Jahre">
 
         <button type="submit">Kostenlose Beratung anfragen →</button>
         
@@ -249,8 +249,8 @@
   })();
 
   // Dieselbe ROI-Logik wie im Backend (Workflow 1), nur live im Browser.
-  var YEARLY_KWH = 0;
-  var COST = 0;
+  var YEARLY_KWH = 10684;
+  var COST = 14000;
   var CONSUMPTION = 4500;           // Haushaltsverbrauch kWh/Jahr
   var BATTERY_COST = 6400;
   var BATTERY_SELF = 0.65;            // Eigenverbrauch mit Speicher
