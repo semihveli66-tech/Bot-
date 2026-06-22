@@ -31,7 +31,9 @@ const STORE = join(OUTPUT_DIR, 'prospects.json');
 const BASE_URL = (process.env.MICROSITE_BASE_URL || 'https://solar-wien.at').replace(/\/$/, '');
 const BRAND = process.env.SENDER_NAME || 'Solar Wien';
 
-const W = 1748, H = 1240; // A6 quer @ 300 dpi
+// POKAmax schneidet die Vorderseite auf ein QUADRAT zu -> Bild quadratisch
+// machen, damit nichts (v.a. der QR-Code) abgeschnitten wird.
+const W = 1240, H = 1240; // quadratisch @ ~300 dpi
 
 async function main() {
   const filter = (process.argv[2] || '').trim();
