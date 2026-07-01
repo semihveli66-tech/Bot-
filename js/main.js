@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ---- Scroll-Reveal-Animation ---- */
   const revealEls = document.querySelectorAll(
-    '.card, .price-card, .about__text, .about__box, .contact__form, .contact__info, .section__head'
+    '.card, .shop-card, .price-card, .about__text, .about__box, .contact__form, .contact__info, .section__head'
   );
   revealEls.forEach(el => el.classList.add('reveal'));
 
