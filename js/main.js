@@ -1,5 +1,5 @@
 /* ============================================================
-   HandyShop Reumannplatz – main.js
+   PHONETASTIC – main.js
    Mobile-Navigation, Header-Effekt, Scroll-Reveal, Formular
    ============================================================ */
 
@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
       );
 
       window.location.href =
-        `mailto:info@handyshop-reumannplatz.at?subject=${subject}&body=${body}`;
+        `mailto:info@phonetastic.at?subject=${subject}&body=${body}`;
 
       status.textContent = 'Danke! Dein E-Mail-Programm öffnet sich – oder ruf uns direkt an: 01 234 56 78';
       status.className = 'form-status ok';
