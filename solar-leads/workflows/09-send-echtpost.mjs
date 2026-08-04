@@ -23,7 +23,7 @@
 //    5. In .env eintragen:
 //         ECHTPOST_API_KEY=...
 //         ECHTPOST_TEMPLATE_ID=...
-//         IMAGE_BASE_URL=https://sesolarwien.github.io/Bot-/mailing
+//         IMAGE_BASE_URL=https://sesolarwien.github.io/Bot-sesolarwien/mailing
 //
 //  Platzhalter, die deine EchtPost-Vorlage nutzen sollte (Merge-Variablen):
 //    {{front_image}}  Vorderseite (Dachbild)   {{qr_image}}   QR-Code
@@ -41,7 +41,7 @@ const STORE = join(OUTPUT_DIR, 'prospects.json');
 
 const API_KEY = process.env.ECHTPOST_API_KEY;
 const TEMPLATE_ID = process.env.ECHTPOST_TEMPLATE_ID;
-const IMAGE_BASE = (process.env.IMAGE_BASE_URL || 'https://sesolarwien.github.io/Bot-/mailing').replace(/\/$/, '');
+const IMAGE_BASE = (process.env.IMAGE_BASE_URL || 'https://sesolarwien.github.io/Bot-sesolarwien/mailing').replace(/\/$/, '');
 const MICROSITE_BASE = (process.env.MICROSITE_BASE_URL || 'https://solar-wien.at').replace(/\/$/, '');
 const ENDPOINT = 'https://api.echtpost.de/v2/cards/from_template';
 
