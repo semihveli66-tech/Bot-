@@ -56,8 +56,9 @@ async function main() {
       const img = await Jimp.read(join(OUTPUT_DIR, src));
       img.cover(W, H);
 
-      // Dunkler Verlauf unten fuer Lesbarkeit.
+      // Dunkle Verlaeufe fuer Lesbarkeit (unten Texte, oben Marke).
       darkenBottom(img, 0.55);
+      darkenTop(img, 0.14);
 
       // Marke oben links.
       img.print(fMed, 60, 50, BRAND);
@@ -96,6 +97,22 @@ function darkenBottom(img, frac) {
   for (let y = H - gh; y < H; y++) {
     const t = (y - (H - gh)) / gh;        // 0 oben -> 1 unten
     const a = Math.min(0.82, t * 0.95);
+    for (let x = 0; x < W; x++) {
+      const i = (W * y + x) << 2;
+      d[i]   = Math.round(d[i]   * (1 - a));
+      d[i+1] = Math.round(d[i+1] * (1 - a));
+      d[i+2] = Math.round(d[i+2] * (1 - a));
+    }
+  }
+}
+
+// Oberen Bildbereich leicht abdunkeln, damit der Markenname lesbar ist.
+function darkenTop(img, frac) {
+  const gh = Math.round(H * frac);
+  const d = img.bitmap.data;
+  for (let y = 0; y < gh; y++) {
+    const t = 1 - y / gh;                 // 1 ganz oben -> 0 unten
+    const a = Math.min(0.55, t * 0.55);
     for (let x = 0; x < W; x++) {
       const i = (W * y + x) << 2;
       d[i]   = Math.round(d[i]   * (1 - a));
