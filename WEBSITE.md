@@ -8,12 +8,63 @@ Wien-Favoriten, Quellenstraße 111 (Ecke Favoritenstraße, beim Reumannplatz).
 ```
 index.html       # Startseite
 css/style.css    # Design inkl. Neon-Logo (Grün → Blau)
-js/main.js       # Navigation, Animationen, Kontaktformular
+js/preise.js     # >>> ALLE PREISE – hier werden sie geändert <<<
+js/main.js       # Navigation, Preisrechner, FAQ, Kontaktformular
+kontakt.php      # nimmt Formular-Anfragen entgegen und mailt sie weiter
 CNAME            # Custom Domain für GitHub Pages (phonetastic.at)
 robots.txt       # Suchmaschinen-Freigabe + Sitemap-Verweis
 sitemap.xml      # Sitemap für Google
 .nojekyll        # liefert alle Dateien unverändert über Pages aus
 ```
+
+---
+
+## Kontaktformular: wohin gehen die Anfragen?
+
+Das Formular schickt die Anfrage an `kontakt.php`, und dieses Skript sendet
+eine E-Mail an **phonetastic1@outlook.com**. Antwortet man auf diese Mail,
+geht die Antwort direkt an den Kunden (Reply-To ist dessen Adresse).
+
+### Damit das funktioniert – zwei Voraussetzungen
+
+1. **Hosting mit PHP.** Bei All-Inkl ist PHP enthalten – dort läuft es sofort.
+   Auf GitHub Pages funktioniert es **nicht**, weil dort nur statische Dateien
+   ausgeliefert werden. In dem Fall greift automatisch die Notlösung: Es öffnet
+   sich das E-Mail-Programm des Besuchers.
+
+2. **Absender-Postfach anlegen.** Im All-Inkl-KAS unter *E-Mail* die Adresse
+   `noreply@phonetastic.at` anlegen. Mails müssen von der eigenen Domain kommen,
+   sonst stuft Outlook sie als Spam ein oder lehnt sie ab.
+   Wer eine andere Adresse verwenden will, ändert oben in `kontakt.php`
+   die Zeile `$ABSENDER`.
+
+### Empfängeradresse ändern
+
+In `kontakt.php` ganz oben:
+
+```php
+$EMPFAENGER = 'phonetastic1@outlook.com';
+```
+
+### Schutz vor Spam
+
+Das Formular enthält ein unsichtbares Feld („Honeypot"). Bots füllen es aus,
+Menschen sehen es nicht – solche Einsendungen werden verworfen. Zusätzlich
+werden Zeilenumbrüche aus allen Feldern entfernt, damit niemand fremde
+Mail-Empfänger einschleusen kann.
+
+---
+
+## Preise ändern
+
+Alle Preise stehen in **`js/preise.js`**. Dort einfach die Zahl überschreiben:
+
+```js
+'iPhone 13': { display: 109, akku: 59, ... }
+```
+
+Nur die Zahl ändern – ohne Euro-Zeichen, ohne Komma. `null` zeigt
+„auf Anfrage" an. Die Datei enthält oben eine ausführliche Anleitung.
 
 ---
 

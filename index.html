@@ -546,8 +546,14 @@
             <label for="message">Nachricht *</label>
             <textarea id="message" name="message" rows="4" placeholder="Beschreibe kurz dein Anliegen" required></textarea>
           </div>
+          <!-- Spam-Falle: für Menschen unsichtbar, Bots füllen sie aus -->
+          <div class="hp" aria-hidden="true">
+            <label for="website">Website (bitte frei lassen)</label>
+            <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
+          </div>
           <button type="submit" class="btn btn--primary btn--block">Anfrage senden</button>
           <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+          <p class="form-hint">Lieber direkt? Ruf uns an unter <a href="tel:+436606511262">0660 651 12 62</a>.</p>
         </form>
 
         <aside class="contact__info">

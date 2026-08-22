@@ -420,6 +420,11 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
 }
 .form-group textarea { resize: vertical; }
 .form-group.error input, .form-group.error textarea { border-color: #ef4444; background: #fef2f2; }
+/* Spam-Falle: unsichtbar, aber nicht display:none (Bots erkennen das) */
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.form-hint { margin-top: 10px; text-align: center; font-size: .88rem; color: var(--muted); }
+.form-hint a { color: var(--brand-dark); font-weight: 600; }
+.btn:disabled { opacity: .6; cursor: wait; }
 .form-status { margin-top: 12px; font-weight: 600; text-align: center; min-height: 1.2em; }
 .form-status.ok { color: #16a34a; }
 .form-status.bad { color: #ef4444; }

@@ -161,18 +161,38 @@ document.addEventListener('DOMContentLoaded', () => {
       if (group) group.classList.toggle('error', on);
     };
 
-    form.addEventListener('submit', (e) => {
+    const submitBtn = form.querySelector('button[type="submit"]');
+
+    /* Notloesung, falls kontakt.php nicht erreichbar ist (z. B. Hosting
+       ohne PHP): Anfrage ueber das E-Mail-Programm des Besuchers. */
+    const perMailProgramm = (d) => {
+      const betreff = encodeURIComponent('Anfrage über die Website – ' + d.name);
+      const inhalt = encodeURIComponent(
+        `Name: ${d.name}\nE-Mail: ${d.email}\nTelefon: ${d.phone || '-'}\n` +
+        `Gerät/Problem: ${d.device || '-'}\n\nNachricht:\n${d.message}`
+      );
+      window.location.href = `mailto:phonetastic1@outlook.com?subject=${betreff}&body=${inhalt}`;
+      status.textContent = 'Dein E-Mail-Programm öffnet sich. Klappt das nicht, ruf uns an: 0660 651 12 62';
+      status.className = 'form-status ok';
+    };
+
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      const name = form.name.value.trim();
-      const email = form.email.value.trim();
-      const message = form.message.value.trim();
-      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      const daten = {
+        name:    form.name.value.trim(),
+        email:   form.email.value.trim(),
+        phone:   form.phone.value.trim(),
+        device:  form.device.value.trim(),
+        message: form.message.value.trim(),
+        website: form.website ? form.website.value : ''   // Spam-Falle
+      };
+      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(daten.email);
 
       let valid = true;
-      showError('name', !name); if (!name) valid = false;
-      showError('email', !emailOk); if (!emailOk) valid = false;
-      showError('message', !message); if (!message) valid = false;
+      showError('name', !daten.name);       if (!daten.name) valid = false;
+      showError('email', !emailOk);         if (!emailOk) valid = false;
+      showError('message', !daten.message); if (!daten.message) valid = false;
 
       if (!valid) {
         status.textContent = 'Bitte fülle die markierten Pflichtfelder korrekt aus.';
@@ -180,23 +200,39 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      /* Ohne Backend: Anfrage per E-Mail-Programm vorbereiten (mailto).
-         Für echten Versand hier eine Form-API (z.B. Formspree) eintragen. */
-      const subject = encodeURIComponent('Anfrage über die Website – ' + name);
-      const body = encodeURIComponent(
-        `Name: ${name}\n` +
-        `E-Mail: ${email}\n` +
-        `Telefon: ${form.phone.value.trim() || '-'}\n` +
-        `Gerät/Problem: ${form.device.value.trim() || '-'}\n\n` +
-        `Nachricht:\n${message}`
-      );
+      submitBtn.disabled = true;
+      const beschriftung = submitBtn.textContent;
+      submitBtn.textContent = 'Wird gesendet …';
+      status.textContent = '';
+      status.className = 'form-status';
 
-      window.location.href =
-        `mailto:phonetastic1@outlook.com?subject=${subject}&body=${body}`;
+      try {
+        const antwort = await fetch('kontakt.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+          body: new URLSearchParams(daten).toString()
+        });
 
-      status.textContent = 'Danke! Dein E-Mail-Programm öffnet sich – oder ruf uns direkt an: 0660 651 12 62';
-      status.className = 'form-status ok';
-      form.reset();
+        // Kein PHP vorhanden? Dann kommt HTML statt JSON zurueck.
+        const typ = antwort.headers.get('content-type') || '';
+        if (!typ.includes('application/json')) throw new Error('kein-php');
+
+        const ergebnis = await antwort.json();
+
+        if (ergebnis.ok) {
+          status.textContent = 'Danke! Deine Anfrage ist bei uns eingegangen – wir melden uns schnellstmöglich.';
+          status.className = 'form-status ok';
+          form.reset();
+        } else {
+          status.textContent = ergebnis.error || 'Das hat leider nicht geklappt. Bitte ruf uns an: 0660 651 12 62';
+          status.className = 'form-status bad';
+        }
+      } catch (err) {
+        perMailProgramm(daten);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = beschriftung;
+      }
     });
 
     // Fehler-Markierung beim Tippen entfernen
