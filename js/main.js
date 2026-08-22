@@ -192,9 +192,9 @@ document.addEventListener('DOMContentLoaded', () => {
       );
 
       window.location.href =
-        `mailto:info@phonetastic.at?subject=${subject}&body=${body}`;
+        `mailto:phonetastic1@outlook.com?subject=${subject}&body=${body}`;
 
-      status.textContent = 'Danke! Dein E-Mail-Programm öffnet sich – oder ruf uns direkt an: 01 234 56 78';
+      status.textContent = 'Danke! Dein E-Mail-Programm öffnet sich – oder ruf uns direkt an: 0660 651 12 62';
       status.className = 'form-status ok';
       form.reset();
     });

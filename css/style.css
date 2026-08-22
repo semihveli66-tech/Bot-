@@ -403,6 +403,10 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
 
 /* ---------- Contact ---------- */
 .contact { display: grid; grid-template-columns: 1.1fr .9fr; gap: 34px; align-items: start; }
+.contact > * { min-width: 0; }
+/* Lange E-Mail-Adressen duerfen umbrechen, sonst dehnen sie das Raster */
+.contact__list div { min-width: 0; }
+.contact__list a { overflow-wrap: anywhere; }
 .contact__form { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 32px; box-shadow: var(--shadow); }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .form-group { margin-bottom: 16px; display: flex; flex-direction: column; }

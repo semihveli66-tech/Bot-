@@ -1,9 +1,29 @@
 /* ============================================================
-   PHONETASTIC – Preisdaten für den Reparatur-Rechner
-   ------------------------------------------------------------
-   HIER die Preise pflegen. Alle Werte in Euro, ohne Zeichen.
-   null  = "auf Anfrage" (wird so angezeigt)
-   Die Arbeitszeit ist bei allen Preisen INKLUSIVE.
+   PHONETASTIC – PREISE
+   ============================================================
+
+   >>> HIER UND NUR HIER WERDEN DIE PREISE GEAENDERT. <<<
+
+   So funktioniert es:
+
+   'iPhone 13': { display: 109, akku: 59, ladebuchse: 69, ... }
+                            ^^^        ^^
+                     Einfach die Zahl ueberschreiben. Fertig.
+
+   Regeln:
+   - Nur die Zahl aendern, alles andere so lassen
+   - Zahlen OHNE Euro-Zeichen und OHNE Komma:  109   richtig
+                                               109 € falsch
+                                               109,- falsch
+   - Kein Komma nach der Zahl vergessen, wenn noch etwas folgt
+   - null  = zeigt "auf Anfrage" statt einem Preis an
+   - Eine Reparaturart ganz weglassen = sie erscheint bei dem
+     Geraet nicht in der Liste
+
+   Neues Modell anlegen: eine bestehende Zeile kopieren, den Namen
+   in den Anfuehrungszeichen aendern und die Preise anpassen.
+
+   Alle Preise verstehen sich INKLUSIVE Arbeitszeit.
    ============================================================ */
 
 const REPARATUR_LABELS = {
@@ -88,6 +108,18 @@ const PREISE = {
   'Google': {
     'Pixel 6 / 7':           { display: 139, akku: 65, ladebuchse: 69, kamera: 99,  rueckglas: 79, lautsprecher: 69, wasser: 59, software: 39 },
     'Pixel 8 / 9':           { display: 179, akku: 75, ladebuchse: 79, kamera: 119, rueckglas: 89, lautsprecher: 79, wasser: 69, software: 39 }
+  },
+
+  /* Tablets: NICHT von der Geraete-Retter-Praemie gedeckt (seit 2026 ausgenommen). */
+  'Tablet / iPad': {
+    'iPad (9./10. Generation)':   { display: 129, akku: 99,  ladebuchse: 89, lautsprecher: 79, wasser: 89, software: 49 },
+    'iPad Air':                   { display: 199, akku: 119, ladebuchse: 99, lautsprecher: 89, wasser: 99, software: 49 },
+    'iPad Pro 11"':               { display: 299, akku: 149, ladebuchse: 119, lautsprecher: 99, wasser: 119, software: 49 },
+    'iPad Pro 12,9"':             { display: 379, akku: 169, ladebuchse: 129, lautsprecher: 109, wasser: 129, software: 49 },
+    'iPad mini':                  { display: 149, akku: 109, ladebuchse: 89, lautsprecher: 79, wasser: 89, software: 49 },
+    'Samsung Galaxy Tab A':       { display: 119, akku: 89,  ladebuchse: 79, lautsprecher: 69, wasser: 79, software: 49 },
+    'Samsung Galaxy Tab S':       { display: 219, akku: 119, ladebuchse: 99, lautsprecher: 89, wasser: 99, software: 49 },
+    'Android-Tablet (sonstige)':  { display: 109, akku: 79,  ladebuchse: 69, lautsprecher: 59, wasser: 69, software: 49 }
   },
 
   /* Laptops: einzige Geraetegruppe hier, die unter die
