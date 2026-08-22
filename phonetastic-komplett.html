@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PHONETASTIC | Handy Reparatur in Wien-Favoriten · Reumannplatz</title>
-  <meta name="description" content="PHONETASTIC – Handy Reparatur am Reumannplatz in Wien-Favoriten. Displaytausch, Akkuwechsel, Verkauf von Smartphones & Zubehör. Faire Preise, Reparatur oft in 30 Minuten." />
+  <meta name="description" content="PHONETASTIC – Handy Reparatur in Wien-Favoriten, Quellenstraße 111 beim Reumannplatz. Display, Akku, Ladebuchse, Rückglas & Wasserschaden für iPhone, Samsung, Xiaomi & Co. Preise online berechnen, 12 Monate Garantie, oft in 30 Minuten fertig." />
   <meta name="keywords" content="PHONETASTIC, Handy Reparatur Wien, Handyshop Favoriten, Reumannplatz, Displaytausch, Akku wechseln, Smartphone Reparatur, iPhone Reparatur Wien, Samsung Reparatur" />
   <meta name="author" content="PHONETASTIC" />
   <meta name="robots" content="index, follow" />
@@ -227,6 +227,117 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
 .shop__note { text-align: center; margin-top: 30px; color: #b6c2d4; }
 .shop__note a { color: #67e8f9; font-weight: 600; }
 
+/* ---------- Preisrechner ---------- */
+.calc {
+  max-width: 780px; margin: 0 auto;
+  background: linear-gradient(160deg, rgba(22,35,58,.92), rgba(14,26,43,.92));
+  border: 1px solid rgba(56,189,248,.22); border-radius: var(--radius);
+  padding: 26px; box-shadow: var(--shadow-lg);
+}
+.calc__controls { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 22px; }
+.calc__field { display: flex; flex-direction: column; min-width: 0; }
+.calc__field label {
+  font-family: inherit; font-size: .78rem; font-weight: 700; letter-spacing: .06em;
+  text-transform: uppercase; color: #7dd3fc; margin-bottom: 7px;
+}
+.calc select {
+  width: 100%; padding: 13px 14px; border-radius: var(--radius-sm);
+  border: 1.5px solid rgba(56,189,248,.3); background: #0b1220; color: #e8eef3;
+  font-family: inherit; font-size: .95rem; cursor: pointer; transition: .2s;
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, #38bdf8 50%), linear-gradient(135deg, #38bdf8 50%, transparent 50%);
+  background-position: calc(100% - 19px) 21px, calc(100% - 13px) 21px;
+  background-size: 6px 6px, 6px 6px; background-repeat: no-repeat;
+}
+.calc select:focus { outline: none; border-color: var(--neon-green); box-shadow: 0 0 0 3px rgba(52,211,153,.2); }
+.calc select:disabled { opacity: .45; cursor: not-allowed; }
+
+.calc__results { border-top: 1px solid rgba(255,255,255,.1); padding-top: 20px; }
+.calc__hint { color: #93a3b8; text-align: center; padding: 22px 10px; }
+.calc__head h3 { color: #f1f5f9; font-size: 1.25rem; margin-bottom: 4px; }
+.calc__head p { color: #93a3b8; font-size: .88rem; margin-bottom: 16px; }
+
+.pr-list { display: grid; gap: 2px; }
+.pr-row {
+  display: grid; grid-template-columns: 34px 1fr auto; align-items: center; gap: 12px;
+  padding: 12px 6px; border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.pr-icon { font-size: 1.15rem; text-align: center; }
+.pr-name { color: #e2e8f0; font-weight: 600; display: flex; flex-direction: column; min-width: 0; }
+.pr-name em { font-style: normal; font-size: .76rem; color: #7c8da0; font-weight: 400; }
+.pr-val {
+  font-weight: 800; font-size: 1.12rem; white-space: nowrap; font-variant-numeric: tabular-nums;
+  background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.pr-ask { font-size: .86rem; color: #93a3b8; white-space: nowrap; }
+
+.calc__foot { margin-top: 22px; text-align: center; }
+.calc__note { color: #7c8da0; font-size: .82rem; margin-top: 12px; }
+
+.calc__badges {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 26px;
+  margin: 26px auto 0; color: #a5f3fc; font-size: .9rem; font-weight: 500;
+}
+
+/* ---------- Marken ---------- */
+.brands { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.brand-chip {
+  background: #fff; border: 1px solid var(--line); border-radius: var(--radius-sm);
+  padding: 20px 14px; text-align: center; transition: .22s;
+}
+.brand-chip:hover { transform: translateY(-4px); border-color: rgba(34,211,238,.55); box-shadow: var(--shadow); }
+.brand-chip strong { display: block; color: var(--ink); font-size: 1.05rem; }
+.brand-chip span { font-size: .82rem; color: var(--muted); }
+
+/* ---------- Ablauf ---------- */
+.steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; counter-reset: none; }
+.step {
+  position: relative; background: #fff; border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 30px 26px 26px; box-shadow: var(--shadow);
+}
+.step__num {
+  position: absolute; top: -18px; left: 26px;
+  width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center;
+  background: var(--grad); color: #04121a; font-weight: 800; font-size: 1.1rem;
+  box-shadow: 0 6px 16px rgba(34,211,238,.35);
+}
+.step h3 { font-size: 1.12rem; margin: 10px 0 8px; }
+.step p { color: var(--muted); font-size: .94rem; }
+
+/* ---------- Firmenkunden ---------- */
+.b2b { display: grid; grid-template-columns: 1.35fr .8fr; gap: 40px; align-items: start; }
+.b2b__text h2 { color: #f8fafc; font-size: clamp(1.6rem, 3.2vw, 2.2rem); margin: 10px 0 14px; }
+.b2b__text > p { color: #b6c2d4; margin-bottom: 18px; }
+.b2b__list { display: grid; gap: 10px; margin-bottom: 24px; }
+.b2b__list li { padding-left: 26px; position: relative; color: #d7e0ec; }
+.b2b__list li::before { content: "✔"; position: absolute; left: 0; color: var(--neon-green); font-weight: 700; }
+.b2b__box {
+  background: rgba(255,255,255,.05); border: 1px solid rgba(56,189,248,.22);
+  border-radius: var(--radius); padding: 26px;
+}
+.b2b__box h3 { color: #fff; font-size: 1.1rem; margin-bottom: 10px; }
+.b2b__box p { color: #b6c2d4; font-size: .93rem; margin-bottom: 18px; }
+
+/* ---------- FAQ ---------- */
+.faq { max-width: 800px; margin: 0 auto; display: grid; gap: 12px; }
+.faq__item { background: #fff; border: 1px solid var(--line); border-radius: var(--radius-sm); box-shadow: var(--shadow); overflow: hidden; }
+.faq__q {
+  width: 100%; text-align: left; background: none; border: none; cursor: pointer;
+  font-family: inherit; font-size: 1rem; font-weight: 650; color: var(--ink);
+  padding: 18px 52px 18px 20px; position: relative; line-height: 1.4;
+}
+.faq__q::after {
+  content: "+"; position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
+  font-size: 1.5rem; font-weight: 400; color: var(--brand); transition: transform .25s;
+}
+.faq__item.open .faq__q::after { transform: translateY(-50%) rotate(45deg); }
+.faq__q:hover { color: var(--brand-dark); }
+.faq__q:focus-visible { outline: 3px solid var(--brand-light); outline-offset: -3px; }
+.faq__a { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .28s ease; }
+.faq__item.open .faq__a { grid-template-rows: 1fr; }
+.faq__a > p { overflow: hidden; color: var(--muted); padding: 0 20px; }
+.faq__item.open .faq__a > p { padding-bottom: 20px; }
+
 /* ---------- Pricing ---------- */
 .pricing { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; align-items: stretch; }
 .price-card {
@@ -338,6 +449,9 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
   .contact { grid-template-columns: 1fr; }
   .cards, .pricing { grid-template-columns: 1fr 1fr; }
   .shop-grid { grid-template-columns: 1fr 1fr; }
+  .brands { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .steps { grid-template-columns: 1fr; gap: 34px; }
+  .b2b { grid-template-columns: 1fr; gap: 26px; }
   .price-card--featured { transform: none; }
   .footer__inner { grid-template-columns: 1fr 1fr; }
 }
@@ -358,6 +472,15 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
   .section { padding: 60px 0; }
   .cards, .pricing, .about__grid, .footer__inner { grid-template-columns: 1fr; }
   .shop-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .brands { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .calc { padding: 18px 14px; }
+  .calc__controls { grid-template-columns: 1fr; gap: 12px; }
+  .pr-row { grid-template-columns: 26px 1fr auto; gap: 8px; padding: 11px 2px; }
+  .pr-val { font-size: 1rem; }
+  .calc__badges { gap: 8px 16px; font-size: .84rem; }
+  .faq__q { font-size: .95rem; padding: 16px 46px 16px 16px; }
+  .faq__a > p { padding: 0 16px; }
+  .faq__item.open .faq__a > p { padding-bottom: 16px; }
   .shop-card { padding: 18px 14px; }
   .shop-card h3 { font-size: 1rem; }
   .shop-card p { font-size: .85rem; }
@@ -429,9 +552,10 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
         <ul class="nav__list">
           <li><a href="#home" class="nav__link">Start</a></li>
           <li><a href="#services" class="nav__link">Leistungen</a></li>
+          <li><a href="#preise" class="nav__link">Preisrechner</a></li>
+          <li><a href="#marken" class="nav__link">Marken</a></li>
           <li><a href="#shop" class="nav__link">Shop</a></li>
-          <li><a href="#preise" class="nav__link">Preise</a></li>
-          <li><a href="#about" class="nav__link">Über uns</a></li>
+          <li><a href="#faq" class="nav__link">FAQ</a></li>
           <li><a href="#kontakt" class="nav__link">Kontakt</a></li>
           <li><a href="tel:+43123456780" class="nav__cta">📞 Anrufen</a></li>
         </ul>
@@ -521,16 +645,124 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
           <p>Gerät lädt nicht mehr richtig? Wir reparieren Ladebuchse, Buttons und Anschlüsse.</p>
         </article>
         <article class="card">
+          <div class="card__icon">🪟</div>
+          <h3>Rückglas-Tausch</h3>
+          <p>Gesprungene Glas-Rückseite? Wir tauschen sie fachgerecht – auch bei verklebten iPhone-Gehäusen.</p>
+        </article>
+        <article class="card">
+          <div class="card__icon">📷</div>
+          <h3>Kamera-Reparatur</h3>
+          <p>Unscharfe Bilder, schwarzes Bild oder gesprungenes Linsenglas – Haupt- und Frontkamera.</p>
+        </article>
+        <article class="card">
+          <div class="card__icon">🔊</div>
+          <h3>Lautsprecher &amp; Mikrofon</h3>
+          <p>Kein Ton, dein Gegenüber hört dich nicht? Wir prüfen Hörer, Lautsprecher und Mikrofone.</p>
+        </article>
+        <article class="card">
+          <div class="card__icon">💾</div>
+          <h3>Software &amp; Datenrettung</h3>
+          <p>Bootschleife, hängendes System, Datenübertragung aufs neue Handy – auch Rettung wichtiger Fotos.</p>
+        </article>
+        <article class="card">
+          <div class="card__icon">🔬</div>
+          <h3>Board-Level-Reparatur</h3>
+          <p>Kein Bild, kein Strom, Ladefehler? Wir reparieren auf Chip-Ebene – dort, wo andere aufgeben.</p>
+        </article>
+        <article class="card">
           <div class="card__icon">🛒</div>
           <h3>Verkauf &amp; Ankauf</h3>
           <p>Neue &amp; generalüberholte Smartphones. Wir kaufen auch dein altes Gerät fair an.</p>
         </article>
-        <article class="card">
-          <div class="card__icon">🎧</div>
-          <h3>Zubehör</h3>
-          <p>Hüllen, Panzerglas, Ladekabel, Kopfhörer &amp; mehr – passend für jedes Modell.</p>
-        </article>
       </div>
+    </div>
+  </section>
+
+  <!-- ============ PREISRECHNER ============ -->
+  <section class="section section--dark" id="preise">
+    <div class="container">
+      <div class="section__head section__head--light">
+        <span class="eyebrow eyebrow--neon">Preisrechner</span>
+        <h2>In 5 Sekunden zum Preis</h2>
+        <p>Marke und Modell wählen – du siehst sofort alle Reparaturpreise. Ohne Anmeldung, ohne versteckte Kosten.</p>
+      </div>
+
+      <div class="calc">
+        <div class="calc__controls">
+          <div class="calc__field">
+            <label for="calcBrand">1. Marke</label>
+            <select id="calcBrand">
+              <option value="">Marke wählen …</option>
+            </select>
+          </div>
+          <div class="calc__field">
+            <label for="calcModel">2. Modell</label>
+            <select id="calcModel" disabled>
+              <option value="">Zuerst Marke wählen</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="calc__results" id="calcResults">
+          <p class="calc__hint">Wähle oben deine Marke – dann erscheinen hier alle Preise für dein Gerät.</p>
+        </div>
+      </div>
+
+      <ul class="calc__badges">
+        <li>✔ Arbeitszeit inklusive</li>
+        <li>✔ Diagnose gratis</li>
+        <li>✔ 12 Monate Garantie</li>
+        <li>✔ Keine Zuschläge für Fehlermeldungen</li>
+      </ul>
+      <p class="shop__note">Dein Modell ist nicht dabei? <a href="#kontakt">Frag uns – wir nennen dir den Preis sofort.</a></p>
+    </div>
+  </section>
+
+  <!-- ============ MARKEN ============ -->
+  <section class="section" id="marken">
+    <div class="container">
+      <div class="section__head">
+        <span class="eyebrow">Alle Marken</span>
+        <h2>Wir reparieren, was du in der Tasche hast</h2>
+        <p>Von Apple bis Motorola – auch ältere Geräte und Modelle, die andere ablehnen.</p>
+      </div>
+      <div class="brands">
+        <div class="brand-chip"><strong>Apple</strong><span>iPhone &amp; iPad</span></div>
+        <div class="brand-chip"><strong>Samsung</strong><span>Galaxy S · A · Z</span></div>
+        <div class="brand-chip"><strong>Xiaomi</strong><span>Redmi · Poco</span></div>
+        <div class="brand-chip"><strong>Huawei</strong><span>P · Mate · Nova</span></div>
+        <div class="brand-chip"><strong>Google</strong><span>Pixel</span></div>
+        <div class="brand-chip"><strong>OnePlus</strong><span>alle Modelle</span></div>
+        <div class="brand-chip"><strong>Oppo</strong><span>alle Modelle</span></div>
+        <div class="brand-chip"><strong>Motorola</strong><span>alle Modelle</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ABLAUF ============ -->
+  <section class="section section--alt" id="ablauf">
+    <div class="container">
+      <div class="section__head">
+        <span class="eyebrow">So läuft's ab</span>
+        <h2>Drei Schritte – meistens in einer halben Stunde erledigt</h2>
+      </div>
+      <ol class="steps">
+        <li class="step">
+          <span class="step__num">1</span>
+          <h3>Vorbeikommen oder anfragen</h3>
+          <p>Komm einfach in die Quellenstraße 111 oder schick uns vorab eine Nachricht mit Modell und Problem.</p>
+        </li>
+        <li class="step">
+          <span class="step__num">2</span>
+          <h3>Gratis-Diagnose &amp; Festpreis</h3>
+          <p>Wir prüfen dein Gerät vor Ort und nennen dir einen verbindlichen Preis – erst dann entscheidest du.</p>
+        </li>
+        <li class="step">
+          <span class="step__num">3</span>
+          <h3>Reparatur &amp; Garantie</h3>
+          <p>Die meisten Reparaturen erledigen wir, während du wartest. Mit 12 Monaten Garantie.</p>
+        </li>
+      </ol>
     </div>
   </section>
 
@@ -590,57 +822,6 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
     </div>
   </section>
 
-  <!-- ============ PREISE ============ -->
-  <section class="section section--alt" id="preise">
-    <div class="container">
-      <div class="section__head">
-        <span class="eyebrow">Transparente Preise</span>
-        <h2>Richtwerte für unsere häufigsten Reparaturen</h2>
-        <p>Endpreise abhängig vom Modell. Kostenvoranschlag immer gratis &amp; unverbindlich.</p>
-      </div>
-
-      <div class="pricing">
-        <div class="price-card">
-          <h3>Displaytausch</h3>
-          <div class="price-card__price">ab <strong>49&nbsp;€</strong></div>
-          <ul>
-            <li>Original- oder Premium-Display</li>
-            <li>Meist fertig in 30–60 Min</li>
-            <li>12 Monate Garantie</li>
-          </ul>
-          <a href="#kontakt" class="btn btn--ghost btn--block">Termin anfragen</a>
-        </div>
-
-        <div class="price-card price-card--featured">
-          <span class="price-card__tag">Beliebt</span>
-          <h3>Akku-Wechsel</h3>
-          <div class="price-card__price">ab <strong>35&nbsp;€</strong></div>
-          <ul>
-            <li>Hochwertiger Ersatz-Akku</li>
-            <li>Fertig, während du wartest</li>
-            <li>Inklusive Funktionstest</li>
-          </ul>
-          <a href="#kontakt" class="btn btn--primary btn--block">Termin anfragen</a>
-        </div>
-
-        <div class="price-card">
-          <h3>Ladebuchse</h3>
-          <div class="price-card__price">ab <strong>39&nbsp;€</strong></div>
-          <ul>
-            <li>Reinigung oder Austausch</li>
-            <li>Diagnose inklusive</li>
-            <li>Schnelle Erledigung</li>
-          </ul>
-          <a href="#kontakt" class="btn btn--ghost btn--block">Termin anfragen</a>
-        </div>
-      </div>
-
-      <p class="pricing__note">
-        Weitere Reparaturen (Kamera, Lautsprecher, Software, Datenrettung) auf Anfrage.
-        <a href="#kontakt">Frag einfach nach deinem Modell →</a>
-      </p>
-    </div>
-  </section>
 
   <!-- ============ ABOUT ============ -->
   <section class="section" id="about">
@@ -674,6 +855,81 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
         <hr />
         <h3>📍 So findest du uns</h3>
         <p>Quellenstraße 111<br />1100 Wien (Favoriten)<br />Ecke Favoritenstraße – U1 Reumannplatz, 2 Minuten zu Fuß</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FIRMENKUNDEN / B2B ============ -->
+  <section class="section section--dark" id="b2b">
+    <div class="container b2b">
+      <div class="b2b__text">
+        <span class="eyebrow eyebrow--neon">Firmenkunden</span>
+        <h2>Geräteflotte im Betrieb? Wir kümmern uns.</h2>
+        <p>
+          Ob Handwerksbetrieb, Kanzlei, Gastro oder Verein – ausgefallene Diensthandys
+          kosten Zeit und Nerven. Wir reparieren die Geräte deines Teams schnell,
+          mit Sammelrechnung und ohne Papierkram.
+        </p>
+        <ul class="b2b__list">
+          <li>Sammelabholung &amp; Sammelrechnung mit Umsatzsteuerausweis</li>
+          <li>Priorisierte Bearbeitung – dein Team wartet nicht</li>
+          <li>Mengenrabatt bei Zubehör (Hüllen, Panzerglas, Kabel)</li>
+          <li>Ankauf und Aufbereitung ausgemusterter Geräte</li>
+        </ul>
+        <a href="#kontakt" class="btn btn--primary">Firmenangebot anfragen</a>
+      </div>
+      <div class="b2b__box">
+        <h3>💼 Für Betriebe in Favoriten</h3>
+        <p>
+          Wir sind gleich um die Ecke – bring die Geräte einfach vorbei oder ruf an,
+          dann besprechen wir eine Lösung, die zu deinem Betrieb passt.
+        </p>
+        <a href="tel:+43123456780" class="btn btn--ghost btn--light btn--block">📞 01 234 56 78</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section class="section" id="faq">
+    <div class="container">
+      <div class="section__head">
+        <span class="eyebrow">Häufige Fragen</span>
+        <h2>Das fragen uns Kundinnen und Kunden am öftesten</h2>
+      </div>
+
+      <div class="faq">
+        <div class="faq__item">
+          <button class="faq__q" aria-expanded="false">Wie lange dauert eine Reparatur?</button>
+          <div class="faq__a"><p>Display- und Akkutausch dauern meist 30 bis 60 Minuten – die kannst du bei uns abwarten. Aufwendigere Arbeiten wie Wasserschäden oder Reparaturen auf Platinenebene brauchen ein bis drei Tage. Den genauen Zeitrahmen sagen wir dir bei der Diagnose.</p></div>
+        </div>
+        <div class="faq__item">
+          <button class="faq__q" aria-expanded="false">Bleiben meine Daten und Fotos erhalten?</button>
+          <div class="faq__a"><p>Ja. Bei einer normalen Reparatur bleiben alle Daten auf dem Gerät – wir setzen nichts zurück. Trotzdem empfehlen wir dir, vorher ein Backup zu machen, denn bei stark beschädigten Geräten lässt sich ein Datenverlust nie zu hundert Prozent ausschließen.</p></div>
+        </div>
+        <div class="faq__item">
+          <button class="faq__q" aria-expanded="false">Was kostet die Diagnose?</button>
+          <div class="faq__a"><p>Nichts. Wir schauen uns dein Gerät an und nennen dir einen verbindlichen Festpreis. Erst wenn du zustimmst, reparieren wir. Wenn du dich dagegen entscheidest, zahlst du nichts.</p></div>
+        </div>
+        <div class="faq__item">
+          <button class="faq__q" aria-expanded="false">Welche Garantie gebt ihr?</button>
+          <div class="faq__a"><p>Auf jede Reparatur geben wir <strong>12 Monate Garantie</strong> auf das eingebaute Ersatzteil und unsere Arbeit. Nicht abgedeckt sind neue Sturz- oder Wasserschäden nach der Reparatur.</p></div>
+        </div>
+        <div class="faq__item">
+          <button class="faq__q" aria-expanded="false">Verwendet ihr Originalteile?</button>
+          <div class="faq__a"><p>Du hast die Wahl. Wir bieten Originalteile und hochwertige Premium-Ersatzteile an. Wir erklären dir vorher ehrlich den Unterschied bei Preis und Qualität, damit du selbst entscheiden kannst.</p></div>
+        </div>
+        <div class="faq__item">
+          <button class="faq__q" aria-expanded="false">Kommt nach dem Tausch eine Fehlermeldung am Handy?</button>
+          <div class="faq__a"><p>Bei neueren iPhones zeigt das System manchmal einen Hinweis, wenn ein Teil nicht vom Hersteller stammt. Wir übernehmen die Daten des Originalteils, damit Funktionen wie die Akku-Gesundheitsanzeige weiter funktionieren – und verlangen dafür <strong>keinen Aufpreis</strong>.</p></div>
+        </div>
+        <div class="faq__item">
+          <button class="faq__q" aria-expanded="false">Muss ich einen Termin vereinbaren?</button>
+          <div class="faq__a"><p>Nein, du kannst jederzeit während der Öffnungszeiten vorbeikommen. Wenn du vorher anrufst oder schreibst, legen wir das passende Ersatzteil bereit – dann geht es noch schneller.</p></div>
+        </div>
+        <div class="faq__item">
+          <button class="faq__q" aria-expanded="false">Kauft ihr auch alte Handys an?</button>
+          <div class="faq__a"><p>Ja. Bring dein altes Gerät vorbei – auch mit Defekt. Wir machen dir ein faires Angebot oder rechnen den Wert direkt gegen deine Reparatur oder ein neues Gerät auf.</p></div>
+        </div>
       </div>
     </div>
   </section>
@@ -762,11 +1018,12 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
       <div class="footer__col">
         <h4>Leistungen</h4>
         <ul>
-          <li><a href="#services">Display-Reparatur</a></li>
-          <li><a href="#services">Akku-Wechsel</a></li>
+          <li><a href="#preise">Preisrechner</a></li>
+          <li><a href="#services">Display &amp; Akku</a></li>
+          <li><a href="#services">Rückglas &amp; Kamera</a></li>
+          <li><a href="#services">Board-Level-Reparatur</a></li>
           <li><a href="#shop">Zubehör &amp; Elektronik</a></li>
-          <li><a href="#shop">Kabel, Kopfhörer, Hüllen</a></li>
-          <li><a href="#services">Verkauf &amp; Ankauf</a></li>
+          <li><a href="#b2b">Firmenkunden</a></li>
         </ul>
       </div>
       <div class="footer__col">
@@ -797,6 +1054,99 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
   <a href="tel:+43123456780" class="fab" aria-label="Anrufen">📞</a>
 
   <script>
+/* ============================================================
+   PHONETASTIC – Preisdaten für den Reparatur-Rechner
+   ------------------------------------------------------------
+   HIER die Preise pflegen. Alle Werte in Euro, ohne Zeichen.
+   null  = "auf Anfrage" (wird so angezeigt)
+   Die Arbeitszeit ist bei allen Preisen INKLUSIVE.
+   ============================================================ */
+
+const REPARATUR_LABELS = {
+  display:      { name: 'Display-Tausch',        icon: '📱', dauer: '30–60 Min' },
+  akku:         { name: 'Akku-Tausch',           icon: '🔋', dauer: '20–30 Min' },
+  ladebuchse:   { name: 'Ladebuchse',            icon: '🔌', dauer: '45–60 Min' },
+  kamera:       { name: 'Kamera',                icon: '📷', dauer: '30–45 Min' },
+  rueckglas:    { name: 'Rückglas',              icon: '🪟', dauer: '60–90 Min' },
+  lautsprecher: { name: 'Lautsprecher / Mikro',  icon: '🔊', dauer: '30–45 Min' },
+  wasser:       { name: 'Wasserschaden',         icon: '💧', dauer: '1–3 Tage' },
+  software:     { name: 'Software-Reparatur',    icon: '💾', dauer: '30–60 Min' }
+};
+
+const PREISE = {
+  'Apple': {
+    'iPhone SE (2020/2022)': { display: 59,  akku: 39, ladebuchse: 49, kamera: 59,  rueckglas: 49,  lautsprecher: 49, wasser: 49, software: 39 },
+    'iPhone X':              { display: 79,  akku: 45, ladebuchse: 55, kamera: 69,  rueckglas: 69,  lautsprecher: 55, wasser: 49, software: 39 },
+    'iPhone XR':             { display: 79,  akku: 45, ladebuchse: 55, kamera: 69,  rueckglas: 69,  lautsprecher: 55, wasser: 49, software: 39 },
+    'iPhone XS':             { display: 89,  akku: 45, ladebuchse: 55, kamera: 69,  rueckglas: 79,  lautsprecher: 55, wasser: 49, software: 39 },
+    'iPhone XS Max':         { display: 99,  akku: 49, ladebuchse: 59, kamera: 79,  rueckglas: 89,  lautsprecher: 59, wasser: 49, software: 39 },
+    'iPhone 11':             { display: 79,  akku: 49, ladebuchse: 59, kamera: 79,  rueckglas: 79,  lautsprecher: 59, wasser: 49, software: 39 },
+    'iPhone 11 Pro':         { display: 109, akku: 49, ladebuchse: 59, kamera: 89,  rueckglas: 89,  lautsprecher: 59, wasser: 49, software: 39 },
+    'iPhone 11 Pro Max':     { display: 129, akku: 55, ladebuchse: 65, kamera: 99,  rueckglas: 99,  lautsprecher: 65, wasser: 49, software: 39 },
+    'iPhone 12 / 12 Pro':    { display: 99,  akku: 55, ladebuchse: 65, kamera: 89,  rueckglas: 99,  lautsprecher: 65, wasser: 49, software: 39 },
+    'iPhone 12 mini':        { display: 99,  akku: 55, ladebuchse: 65, kamera: 89,  rueckglas: 89,  lautsprecher: 65, wasser: 49, software: 39 },
+    'iPhone 12 Pro Max':     { display: 129, akku: 59, ladebuchse: 69, kamera: 99,  rueckglas: 109, lautsprecher: 69, wasser: 49, software: 39 },
+    'iPhone 13':             { display: 109, akku: 59, ladebuchse: 69, kamera: 99,  rueckglas: 99,  lautsprecher: 69, wasser: 49, software: 39 },
+    'iPhone 13 mini':        { display: 109, akku: 59, ladebuchse: 69, kamera: 99,  rueckglas: 99,  lautsprecher: 69, wasser: 49, software: 39 },
+    'iPhone 13 Pro':         { display: 149, akku: 65, ladebuchse: 75, kamera: 119, rueckglas: 119, lautsprecher: 75, wasser: 59, software: 39 },
+    'iPhone 13 Pro Max':     { display: 169, akku: 69, ladebuchse: 79, kamera: 129, rueckglas: 129, lautsprecher: 79, wasser: 59, software: 39 },
+    'iPhone 14':             { display: 119, akku: 65, ladebuchse: 75, kamera: 109, rueckglas: 109, lautsprecher: 75, wasser: 59, software: 39 },
+    'iPhone 14 Plus':        { display: 139, akku: 69, ladebuchse: 79, kamera: 119, rueckglas: 119, lautsprecher: 79, wasser: 59, software: 39 },
+    'iPhone 14 Pro':         { display: 189, akku: 75, ladebuchse: 85, kamera: 139, rueckglas: 139, lautsprecher: 85, wasser: 59, software: 39 },
+    'iPhone 14 Pro Max':     { display: 209, akku: 79, ladebuchse: 89, kamera: 149, rueckglas: 149, lautsprecher: 89, wasser: 59, software: 39 },
+    'iPhone 15':             { display: 149, akku: 75, ladebuchse: 85, kamera: 129, rueckglas: 119, lautsprecher: 85, wasser: 59, software: 39 },
+    'iPhone 15 Plus':        { display: 169, akku: 79, ladebuchse: 89, kamera: 139, rueckglas: 129, lautsprecher: 89, wasser: 59, software: 39 },
+    'iPhone 15 Pro':         { display: 219, akku: 85, ladebuchse: 95, kamera: 159, rueckglas: 149, lautsprecher: 95, wasser: 69, software: 39 },
+    'iPhone 15 Pro Max':     { display: 239, akku: 89, ladebuchse: 99, kamera: 169, rueckglas: 159, lautsprecher: 99, wasser: 69, software: 39 },
+    'iPhone 16':             { display: 179, akku: 85, ladebuchse: 95, kamera: 149, rueckglas: 139, lautsprecher: 95, wasser: 69, software: 39 },
+    'iPhone 16 Pro':         { display: 249, akku: 89, ladebuchse: 99, kamera: 179, rueckglas: 159, lautsprecher: 99, wasser: 69, software: 39 },
+    'iPhone 16 Pro Max':     { display: 269, akku: 95, ladebuchse: 105, kamera: 189, rueckglas: 169, lautsprecher: 105, wasser: 69, software: 39 },
+    'iPhone 17':             { display: 189, akku: 89, ladebuchse: 99, kamera: 169, rueckglas: 139, lautsprecher: 99, wasser: 69, software: 39 },
+    'iPhone 17 Pro':         { display: 189, akku: 89, ladebuchse: 129, kamera: 209, rueckglas: 139, lautsprecher: 119, wasser: 69, software: 39 },
+    'iPhone 17 Pro Max':     { display: 289, akku: 99, ladebuchse: 135, kamera: 219, rueckglas: 159, lautsprecher: 125, wasser: 79, software: 39 }
+  },
+
+  'Samsung': {
+    'Galaxy A13 / A14':      { display: 79,  akku: 49, ladebuchse: 55, kamera: 65, rueckglas: 55, lautsprecher: 55, wasser: 49, software: 39 },
+    'Galaxy A15 / A16':      { display: 89,  akku: 49, ladebuchse: 55, kamera: 69, rueckglas: 59, lautsprecher: 55, wasser: 49, software: 39 },
+    'Galaxy A34 / A35':      { display: 119, akku: 55, ladebuchse: 59, kamera: 79, rueckglas: 69, lautsprecher: 59, wasser: 49, software: 39 },
+    'Galaxy A54 / A55':      { display: 139, akku: 59, ladebuchse: 65, kamera: 89, rueckglas: 79, lautsprecher: 65, wasser: 49, software: 39 },
+    'Galaxy S20 / S20 FE':   { display: 149, akku: 65, ladebuchse: 69, kamera: 99, rueckglas: 79, lautsprecher: 69, wasser: 59, software: 39 },
+    'Galaxy S21':            { display: 169, akku: 69, ladebuchse: 75, kamera: 109, rueckglas: 89, lautsprecher: 75, wasser: 59, software: 39 },
+    'Galaxy S22':            { display: 189, akku: 75, ladebuchse: 79, kamera: 119, rueckglas: 99, lautsprecher: 79, wasser: 59, software: 39 },
+    'Galaxy S23':            { display: 209, akku: 79, ladebuchse: 85, kamera: 129, rueckglas: 109, lautsprecher: 85, wasser: 69, software: 39 },
+    'Galaxy S24':            { display: 239, akku: 85, ladebuchse: 89, kamera: 139, rueckglas: 119, lautsprecher: 89, wasser: 69, software: 39 },
+    'Galaxy S24 Ultra':      { display: 289, akku: 95, ladebuchse: 99, kamera: 169, rueckglas: 139, lautsprecher: 99, wasser: 79, software: 39 },
+    'Galaxy S25':            { display: 259, akku: 89, ladebuchse: 95, kamera: 149, rueckglas: 129, lautsprecher: 95, wasser: 79, software: 39 },
+    'Galaxy Z Flip (alle)':  { display: null, akku: 99, ladebuchse: 109, kamera: 149, rueckglas: 149, lautsprecher: 99, wasser: 89, software: 39 },
+    'Galaxy Z Fold (alle)':  { display: null, akku: 119, ladebuchse: 119, kamera: 169, rueckglas: 169, lautsprecher: 109, wasser: 89, software: 39 }
+  },
+
+  'Xiaomi': {
+    'Redmi Note 11 / 12':    { display: 69, akku: 45, ladebuchse: 49, kamera: 59, rueckglas: 49, lautsprecher: 49, wasser: 49, software: 39 },
+    'Redmi Note 13 / 14':    { display: 79, akku: 49, ladebuchse: 55, kamera: 65, rueckglas: 55, lautsprecher: 55, wasser: 49, software: 39 },
+    'Xiaomi 13 / 14':        { display: 149, akku: 65, ladebuchse: 69, kamera: 99, rueckglas: 79, lautsprecher: 69, wasser: 59, software: 39 },
+    'Poco (alle Modelle)':   { display: 79, akku: 49, ladebuchse: 55, kamera: 65, rueckglas: 55, lautsprecher: 55, wasser: 49, software: 39 }
+  },
+
+  'Huawei': {
+    'P30 / P40 Serie':       { display: 99,  akku: 55, ladebuchse: 59, kamera: 79, rueckglas: 69, lautsprecher: 59, wasser: 49, software: 39 },
+    'Mate Serie':            { display: 129, akku: 65, ladebuchse: 69, kamera: 89, rueckglas: 79, lautsprecher: 69, wasser: 59, software: 39 },
+    'Nova Serie':            { display: 89,  akku: 49, ladebuchse: 55, kamera: 69, rueckglas: 59, lautsprecher: 55, wasser: 49, software: 39 }
+  },
+
+  'Google': {
+    'Pixel 6 / 7':           { display: 139, akku: 65, ladebuchse: 69, kamera: 99,  rueckglas: 79, lautsprecher: 69, wasser: 59, software: 39 },
+    'Pixel 8 / 9':           { display: 179, akku: 75, ladebuchse: 79, kamera: 119, rueckglas: 89, lautsprecher: 79, wasser: 69, software: 39 }
+  },
+
+  'OnePlus / Oppo / Motorola': {
+    'OnePlus (alle Modelle)':  { display: 129, akku: 59, ladebuchse: 65, kamera: 89, rueckglas: 69, lautsprecher: 65, wasser: 59, software: 39 },
+    'Oppo (alle Modelle)':     { display: 99,  akku: 55, ladebuchse: 59, kamera: 79, rueckglas: 59, lautsprecher: 59, wasser: 49, software: 39 },
+    'Motorola (alle Modelle)': { display: 89,  akku: 49, ladebuchse: 55, kamera: 69, rueckglas: 59, lautsprecher: 55, wasser: 49, software: 39 }
+  }
+};
+
 /* ============================================================
    PHONETASTIC – main.js
    Mobile-Navigation, Header-Effekt, Scroll-Reveal, Formular
@@ -840,7 +1190,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ---- Scroll-Reveal-Animation ---- */
   const revealEls = document.querySelectorAll(
-    '.card, .shop-card, .price-card, .about__text, .about__box, .contact__form, .contact__info, .section__head'
+    '.card, .shop-card, .price-card, .brand-chip, .step, .faq__item, .b2b__text, .b2b__box, ' +
+    '.about__text, .about__box, .contact__form, .contact__info, .section__head'
   );
   revealEls.forEach(el => el.classList.add('reveal'));
 
@@ -857,6 +1208,78 @@ document.addEventListener('DOMContentLoaded', () => {
   } else {
     revealEls.forEach(el => el.classList.add('visible'));
   }
+
+  /* ---- Reparatur-Preisrechner ---- */
+  const brandSel = document.getElementById('calcBrand');
+  const modelSel = document.getElementById('calcModel');
+  const results  = document.getElementById('calcResults');
+
+  if (brandSel && modelSel && results && typeof PREISE !== 'undefined') {
+
+    // Marken befüllen
+    Object.keys(PREISE).forEach(brand => {
+      brandSel.insertAdjacentHTML('beforeend', `<option value="${brand}">${brand}</option>`);
+    });
+
+    const fmt = (v) => v === null || v === undefined
+      ? '<span class="pr-ask">auf Anfrage</span>'
+      : `<span class="pr-val">${v},–&nbsp;€</span>`;
+
+    const renderEmpty = (msg) => {
+      results.innerHTML = `<p class="calc__hint">${msg}</p>`;
+    };
+
+    const renderPrices = (brand, model) => {
+      const data = PREISE[brand][model];
+      const rows = Object.keys(REPARATUR_LABELS)
+        .filter(key => key in data)
+        .map(key => {
+          const l = REPARATUR_LABELS[key];
+          return `<li class="pr-row">
+            <span class="pr-icon" aria-hidden="true">${l.icon}</span>
+            <span class="pr-name">${l.name}<em>${l.dauer}</em></span>
+            ${fmt(data[key])}
+          </li>`;
+        }).join('');
+
+      results.innerHTML = `
+        <div class="calc__head">
+          <h3>${brand} ${model}</h3>
+          <p>Alle Preise inklusive Arbeitszeit &amp; 12 Monate Garantie.</p>
+        </div>
+        <ul class="pr-list">${rows}</ul>
+        <div class="calc__foot">
+          <a href="#kontakt" class="btn btn--primary">Termin für dieses Gerät anfragen</a>
+          <p class="calc__note">Endpreis abhängig vom tatsächlichen Schaden – die Diagnose ist bei uns gratis.</p>
+        </div>`;
+    };
+
+    brandSel.addEventListener('change', () => {
+      const brand = brandSel.value;
+      modelSel.innerHTML = '<option value="">Modell wählen …</option>';
+      modelSel.disabled = !brand;
+      if (!brand) { renderEmpty('Bitte zuerst die Marke wählen.'); return; }
+      Object.keys(PREISE[brand]).forEach(m => {
+        modelSel.insertAdjacentHTML('beforeend', `<option value="${m}">${m}</option>`);
+      });
+      renderEmpty('Jetzt noch dein Modell wählen – dann siehst du sofort alle Preise.');
+    });
+
+    modelSel.addEventListener('change', () => {
+      const brand = brandSel.value, model = modelSel.value;
+      if (brand && model) renderPrices(brand, model);
+      else renderEmpty('Bitte ein Modell wählen.');
+    });
+  }
+
+  /* ---- FAQ (Aufklappen) ---- */
+  document.querySelectorAll('.faq__q').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq__item');
+      const open = item.classList.toggle('open');
+      btn.setAttribute('aria-expanded', String(open));
+    });
+  });
 
   /* ---- Kontaktformular ---- */
   const form = document.getElementById('contactForm');

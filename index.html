@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PHONETASTIC | Handy Reparatur in Wien-Favoriten · Reumannplatz</title>
-  <meta name="description" content="PHONETASTIC – Handy Reparatur am Reumannplatz in Wien-Favoriten. Displaytausch, Akkuwechsel, Verkauf von Smartphones & Zubehör. Faire Preise, Reparatur oft in 30 Minuten." />
+  <meta name="description" content="PHONETASTIC – Handy Reparatur in Wien-Favoriten, Quellenstraße 111 beim Reumannplatz. Display, Akku, Ladebuchse, Rückglas & Wasserschaden für iPhone, Samsung, Xiaomi & Co. Preise online berechnen, 12 Monate Garantie, oft in 30 Minuten fertig." />
   <meta name="keywords" content="PHONETASTIC, Handy Reparatur Wien, Handyshop Favoriten, Reumannplatz, Displaytausch, Akku wechseln, Smartphone Reparatur, iPhone Reparatur Wien, Samsung Reparatur" />
   <meta name="author" content="PHONETASTIC" />
   <meta name="robots" content="index, follow" />
@@ -72,9 +72,10 @@
         <ul class="nav__list">
           <li><a href="#home" class="nav__link">Start</a></li>
           <li><a href="#services" class="nav__link">Leistungen</a></li>
+          <li><a href="#preise" class="nav__link">Preisrechner</a></li>
+          <li><a href="#marken" class="nav__link">Marken</a></li>
           <li><a href="#shop" class="nav__link">Shop</a></li>
-          <li><a href="#preise" class="nav__link">Preise</a></li>
-          <li><a href="#about" class="nav__link">Über uns</a></li>
+          <li><a href="#faq" class="nav__link">FAQ</a></li>
           <li><a href="#kontakt" class="nav__link">Kontakt</a></li>
           <li><a href="tel:+43123456780" class="nav__cta">📞 Anrufen</a></li>
         </ul>
@@ -164,16 +165,124 @@
           <p>Gerät lädt nicht mehr richtig? Wir reparieren Ladebuchse, Buttons und Anschlüsse.</p>
         </article>
         <article class="card">
+          <div class="card__icon">🪟</div>
+          <h3>Rückglas-Tausch</h3>
+          <p>Gesprungene Glas-Rückseite? Wir tauschen sie fachgerecht – auch bei verklebten iPhone-Gehäusen.</p>
+        </article>
+        <article class="card">
+          <div class="card__icon">📷</div>
+          <h3>Kamera-Reparatur</h3>
+          <p>Unscharfe Bilder, schwarzes Bild oder gesprungenes Linsenglas – Haupt- und Frontkamera.</p>
+        </article>
+        <article class="card">
+          <div class="card__icon">🔊</div>
+          <h3>Lautsprecher &amp; Mikrofon</h3>
+          <p>Kein Ton, dein Gegenüber hört dich nicht? Wir prüfen Hörer, Lautsprecher und Mikrofone.</p>
+        </article>
+        <article class="card">
+          <div class="card__icon">💾</div>
+          <h3>Software &amp; Datenrettung</h3>
+          <p>Bootschleife, hängendes System, Datenübertragung aufs neue Handy – auch Rettung wichtiger Fotos.</p>
+        </article>
+        <article class="card">
+          <div class="card__icon">🔬</div>
+          <h3>Board-Level-Reparatur</h3>
+          <p>Kein Bild, kein Strom, Ladefehler? Wir reparieren auf Chip-Ebene – dort, wo andere aufgeben.</p>
+        </article>
+        <article class="card">
           <div class="card__icon">🛒</div>
           <h3>Verkauf &amp; Ankauf</h3>
           <p>Neue &amp; generalüberholte Smartphones. Wir kaufen auch dein altes Gerät fair an.</p>
         </article>
-        <article class="card">
-          <div class="card__icon">🎧</div>
-          <h3>Zubehör</h3>
-          <p>Hüllen, Panzerglas, Ladekabel, Kopfhörer &amp; mehr – passend für jedes Modell.</p>
-        </article>
       </div>
+    </div>
+  </section>
+
+  <!-- ============ PREISRECHNER ============ -->
+  <section class="section section--dark" id="preise">
+    <div class="container">
+      <div class="section__head section__head--light">
+        <span class="eyebrow eyebrow--neon">Preisrechner</span>
+        <h2>In 5 Sekunden zum Preis</h2>
+        <p>Marke und Modell wählen – du siehst sofort alle Reparaturpreise. Ohne Anmeldung, ohne versteckte Kosten.</p>
+      </div>
+
+      <div class="calc">
+        <div class="calc__controls">
+          <div class="calc__field">
+            <label for="calcBrand">1. Marke</label>
+            <select id="calcBrand">
+              <option value="">Marke wählen …</option>
+            </select>
+          </div>
+          <div class="calc__field">
+            <label for="calcModel">2. Modell</label>
+            <select id="calcModel" disabled>
+              <option value="">Zuerst Marke wählen</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="calc__results" id="calcResults">
+          <p class="calc__hint">Wähle oben deine Marke – dann erscheinen hier alle Preise für dein Gerät.</p>
+        </div>
+      </div>
+
+      <ul class="calc__badges">
+        <li>✔ Arbeitszeit inklusive</li>
+        <li>✔ Diagnose gratis</li>
+        <li>✔ 12 Monate Garantie</li>
+        <li>✔ Keine Zuschläge für Fehlermeldungen</li>
+      </ul>
+      <p class="shop__note">Dein Modell ist nicht dabei? <a href="#kontakt">Frag uns – wir nennen dir den Preis sofort.</a></p>
+    </div>
+  </section>
+
+  <!-- ============ MARKEN ============ -->
+  <section class="section" id="marken">
+    <div class="container">
+      <div class="section__head">
+        <span class="eyebrow">Alle Marken</span>
+        <h2>Wir reparieren, was du in der Tasche hast</h2>
+        <p>Von Apple bis Motorola – auch ältere Geräte und Modelle, die andere ablehnen.</p>
+      </div>
+      <div class="brands">
+        <div class="brand-chip"><strong>Apple</strong><span>iPhone &amp; iPad</span></div>
+        <div class="brand-chip"><strong>Samsung</strong><span>Galaxy S · A · Z</span></div>
+        <div class="brand-chip"><strong>Xiaomi</strong><span>Redmi · Poco</span></div>
+        <div class="brand-chip"><strong>Huawei</strong><span>P · Mate · Nova</span></div>
+        <div class="brand-chip"><strong>Google</strong><span>Pixel</span></div>
+        <div class="brand-chip"><strong>OnePlus</strong><span>alle Modelle</span></div>
+        <div class="brand-chip"><strong>Oppo</strong><span>alle Modelle</span></div>
+        <div class="brand-chip"><strong>Motorola</strong><span>alle Modelle</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ABLAUF ============ -->
+  <section class="section section--alt" id="ablauf">
+    <div class="container">
+      <div class="section__head">
+        <span class="eyebrow">So läuft's ab</span>
+        <h2>Drei Schritte – meistens in einer halben Stunde erledigt</h2>
+      </div>
+      <ol class="steps">
+        <li class="step">
+          <span class="step__num">1</span>
+          <h3>Vorbeikommen oder anfragen</h3>
+          <p>Komm einfach in die Quellenstraße 111 oder schick uns vorab eine Nachricht mit Modell und Problem.</p>
+        </li>
+        <li class="step">
+          <span class="step__num">2</span>
+          <h3>Gratis-Diagnose &amp; Festpreis</h3>
+          <p>Wir prüfen dein Gerät vor Ort und nennen dir einen verbindlichen Preis – erst dann entscheidest du.</p>
+        </li>
+        <li class="step">
+          <span class="step__num">3</span>
+          <h3>Reparatur &amp; Garantie</h3>
+          <p>Die meisten Reparaturen erledigen wir, während du wartest. Mit 12 Monaten Garantie.</p>
+        </li>
+      </ol>
     </div>
   </section>
 
@@ -233,57 +342,6 @@
     </div>
   </section>
 
-  <!-- ============ PREISE ============ -->
-  <section class="section section--alt" id="preise">
-    <div class="container">
-      <div class="section__head">
-        <span class="eyebrow">Transparente Preise</span>
-        <h2>Richtwerte für unsere häufigsten Reparaturen</h2>
-        <p>Endpreise abhängig vom Modell. Kostenvoranschlag immer gratis &amp; unverbindlich.</p>
-      </div>
-
-      <div class="pricing">
-        <div class="price-card">
-          <h3>Displaytausch</h3>
-          <div class="price-card__price">ab <strong>49&nbsp;€</strong></div>
-          <ul>
-            <li>Original- oder Premium-Display</li>
-            <li>Meist fertig in 30–60 Min</li>
-            <li>12 Monate Garantie</li>
-          </ul>
-          <a href="#kontakt" class="btn btn--ghost btn--block">Termin anfragen</a>
-        </div>
-
-        <div class="price-card price-card--featured">
-          <span class="price-card__tag">Beliebt</span>
-          <h3>Akku-Wechsel</h3>
-          <div class="price-card__price">ab <strong>35&nbsp;€</strong></div>
-          <ul>
-            <li>Hochwertiger Ersatz-Akku</li>
-            <li>Fertig, während du wartest</li>
-            <li>Inklusive Funktionstest</li>
-          </ul>
-          <a href="#kontakt" class="btn btn--primary btn--block">Termin anfragen</a>
-        </div>
-
-        <div class="price-card">
-          <h3>Ladebuchse</h3>
-          <div class="price-card__price">ab <strong>39&nbsp;€</strong></div>
-          <ul>
-            <li>Reinigung oder Austausch</li>
-            <li>Diagnose inklusive</li>
-            <li>Schnelle Erledigung</li>
-          </ul>
-          <a href="#kontakt" class="btn btn--ghost btn--block">Termin anfragen</a>
-        </div>
-      </div>
-
-      <p class="pricing__note">
-        Weitere Reparaturen (Kamera, Lautsprecher, Software, Datenrettung) auf Anfrage.
-        <a href="#kontakt">Frag einfach nach deinem Modell →</a>
-      </p>
-    </div>
-  </section>
 
   <!-- ============ ABOUT ============ -->
   <section class="section" id="about">
@@ -317,6 +375,81 @@
         <hr />
         <h3>📍 So findest du uns</h3>
         <p>Quellenstraße 111<br />1100 Wien (Favoriten)<br />Ecke Favoritenstraße – U1 Reumannplatz, 2 Minuten zu Fuß</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FIRMENKUNDEN / B2B ============ -->
+  <section class="section section--dark" id="b2b">
+    <div class="container b2b">
+      <div class="b2b__text">
+        <span class="eyebrow eyebrow--neon">Firmenkunden</span>
+        <h2>Geräteflotte im Betrieb? Wir kümmern uns.</h2>
+        <p>
+          Ob Handwerksbetrieb, Kanzlei, Gastro oder Verein – ausgefallene Diensthandys
+          kosten Zeit und Nerven. Wir reparieren die Geräte deines Teams schnell,
+          mit Sammelrechnung und ohne Papierkram.
+        </p>
+        <ul class="b2b__list">
+          <li>Sammelabholung &amp; Sammelrechnung mit Umsatzsteuerausweis</li>
+          <li>Priorisierte Bearbeitung – dein Team wartet nicht</li>
+          <li>Mengenrabatt bei Zubehör (Hüllen, Panzerglas, Kabel)</li>
+          <li>Ankauf und Aufbereitung ausgemusterter Geräte</li>
+        </ul>
+        <a href="#kontakt" class="btn btn--primary">Firmenangebot anfragen</a>
+      </div>
+      <div class="b2b__box">
+        <h3>💼 Für Betriebe in Favoriten</h3>
+        <p>
+          Wir sind gleich um die Ecke – bring die Geräte einfach vorbei oder ruf an,
+          dann besprechen wir eine Lösung, die zu deinem Betrieb passt.
+        </p>
+        <a href="tel:+43123456780" class="btn btn--ghost btn--light btn--block">📞 01 234 56 78</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section class="section" id="faq">
+    <div class="container">
+      <div class="section__head">
+        <span class="eyebrow">Häufige Fragen</span>
+        <h2>Das fragen uns Kundinnen und Kunden am öftesten</h2>
+      </div>
+
+      <div class="faq">
+        <div class="faq__item">
+          <button class="faq__q" aria-expanded="false">Wie lange dauert eine Reparatur?</button>
+          <div class="faq__a"><p>Display- und Akkutausch dauern meist 30 bis 60 Minuten – die kannst du bei uns abwarten. Aufwendigere Arbeiten wie Wasserschäden oder Reparaturen auf Platinenebene brauchen ein bis drei Tage. Den genauen Zeitrahmen sagen wir dir bei der Diagnose.</p></div>
+        </div>
+        <div class="faq__item">
+          <button class="faq__q" aria-expanded="false">Bleiben meine Daten und Fotos erhalten?</button>
+          <div class="faq__a"><p>Ja. Bei einer normalen Reparatur bleiben alle Daten auf dem Gerät – wir setzen nichts zurück. Trotzdem empfehlen wir dir, vorher ein Backup zu machen, denn bei stark beschädigten Geräten lässt sich ein Datenverlust nie zu hundert Prozent ausschließen.</p></div>
+        </div>
+        <div class="faq__item">
+          <button class="faq__q" aria-expanded="false">Was kostet die Diagnose?</button>
+          <div class="faq__a"><p>Nichts. Wir schauen uns dein Gerät an und nennen dir einen verbindlichen Festpreis. Erst wenn du zustimmst, reparieren wir. Wenn du dich dagegen entscheidest, zahlst du nichts.</p></div>
+        </div>
+        <div class="faq__item">
+          <button class="faq__q" aria-expanded="false">Welche Garantie gebt ihr?</button>
+          <div class="faq__a"><p>Auf jede Reparatur geben wir <strong>12 Monate Garantie</strong> auf das eingebaute Ersatzteil und unsere Arbeit. Nicht abgedeckt sind neue Sturz- oder Wasserschäden nach der Reparatur.</p></div>
+        </div>
+        <div class="faq__item">
+          <button class="faq__q" aria-expanded="false">Verwendet ihr Originalteile?</button>
+          <div class="faq__a"><p>Du hast die Wahl. Wir bieten Originalteile und hochwertige Premium-Ersatzteile an. Wir erklären dir vorher ehrlich den Unterschied bei Preis und Qualität, damit du selbst entscheiden kannst.</p></div>
+        </div>
+        <div class="faq__item">
+          <button class="faq__q" aria-expanded="false">Kommt nach dem Tausch eine Fehlermeldung am Handy?</button>
+          <div class="faq__a"><p>Bei neueren iPhones zeigt das System manchmal einen Hinweis, wenn ein Teil nicht vom Hersteller stammt. Wir übernehmen die Daten des Originalteils, damit Funktionen wie die Akku-Gesundheitsanzeige weiter funktionieren – und verlangen dafür <strong>keinen Aufpreis</strong>.</p></div>
+        </div>
+        <div class="faq__item">
+          <button class="faq__q" aria-expanded="false">Muss ich einen Termin vereinbaren?</button>
+          <div class="faq__a"><p>Nein, du kannst jederzeit während der Öffnungszeiten vorbeikommen. Wenn du vorher anrufst oder schreibst, legen wir das passende Ersatzteil bereit – dann geht es noch schneller.</p></div>
+        </div>
+        <div class="faq__item">
+          <button class="faq__q" aria-expanded="false">Kauft ihr auch alte Handys an?</button>
+          <div class="faq__a"><p>Ja. Bring dein altes Gerät vorbei – auch mit Defekt. Wir machen dir ein faires Angebot oder rechnen den Wert direkt gegen deine Reparatur oder ein neues Gerät auf.</p></div>
+        </div>
       </div>
     </div>
   </section>
@@ -405,11 +538,12 @@
       <div class="footer__col">
         <h4>Leistungen</h4>
         <ul>
-          <li><a href="#services">Display-Reparatur</a></li>
-          <li><a href="#services">Akku-Wechsel</a></li>
+          <li><a href="#preise">Preisrechner</a></li>
+          <li><a href="#services">Display &amp; Akku</a></li>
+          <li><a href="#services">Rückglas &amp; Kamera</a></li>
+          <li><a href="#services">Board-Level-Reparatur</a></li>
           <li><a href="#shop">Zubehör &amp; Elektronik</a></li>
-          <li><a href="#shop">Kabel, Kopfhörer, Hüllen</a></li>
-          <li><a href="#services">Verkauf &amp; Ankauf</a></li>
+          <li><a href="#b2b">Firmenkunden</a></li>
         </ul>
       </div>
       <div class="footer__col">
@@ -439,6 +573,7 @@
 
   <a href="tel:+43123456780" class="fab" aria-label="Anrufen">📞</a>
 
+  <script src="js/preise.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

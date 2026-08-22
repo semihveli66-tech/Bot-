@@ -41,7 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ---- Scroll-Reveal-Animation ---- */
   const revealEls = document.querySelectorAll(
-    '.card, .shop-card, .price-card, .about__text, .about__box, .contact__form, .contact__info, .section__head'
+    '.card, .shop-card, .price-card, .brand-chip, .step, .faq__item, .b2b__text, .b2b__box, ' +
+    '.about__text, .about__box, .contact__form, .contact__info, .section__head'
   );
   revealEls.forEach(el => el.classList.add('reveal'));
 
@@ -58,6 +59,78 @@ document.addEventListener('DOMContentLoaded', () => {
   } else {
     revealEls.forEach(el => el.classList.add('visible'));
   }
+
+  /* ---- Reparatur-Preisrechner ---- */
+  const brandSel = document.getElementById('calcBrand');
+  const modelSel = document.getElementById('calcModel');
+  const results  = document.getElementById('calcResults');
+
+  if (brandSel && modelSel && results && typeof PREISE !== 'undefined') {
+
+    // Marken befüllen
+    Object.keys(PREISE).forEach(brand => {
+      brandSel.insertAdjacentHTML('beforeend', `<option value="${brand}">${brand}</option>`);
+    });
+
+    const fmt = (v) => v === null || v === undefined
+      ? '<span class="pr-ask">auf Anfrage</span>'
+      : `<span class="pr-val">${v},–&nbsp;€</span>`;
+
+    const renderEmpty = (msg) => {
+      results.innerHTML = `<p class="calc__hint">${msg}</p>`;
+    };
+
+    const renderPrices = (brand, model) => {
+      const data = PREISE[brand][model];
+      const rows = Object.keys(REPARATUR_LABELS)
+        .filter(key => key in data)
+        .map(key => {
+          const l = REPARATUR_LABELS[key];
+          return `<li class="pr-row">
+            <span class="pr-icon" aria-hidden="true">${l.icon}</span>
+            <span class="pr-name">${l.name}<em>${l.dauer}</em></span>
+            ${fmt(data[key])}
+          </li>`;
+        }).join('');
+
+      results.innerHTML = `
+        <div class="calc__head">
+          <h3>${brand} ${model}</h3>
+          <p>Alle Preise inklusive Arbeitszeit &amp; 12 Monate Garantie.</p>
+        </div>
+        <ul class="pr-list">${rows}</ul>
+        <div class="calc__foot">
+          <a href="#kontakt" class="btn btn--primary">Termin für dieses Gerät anfragen</a>
+          <p class="calc__note">Endpreis abhängig vom tatsächlichen Schaden – die Diagnose ist bei uns gratis.</p>
+        </div>`;
+    };
+
+    brandSel.addEventListener('change', () => {
+      const brand = brandSel.value;
+      modelSel.innerHTML = '<option value="">Modell wählen …</option>';
+      modelSel.disabled = !brand;
+      if (!brand) { renderEmpty('Bitte zuerst die Marke wählen.'); return; }
+      Object.keys(PREISE[brand]).forEach(m => {
+        modelSel.insertAdjacentHTML('beforeend', `<option value="${m}">${m}</option>`);
+      });
+      renderEmpty('Jetzt noch dein Modell wählen – dann siehst du sofort alle Preise.');
+    });
+
+    modelSel.addEventListener('change', () => {
+      const brand = brandSel.value, model = modelSel.value;
+      if (brand && model) renderPrices(brand, model);
+      else renderEmpty('Bitte ein Modell wählen.');
+    });
+  }
+
+  /* ---- FAQ (Aufklappen) ---- */
+  document.querySelectorAll('.faq__q').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq__item');
+      const open = item.classList.toggle('open');
+      btn.setAttribute('aria-expanded', String(open));
+    });
+  });
 
   /* ---- Kontaktformular ---- */
   const form = document.getElementById('contactForm');
