@@ -1,54 +1,96 @@
-# PHONETASTIC – Handy Reparatur (Website)
+# PHONETASTIC – Website (phonetastic.at)
 
-Voll funktionierende, responsive Website für **PHONETASTIC**, den Handy-Reparatur-
-und Verkaufsshop in Wien-Favoriten am Reumannplatz.
-
-## Live-URL (nach Aktivierung von GitHub Pages)
-
-```
-https://semihveli66-tech.github.io/Bot-/
-```
+Responsive Website für **PHONETASTIC**, Handy-Reparatur und Zubehör-Shop in
+Wien-Favoriten, Quellenstraße 111 (Ecke Favoritenstraße, beim Reumannplatz).
 
 ## Dateien
 
 ```
-index.html       # Startseite (im Root, damit Pages sie direkt ausliefert)
-css/style.css    # Design inkl. nachgebautem Neon-Logo (Grün → Blau)
+index.html       # Startseite
+css/style.css    # Design inkl. Neon-Logo (Grün → Blau)
 js/main.js       # Navigation, Animationen, Kontaktformular
-.nojekyll        # sorgt für korrekte Auslieferung über GitHub Pages
+CNAME            # Custom Domain für GitHub Pages (phonetastic.at)
+robots.txt       # Suchmaschinen-Freigabe + Sitemap-Verweis
+sitemap.xml      # Sitemap für Google
+.nojekyll        # liefert alle Dateien unverändert über Pages aus
 ```
 
-## Website live nehmen (GitHub Pages, kostenlos)
+---
 
-1. Repo auf GitHub öffnen → **Settings**
-2. Linke Leiste → **Pages**
-3. **Source**: „Deploy from a branch"
-4. **Branch**: `claude/handyshop-favoriten-website-eyi3gg`, Ordner **`/ (root)`** → **Save**
-5. Nach ca. 1 Minute ist die Seite unter obiger URL erreichbar.
+## Website live schalten auf phonetastic.at
 
-Tipp: Zum dauerhaften Betrieb empfiehlt sich der Merge in den `main`-Branch und
-dann Pages von `main` / `root` ausliefern.
+### Schritt 1 – GitHub Pages aktivieren
 
-## Sofort ansehen (ohne Pages)
+1. Repo auf GitHub → **Settings** → **Pages**
+2. **Source:** „Deploy from a branch"
+3. **Branch:** `claude/handyshop-favoriten-website-eyi3gg`, Ordner **`/ (root)`** → **Save**
+4. Unter **Custom domain** `phonetastic.at` eintragen → **Save**
+   (Die Datei `CNAME` im Repo setzt das bereits – der Eintrag sollte automatisch erscheinen.)
+5. Nach erfolgreicher DNS-Prüfung **„Enforce HTTPS"** aktivieren.
 
-`index.html` herunterladen und im Browser öffnen – oder lokal:
+### Schritt 2 – DNS beim Domain-Anbieter eintragen
+
+Im DNS-Verwaltungsbereich des Anbieters, bei dem `phonetastic.at` gekauft wurde:
+
+**Für die Hauptdomain (phonetastic.at) – vier A-Records:**
+
+| Typ | Name/Host | Wert |
+|-----|-----------|------|
+| A | `@` | `185.199.108.153` |
+| A | `@` | `185.199.109.153` |
+| A | `@` | `185.199.110.153` |
+| A | `@` | `185.199.111.153` |
+
+**Für www (www.phonetastic.at) – ein CNAME-Record:**
+
+| Typ | Name/Host | Wert |
+|-----|-----------|------|
+| CNAME | `www` | `semihveli66-tech.github.io.` |
+
+> DNS-Änderungen brauchen typischerweise 15 Minuten bis 24 Stunden, bis sie
+> überall greifen. Danach prüft GitHub die Domain automatisch und stellt ein
+> kostenloses SSL-Zertifikat aus (https).
+
+### Schritt 3 – Prüfen
+
+- `https://phonetastic.at` aufrufen
+- In den Pages-Settings muss „DNS check successful" stehen
+- Erst danach lässt sich **Enforce HTTPS** einschalten
+
+### Empfehlung: auf `main` mergen
+
+Für den Dauerbetrieb die Änderungen in den `main`-Branch mergen und GitHub Pages
+von `main` / `root` ausliefern lassen. Dann bleibt die Seite unabhängig vom
+Feature-Branch online.
+
+---
+
+## Nach dem Livegang bei Google eintragen
+
+1. **Google Search Console** → Property `phonetastic.at` anlegen, Domain per
+   DNS-TXT-Eintrag verifizieren, danach `https://phonetastic.at/sitemap.xml` einreichen.
+2. **Google Business Profil** anlegen (wichtiger als die Website für Laufkundschaft):
+   Adresse Quellenstraße 111, Kategorie „Handyreparatur", Öffnungszeiten, Fotos.
+
+---
+
+## Noch anzupassen (Platzhalter)
+
+| Platzhalter | ändern auf |
+|---|---|
+| `01 234 56 78` / `+43123456780` | echte Telefonnummer |
+| `info@phonetastic.at` | E-Mail-Postfach zur Domain einrichten |
+| Preise (49/35/39 €) | echte Preise |
+| Öffnungszeiten | echte Zeiten |
+| Impressum / Datenschutz (Footer) | Pflichtseiten – in Österreich gesetzlich erforderlich |
+
+## Lokal testen
 
 ```bash
 python3 -m http.server 8000   # dann http://localhost:8000
 ```
 
-## Vor dem echten Livegang anpassen
-
-| Platzhalter | ändern auf |
-|---|---|
-| `01 234 56 78` / `+43123456780` | echte Telefonnummer |
-| `info@phonetastic.at` | echte E-Mail |
-| `Reumannplatz 1, 1100 Wien` | genaue Adresse |
-| Preise (49/35/39 €) | echte Preise |
-| Karten-Koordinaten (iframe `marker=`) | echte Position |
-| Impressum / Datenschutz (Footer) | Pflichtseiten (in AT gesetzlich erforderlich) |
-
 ## Logo
 
-Das PHONETASTIC-Logo ist als CSS/HTML nachgebaut (Klasse `.brand`) – dadurch ist es
-gestochen scharf auf allen Bildschirmen und lädt ohne zusätzliche Bilddatei.
+Das PHONETASTIC-Logo ist als CSS/HTML nachgebaut (Klasse `.brand`) – scharf auf
+allen Bildschirmen, ohne zusätzliche Bilddatei.
