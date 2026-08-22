@@ -125,11 +125,24 @@ const PREISE = {
   /* Laptops: einzige Geraetegruppe hier, die unter die
      Geraete-Retter-Praemie faellt (50 %, max. 130 EUR). */
   'Laptop / Notebook': {
-    'Windows-Notebook (Standard)':  { display: 149, akku: 99,  ladebuchse: 89,  lautsprecher: 79, wasser: 89, software: 59, tastatur: 89,  luefter: 79 },
-    'Windows-Notebook (Business)':  { display: 189, akku: 119, ladebuchse: 99,  lautsprecher: 89, wasser: 99, software: 59, tastatur: 99,  luefter: 89 },
-    'MacBook Air':                  { display: 349, akku: 149, ladebuchse: 129, lautsprecher: 99, wasser: 129, software: 79, tastatur: 179, luefter: 99 },
-    'MacBook Pro':                  { display: 429, akku: 179, ladebuchse: 149, lautsprecher: 119, wasser: 149, software: 79, tastatur: 199, luefter: 109 },
-    'Chromebook':                   { display: 129, akku: 89,  ladebuchse: 79,  lautsprecher: 69, wasser: 79, software: 49, tastatur: 79,  luefter: 69 }
+    'Apple MacBook Air':                 { display: 349, akku: 149, ladebuchse: 129, lautsprecher: 99,  wasser: 129, software: 79, tastatur: 179, luefter: 99 },
+    'Apple MacBook Pro':                 { display: 429, akku: 179, ladebuchse: 149, lautsprecher: 119, wasser: 149, software: 79, tastatur: 199, luefter: 109 },
+    'Lenovo ThinkPad':                   { display: 189, akku: 119, ladebuchse: 99,  lautsprecher: 89,  wasser: 99,  software: 59, tastatur: 99,  luefter: 89 },
+    'Lenovo IdeaPad / Yoga':             { display: 149, akku: 99,  ladebuchse: 89,  lautsprecher: 79,  wasser: 89,  software: 59, tastatur: 89,  luefter: 79 },
+    'HP EliteBook / ProBook':            { display: 189, akku: 119, ladebuchse: 99,  lautsprecher: 89,  wasser: 99,  software: 59, tastatur: 99,  luefter: 89 },
+    'HP Pavilion / Envy':                { display: 149, akku: 99,  ladebuchse: 89,  lautsprecher: 79,  wasser: 89,  software: 59, tastatur: 89,  luefter: 79 },
+    'Dell Latitude / XPS':               { display: 229, akku: 139, ladebuchse: 109, lautsprecher: 99,  wasser: 109, software: 59, tastatur: 109, luefter: 89 },
+    'Dell Inspiron / Vostro':            { display: 149, akku: 99,  ladebuchse: 89,  lautsprecher: 79,  wasser: 89,  software: 59, tastatur: 89,  luefter: 79 },
+    'Acer Aspire / Swift':               { display: 139, akku: 95,  ladebuchse: 85,  lautsprecher: 75,  wasser: 89,  software: 59, tastatur: 85,  luefter: 75 },
+    'Acer Predator / Nitro (Gaming)':    { display: 229, akku: 139, ladebuchse: 109, lautsprecher: 95,  wasser: 119, software: 69, tastatur: 119, luefter: 95 },
+    'Asus VivoBook / ZenBook':           { display: 149, akku: 99,  ladebuchse: 89,  lautsprecher: 79,  wasser: 89,  software: 59, tastatur: 89,  luefter: 79 },
+    'Asus ROG / TUF (Gaming)':           { display: 249, akku: 149, ladebuchse: 119, lautsprecher: 99,  wasser: 129, software: 69, tastatur: 129, luefter: 99 },
+    'MSI (Gaming)':                      { display: 249, akku: 149, ladebuchse: 119, lautsprecher: 99,  wasser: 129, software: 69, tastatur: 129, luefter: 99 },
+    'Razer (Gaming)':                    { display: 289, akku: 169, ladebuchse: 129, lautsprecher: 109, wasser: 139, software: 69, tastatur: 149, luefter: 109 },
+    'Microsoft Surface':                 { display: 349, akku: 199, ladebuchse: 139, lautsprecher: 109, wasser: 149, software: 69, tastatur: null, luefter: 109 },
+    'Samsung Galaxy Book':               { display: 199, akku: 119, ladebuchse: 99,  lautsprecher: 89,  wasser: 99,  software: 59, tastatur: 99,  luefter: 89 },
+    'Chromebook (alle Marken)':          { display: 129, akku: 89,  ladebuchse: 79,  lautsprecher: 69,  wasser: 79,  software: 49, tastatur: 79,  luefter: 69 },
+    'Anderes Notebook':                  { display: null, akku: null, ladebuchse: null, lautsprecher: null, wasser: 89, software: 59, tastatur: null, luefter: 79 }
   },
 
   'OnePlus / Oppo / Motorola': {
