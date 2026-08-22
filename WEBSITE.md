@@ -45,7 +45,13 @@ Im DNS-Verwaltungsbereich des Anbieters, bei dem `phonetastic.at` gekauft wurde:
 
 | Typ | Name/Host | Wert |
 |-----|-----------|------|
-| CNAME | `www` | `semihveli66-tech.github.io.` |
+| CNAME | `www` | `<github-benutzername>.github.io.` |
+
+> Den Benutzernamen aus der eigenen Repo-URL übernehmen (der Teil zwischen
+> `github.com/` und dem Repo-Namen) und den Punkt am Ende mitschreiben.
+> Beim letzten Push meldete GitHub den Umzug des Repos nach
+> `sesolarwien/Bot-sesolarwien` – dann lautet der Wert `sesolarwien.github.io.`
+> Die vier A-Records oben sind davon unabhängig und bleiben gleich.
 
 > DNS-Änderungen brauchen typischerweise 15 Minuten bis 24 Stunden, bis sie
 > überall greifen. Danach prüft GitHub die Domain automatisch und stellt ein
