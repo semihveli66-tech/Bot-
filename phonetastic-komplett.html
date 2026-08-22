@@ -279,6 +279,54 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
   margin: 26px auto 0; color: #a5f3fc; font-size: .9rem; font-weight: 500;
 }
 
+/* ---------- Foerderhinweis im Rechner ---------- */
+.calc__foerderung {
+  margin-top: 18px; padding: 16px 18px; border-radius: var(--radius-sm);
+  background: rgba(52, 211, 153, .1); border: 1px solid rgba(52, 211, 153, .38);
+}
+.calc__foerderung strong { display: block; color: var(--neon-green); margin-bottom: 5px; font-size: .95rem; }
+.calc__foerderung p { color: #cfe6dd; font-size: .88rem; }
+.calc__foerderung p strong { display: inline; color: #eafff6; }
+
+/* ---------- Geraete-Retter-Praemie ---------- */
+.praemie { display: grid; grid-template-columns: 1.25fr .9fr; gap: 30px; align-items: start; }
+.praemie__main {
+  background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 30px; box-shadow: var(--shadow);
+}
+.praemie__main h3 { font-size: 1.2rem; margin-bottom: 16px; }
+.praemie__steps { list-style: none; counter-reset: pstep; display: grid; gap: 16px; margin-bottom: 18px; }
+.praemie__steps li {
+  counter-increment: pstep; position: relative; padding-left: 44px; color: var(--muted);
+}
+.praemie__steps li::before {
+  content: counter(pstep); position: absolute; left: 0; top: 0;
+  width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center;
+  background: var(--grad); color: #04121a; font-weight: 800; font-size: .95rem;
+}
+.praemie__steps strong { color: var(--ink); }
+.praemie__hint { color: var(--muted); font-size: .92rem; margin-bottom: 20px; }
+
+.praemie__side { display: grid; gap: 16px; }
+.praemie__yes, .praemie__no {
+  border-radius: var(--radius-sm); padding: 20px; border: 1px solid var(--line); background: #fff;
+}
+.praemie__yes { border-color: rgba(14, 159, 110, .42); background: rgba(14, 159, 110, .06); }
+.praemie__no  { border-color: rgba(209, 73, 91, .35);  background: rgba(209, 73, 91, .05); }
+.praemie__yes h4, .praemie__no h4 { font-size: 1rem; margin-bottom: 10px; }
+.praemie__side ul { display: grid; gap: 7px; font-size: .93rem; color: var(--body); }
+.praemie__side li { padding-left: 16px; position: relative; }
+.praemie__side li::before { content: "·"; position: absolute; left: 4px; font-weight: 800; color: var(--muted); }
+.praemie__no p { margin-top: 12px; font-size: .85rem; color: var(--muted); }
+
+/* Hervorgehobene Leistungskarte */
+.card--highlight { border-color: rgba(52, 211, 153, .5); }
+.card__tag {
+  display: inline-block; vertical-align: middle; margin-left: 8px;
+  background: var(--grad); color: #04121a; font-size: .68rem; font-weight: 800;
+  padding: 3px 9px; border-radius: 999px; white-space: nowrap;
+}
+
 /* ---------- Marken ---------- */
 .brands { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
 .brand-chip {
@@ -288,6 +336,10 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
 .brand-chip:hover { transform: translateY(-4px); border-color: rgba(34,211,238,.55); box-shadow: var(--shadow); }
 .brand-chip strong { display: block; color: var(--ink); font-size: 1.05rem; }
 .brand-chip span { font-size: .82rem; color: var(--muted); }
+.brand-chip--wide {
+  grid-column: 1 / -1;
+  border-color: rgba(52, 211, 153, .5); background: rgba(52, 211, 153, .06);
+}
 
 /* ---------- Ablauf ---------- */
 .steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; counter-reset: none; }
@@ -452,6 +504,7 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
   .brands { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .steps { grid-template-columns: 1fr; gap: 34px; }
   .b2b { grid-template-columns: 1fr; gap: 26px; }
+  .praemie { grid-template-columns: 1fr; gap: 20px; }
   .price-card--featured { transform: none; }
   .footer__inner { grid-template-columns: 1fr 1fr; }
 }
@@ -478,6 +531,8 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
   .pr-row { grid-template-columns: 26px 1fr auto; gap: 8px; padding: 11px 2px; }
   .pr-val { font-size: 1rem; }
   .calc__badges { gap: 8px 16px; font-size: .84rem; }
+  .praemie__main { padding: 22px 18px; }
+  .card__tag { margin-left: 0; margin-top: 6px; }
   .faq__q { font-size: .95rem; padding: 16px 46px 16px 16px; }
   .faq__a > p { padding: 0 16px; }
   .faq__item.open .faq__a > p { padding-bottom: 16px; }
@@ -553,7 +608,7 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
           <li><a href="#home" class="nav__link">Start</a></li>
           <li><a href="#services" class="nav__link">Leistungen</a></li>
           <li><a href="#preise" class="nav__link">Preisrechner</a></li>
-          <li><a href="#marken" class="nav__link">Marken</a></li>
+          <li><a href="#praemie" class="nav__link">Förderung</a></li>
           <li><a href="#shop" class="nav__link">Shop</a></li>
           <li><a href="#faq" class="nav__link">FAQ</a></li>
           <li><a href="#kontakt" class="nav__link">Kontakt</a></li>
@@ -664,6 +719,11 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
           <h3>Software &amp; Datenrettung</h3>
           <p>Bootschleife, hängendes System, Datenübertragung aufs neue Handy – auch Rettung wichtiger Fotos.</p>
         </article>
+        <article class="card card--highlight">
+          <div class="card__icon">💻</div>
+          <h3>Laptop-Reparatur <span class="card__tag">bis 130 € Förderung</span></h3>
+          <p>Display, Akku, Tastatur, Ladebuchse und Lüfterreinigung – für Laptops gibt es die staatliche Geräte-Retter-Prämie.</p>
+        </article>
         <article class="card">
           <div class="card__icon">🔬</div>
           <h3>Board-Level-Reparatur</h3>
@@ -718,6 +778,58 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
     </div>
   </section>
 
+  <!-- ============ GERÄTE-RETTER-PRÄMIE ============ -->
+  <section class="section section--alt" id="praemie">
+    <div class="container">
+      <div class="section__head">
+        <span class="eyebrow">Förderung</span>
+        <h2>Geräte-Retter-Prämie: bis zu 130&nbsp;€ vom Staat zurück</h2>
+        <p>Die Nachfolge des Reparaturbonus. Für Laptop-Reparaturen übernimmt der Staat die Hälfte.</p>
+      </div>
+
+      <div class="praemie">
+        <div class="praemie__main">
+          <h3>Wie es funktioniert</h3>
+          <ol class="praemie__steps">
+            <li><strong>Bon holen</strong> – auf der offiziellen Seite der Geräte-Retter-Prämie den Förderbon für dein Gerät anfordern.</li>
+            <li><strong>Reparieren lassen</strong> – bring dein Gerät zu uns, wir reparieren es und stellen dir eine ordentliche Rechnung aus.</li>
+            <li><strong>Geld zurück</strong> – du reichst die Rechnung ein und bekommst <strong>50 % der Kosten, maximal 130&nbsp;€</strong>, direkt auf dein Konto überwiesen.</li>
+          </ol>
+          <p class="praemie__hint">
+            Wir helfen dir gern beim Antrag und stellen die Rechnung so aus, wie sie für die
+            Einreichung gebraucht wird.
+          </p>
+          <a href="#kontakt" class="btn btn--primary">Laptop-Reparatur anfragen</a>
+        </div>
+
+        <aside class="praemie__side">
+          <div class="praemie__yes">
+            <h4>✅ Wird gefördert</h4>
+            <ul>
+              <li>Laptops &amp; Notebooks</li>
+              <li>MacBooks</li>
+              <li>Haushalts- &amp; Elektrogeräte</li>
+              <li>Zubehör wie Ladegeräte zum Gerät</li>
+            </ul>
+          </div>
+          <div class="praemie__no">
+            <h4>❌ Wird nicht gefördert</h4>
+            <ul>
+              <li>Handys &amp; Smartphones</li>
+              <li>Tablets &amp; iPads</li>
+              <li>Fahrräder &amp; E-Bikes</li>
+            </ul>
+            <p>
+              Handys und Tablets waren beim alten Reparaturbonus dabei, sind seit
+              Jänner 2026 aber ausgenommen. Wir sagen dir das lieber ehrlich vorher,
+              als dass du dich hinterher ärgerst.
+            </p>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ MARKEN ============ -->
   <section class="section" id="marken">
     <div class="container">
@@ -735,6 +847,7 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
         <div class="brand-chip"><strong>OnePlus</strong><span>alle Modelle</span></div>
         <div class="brand-chip"><strong>Oppo</strong><span>alle Modelle</span></div>
         <div class="brand-chip"><strong>Motorola</strong><span>alle Modelle</span></div>
+        <div class="brand-chip brand-chip--wide"><strong>💻 Laptops &amp; Notebooks</strong><span>Windows, MacBook &amp; Chromebook – mit Förderung bis 130&nbsp;€</span></div>
       </div>
     </div>
   </section>
@@ -927,6 +1040,10 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
           <div class="faq__a"><p>Nein, du kannst jederzeit während der Öffnungszeiten vorbeikommen. Wenn du vorher anrufst oder schreibst, legen wir das passende Ersatzteil bereit – dann geht es noch schneller.</p></div>
         </div>
         <div class="faq__item">
+          <button class="faq__q" aria-expanded="false">Gibt es für meine Reparatur eine Förderung?</button>
+          <div class="faq__a"><p>Für <strong>Laptops und Notebooks</strong> ja: Über die Geräte-Retter-Prämie bekommst du 50 % der Reparaturkosten zurück, maximal 130 €. Für <strong>Handys und Tablets gibt es seit Jänner 2026 keine Förderung mehr</strong> – die waren nur beim alten Reparaturbonus dabei. Wenn dir das jemand anders verspricht, stimmt das leider nicht.</p></div>
+        </div>
+        <div class="faq__item">
           <button class="faq__q" aria-expanded="false">Kauft ihr auch alte Handys an?</button>
           <div class="faq__a"><p>Ja. Bring dein altes Gerät vorbei – auch mit Defekt. Wir machen dir ein faires Angebot oder rechnen den Wert direkt gegen deine Reparatur oder ein neues Gerät auf.</p></div>
         </div>
@@ -1021,6 +1138,7 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
           <li><a href="#preise">Preisrechner</a></li>
           <li><a href="#services">Display &amp; Akku</a></li>
           <li><a href="#services">Rückglas &amp; Kamera</a></li>
+          <li><a href="#praemie">Laptop-Reparatur &amp; Förderung</a></li>
           <li><a href="#services">Board-Level-Reparatur</a></li>
           <li><a href="#shop">Zubehör &amp; Elektronik</a></li>
           <li><a href="#b2b">Firmenkunden</a></li>
@@ -1070,8 +1188,14 @@ const REPARATUR_LABELS = {
   rueckglas:    { name: 'Rückglas',              icon: '🪟', dauer: '60–90 Min' },
   lautsprecher: { name: 'Lautsprecher / Mikro',  icon: '🔊', dauer: '30–45 Min' },
   wasser:       { name: 'Wasserschaden',         icon: '💧', dauer: '1–3 Tage' },
-  software:     { name: 'Software-Reparatur',    icon: '💾', dauer: '30–60 Min' }
+  software:     { name: 'Software-Reparatur',    icon: '💾', dauer: '30–60 Min' },
+  tastatur:     { name: 'Tastatur-Tausch',       icon: '⌨️', dauer: '1–2 Tage' },
+  luefter:      { name: 'Lüfter &amp; Reinigung',    icon: '🌀', dauer: '1 Tag' }
 };
+
+/* Geraetegruppen, fuer die die Geraete-Retter-Praemie gilt.
+   Stand 2026: Handys und Tablets sind ausdruecklich AUSGENOMMEN. */
+const PRAEMIE_GRUPPEN = ['Laptop / Notebook'];
 
 const PREISE = {
   'Apple': {
@@ -1138,6 +1262,16 @@ const PREISE = {
   'Google': {
     'Pixel 6 / 7':           { display: 139, akku: 65, ladebuchse: 69, kamera: 99,  rueckglas: 79, lautsprecher: 69, wasser: 59, software: 39 },
     'Pixel 8 / 9':           { display: 179, akku: 75, ladebuchse: 79, kamera: 119, rueckglas: 89, lautsprecher: 79, wasser: 69, software: 39 }
+  },
+
+  /* Laptops: einzige Geraetegruppe hier, die unter die
+     Geraete-Retter-Praemie faellt (50 %, max. 130 EUR). */
+  'Laptop / Notebook': {
+    'Windows-Notebook (Standard)':  { display: 149, akku: 99,  ladebuchse: 89,  lautsprecher: 79, wasser: 89, software: 59, tastatur: 89,  luefter: 79 },
+    'Windows-Notebook (Business)':  { display: 189, akku: 119, ladebuchse: 99,  lautsprecher: 89, wasser: 99, software: 59, tastatur: 99,  luefter: 89 },
+    'MacBook Air':                  { display: 349, akku: 149, ladebuchse: 129, lautsprecher: 99, wasser: 129, software: 79, tastatur: 179, luefter: 99 },
+    'MacBook Pro':                  { display: 429, akku: 179, ladebuchse: 149, lautsprecher: 119, wasser: 149, software: 79, tastatur: 199, luefter: 109 },
+    'Chromebook':                   { display: 129, akku: 89,  ladebuchse: 79,  lautsprecher: 69, wasser: 79, software: 49, tastatur: 79,  luefter: 69 }
   },
 
   'OnePlus / Oppo / Motorola': {
@@ -1242,12 +1376,31 @@ document.addEventListener('DOMContentLoaded', () => {
           </li>`;
         }).join('');
 
+      // Geraete-Retter-Praemie: gilt nur fuer bestimmte Geraetegruppen
+      const foerderbar = typeof PRAEMIE_GRUPPEN !== 'undefined'
+        && PRAEMIE_GRUPPEN.indexOf(brand) !== -1;
+
+      const preise = Object.keys(data).map(k => data[k]).filter(v => typeof v === 'number');
+      const guenstigster = preise.length ? Math.min.apply(null, preise) : 0;
+      const teuerster = preise.length ? Math.max.apply(null, preise) : 0;
+      const foerderBlock = foerderbar ? `
+        <div class="calc__foerderung">
+          <strong>🇦🇹 Geräte-Retter-Prämie möglich</strong>
+          <p>
+            Für Laptop-Reparaturen bekommst du <strong>50 % der Kosten zurück</strong>,
+            maximal 130&nbsp;€. Bei den Preisen oben sind das rund
+            <strong>${Math.round(guenstigster / 2)}–${Math.min(130, Math.round(teuerster / 2))}&nbsp;€</strong>
+            Ersparnis. Wir helfen dir beim Antrag.
+          </p>
+        </div>` : '';
+
       results.innerHTML = `
         <div class="calc__head">
           <h3>${brand} ${model}</h3>
           <p>Alle Preise inklusive Arbeitszeit &amp; 12 Monate Garantie.</p>
         </div>
         <ul class="pr-list">${rows}</ul>
+        ${foerderBlock}
         <div class="calc__foot">
           <a href="#kontakt" class="btn btn--primary">Termin für dieses Gerät anfragen</a>
           <p class="calc__note">Endpreis abhängig vom tatsächlichen Schaden – die Diagnose ist bei uns gratis.</p>

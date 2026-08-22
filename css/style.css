@@ -251,6 +251,54 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
   margin: 26px auto 0; color: #a5f3fc; font-size: .9rem; font-weight: 500;
 }
 
+/* ---------- Foerderhinweis im Rechner ---------- */
+.calc__foerderung {
+  margin-top: 18px; padding: 16px 18px; border-radius: var(--radius-sm);
+  background: rgba(52, 211, 153, .1); border: 1px solid rgba(52, 211, 153, .38);
+}
+.calc__foerderung strong { display: block; color: var(--neon-green); margin-bottom: 5px; font-size: .95rem; }
+.calc__foerderung p { color: #cfe6dd; font-size: .88rem; }
+.calc__foerderung p strong { display: inline; color: #eafff6; }
+
+/* ---------- Geraete-Retter-Praemie ---------- */
+.praemie { display: grid; grid-template-columns: 1.25fr .9fr; gap: 30px; align-items: start; }
+.praemie__main {
+  background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 30px; box-shadow: var(--shadow);
+}
+.praemie__main h3 { font-size: 1.2rem; margin-bottom: 16px; }
+.praemie__steps { list-style: none; counter-reset: pstep; display: grid; gap: 16px; margin-bottom: 18px; }
+.praemie__steps li {
+  counter-increment: pstep; position: relative; padding-left: 44px; color: var(--muted);
+}
+.praemie__steps li::before {
+  content: counter(pstep); position: absolute; left: 0; top: 0;
+  width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center;
+  background: var(--grad); color: #04121a; font-weight: 800; font-size: .95rem;
+}
+.praemie__steps strong { color: var(--ink); }
+.praemie__hint { color: var(--muted); font-size: .92rem; margin-bottom: 20px; }
+
+.praemie__side { display: grid; gap: 16px; }
+.praemie__yes, .praemie__no {
+  border-radius: var(--radius-sm); padding: 20px; border: 1px solid var(--line); background: #fff;
+}
+.praemie__yes { border-color: rgba(14, 159, 110, .42); background: rgba(14, 159, 110, .06); }
+.praemie__no  { border-color: rgba(209, 73, 91, .35);  background: rgba(209, 73, 91, .05); }
+.praemie__yes h4, .praemie__no h4 { font-size: 1rem; margin-bottom: 10px; }
+.praemie__side ul { display: grid; gap: 7px; font-size: .93rem; color: var(--body); }
+.praemie__side li { padding-left: 16px; position: relative; }
+.praemie__side li::before { content: "·"; position: absolute; left: 4px; font-weight: 800; color: var(--muted); }
+.praemie__no p { margin-top: 12px; font-size: .85rem; color: var(--muted); }
+
+/* Hervorgehobene Leistungskarte */
+.card--highlight { border-color: rgba(52, 211, 153, .5); }
+.card__tag {
+  display: inline-block; vertical-align: middle; margin-left: 8px;
+  background: var(--grad); color: #04121a; font-size: .68rem; font-weight: 800;
+  padding: 3px 9px; border-radius: 999px; white-space: nowrap;
+}
+
 /* ---------- Marken ---------- */
 .brands { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
 .brand-chip {
@@ -260,6 +308,10 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
 .brand-chip:hover { transform: translateY(-4px); border-color: rgba(34,211,238,.55); box-shadow: var(--shadow); }
 .brand-chip strong { display: block; color: var(--ink); font-size: 1.05rem; }
 .brand-chip span { font-size: .82rem; color: var(--muted); }
+.brand-chip--wide {
+  grid-column: 1 / -1;
+  border-color: rgba(52, 211, 153, .5); background: rgba(52, 211, 153, .06);
+}
 
 /* ---------- Ablauf ---------- */
 .steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; counter-reset: none; }
@@ -424,6 +476,7 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
   .brands { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .steps { grid-template-columns: 1fr; gap: 34px; }
   .b2b { grid-template-columns: 1fr; gap: 26px; }
+  .praemie { grid-template-columns: 1fr; gap: 20px; }
   .price-card--featured { transform: none; }
   .footer__inner { grid-template-columns: 1fr 1fr; }
 }
@@ -450,6 +503,8 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
   .pr-row { grid-template-columns: 26px 1fr auto; gap: 8px; padding: 11px 2px; }
   .pr-val { font-size: 1rem; }
   .calc__badges { gap: 8px 16px; font-size: .84rem; }
+  .praemie__main { padding: 22px 18px; }
+  .card__tag { margin-left: 0; margin-top: 6px; }
   .faq__q { font-size: .95rem; padding: 16px 46px 16px 16px; }
   .faq__a > p { padding: 0 16px; }
   .faq__item.open .faq__a > p { padding-bottom: 16px; }

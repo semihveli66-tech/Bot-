@@ -93,12 +93,31 @@ document.addEventListener('DOMContentLoaded', () => {
           </li>`;
         }).join('');
 
+      // Geraete-Retter-Praemie: gilt nur fuer bestimmte Geraetegruppen
+      const foerderbar = typeof PRAEMIE_GRUPPEN !== 'undefined'
+        && PRAEMIE_GRUPPEN.indexOf(brand) !== -1;
+
+      const preise = Object.keys(data).map(k => data[k]).filter(v => typeof v === 'number');
+      const guenstigster = preise.length ? Math.min.apply(null, preise) : 0;
+      const teuerster = preise.length ? Math.max.apply(null, preise) : 0;
+      const foerderBlock = foerderbar ? `
+        <div class="calc__foerderung">
+          <strong>🇦🇹 Geräte-Retter-Prämie möglich</strong>
+          <p>
+            Für Laptop-Reparaturen bekommst du <strong>50 % der Kosten zurück</strong>,
+            maximal 130&nbsp;€. Bei den Preisen oben sind das rund
+            <strong>${Math.round(guenstigster / 2)}–${Math.min(130, Math.round(teuerster / 2))}&nbsp;€</strong>
+            Ersparnis. Wir helfen dir beim Antrag.
+          </p>
+        </div>` : '';
+
       results.innerHTML = `
         <div class="calc__head">
           <h3>${brand} ${model}</h3>
           <p>Alle Preise inklusive Arbeitszeit &amp; 12 Monate Garantie.</p>
         </div>
         <ul class="pr-list">${rows}</ul>
+        ${foerderBlock}
         <div class="calc__foot">
           <a href="#kontakt" class="btn btn--primary">Termin für dieses Gerät anfragen</a>
           <p class="calc__note">Endpreis abhängig vom tatsächlichen Schaden – die Diagnose ist bei uns gratis.</p>

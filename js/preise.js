@@ -14,8 +14,14 @@ const REPARATUR_LABELS = {
   rueckglas:    { name: 'Rückglas',              icon: '🪟', dauer: '60–90 Min' },
   lautsprecher: { name: 'Lautsprecher / Mikro',  icon: '🔊', dauer: '30–45 Min' },
   wasser:       { name: 'Wasserschaden',         icon: '💧', dauer: '1–3 Tage' },
-  software:     { name: 'Software-Reparatur',    icon: '💾', dauer: '30–60 Min' }
+  software:     { name: 'Software-Reparatur',    icon: '💾', dauer: '30–60 Min' },
+  tastatur:     { name: 'Tastatur-Tausch',       icon: '⌨️', dauer: '1–2 Tage' },
+  luefter:      { name: 'Lüfter &amp; Reinigung',    icon: '🌀', dauer: '1 Tag' }
 };
+
+/* Geraetegruppen, fuer die die Geraete-Retter-Praemie gilt.
+   Stand 2026: Handys und Tablets sind ausdruecklich AUSGENOMMEN. */
+const PRAEMIE_GRUPPEN = ['Laptop / Notebook'];
 
 const PREISE = {
   'Apple': {
@@ -82,6 +88,16 @@ const PREISE = {
   'Google': {
     'Pixel 6 / 7':           { display: 139, akku: 65, ladebuchse: 69, kamera: 99,  rueckglas: 79, lautsprecher: 69, wasser: 59, software: 39 },
     'Pixel 8 / 9':           { display: 179, akku: 75, ladebuchse: 79, kamera: 119, rueckglas: 89, lautsprecher: 79, wasser: 69, software: 39 }
+  },
+
+  /* Laptops: einzige Geraetegruppe hier, die unter die
+     Geraete-Retter-Praemie faellt (50 %, max. 130 EUR). */
+  'Laptop / Notebook': {
+    'Windows-Notebook (Standard)':  { display: 149, akku: 99,  ladebuchse: 89,  lautsprecher: 79, wasser: 89, software: 59, tastatur: 89,  luefter: 79 },
+    'Windows-Notebook (Business)':  { display: 189, akku: 119, ladebuchse: 99,  lautsprecher: 89, wasser: 99, software: 59, tastatur: 99,  luefter: 89 },
+    'MacBook Air':                  { display: 349, akku: 149, ladebuchse: 129, lautsprecher: 99, wasser: 129, software: 79, tastatur: 179, luefter: 99 },
+    'MacBook Pro':                  { display: 429, akku: 179, ladebuchse: 149, lautsprecher: 119, wasser: 149, software: 79, tastatur: 199, luefter: 109 },
+    'Chromebook':                   { display: 129, akku: 89,  ladebuchse: 79,  lautsprecher: 69, wasser: 79, software: 49, tastatur: 79,  luefter: 69 }
   },
 
   'OnePlus / Oppo / Motorola': {
