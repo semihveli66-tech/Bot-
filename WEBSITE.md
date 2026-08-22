@@ -6,24 +6,37 @@ Wien-Favoriten, Quellenstraße 111 (Ecke Favoritenstraße, beim Reumannplatz).
 ## Dateien
 
 ```
+Arbeitsstand (hier wird bearbeitet):
+
 index.html       # Startseite
 css/style.css    # Design inkl. Neon-Logo (Grün → Blau)
 js/preise.js     # >>> ALLE PREISE – hier werden sie geändert <<<
 js/main.js       # Navigation, Preisrechner, FAQ, Kontaktformular
 kontakt.php      # nimmt Formular-Anfragen entgegen und mailt sie weiter
-CNAME            # Custom Domain für GitHub Pages (phonetastic.at)
 robots.txt       # Suchmaschinen-Freigabe + Sitemap-Verweis
 sitemap.xml      # Sitemap für Google
-.nojekyll        # liefert alle Dateien unverändert über Pages aus
+
+Fertig zum Hochladen (aus dem Arbeitsstand erzeugt):
+
+upload/          # dieselbe Seite ohne Unterordner, siehe Abschnitt Hosting
 ```
 
 ---
 
 ## Kontaktformular: wohin gehen die Anfragen?
 
-Das Formular schickt die Anfrage an `kontakt.php`, und dieses Skript sendet
-eine E-Mail an **phonetastic1@outlook.com**. Antwortet man auf diese Mail,
-geht die Antwort direkt an den Kunden (Reply-To ist dessen Adresse).
+Es sind drei Adressen im Spiel:
+
+| Adresse | Rolle |
+|---|---|
+| `info@phonetastic.at` | steht auf der Website, hier schreiben Kunden direkt hin (Weiterleitung aufs Outlook-Postfach) |
+| `noreply@phonetastic.at` | Absender, mit dem der Server die Formular-Mails verschickt |
+| `phonetastic1@outlook.com` | Empfänger der Formular-Anfragen, eingestellt in `kontakt.php` |
+
+Das Formular schickt die Anfrage an `kontakt.php`, das Skript mailt sie an das
+Outlook-Postfach – bewusst direkt und nicht über die Weiterleitung, damit ein
+Zwischenschritt weniger schiefgehen kann. Antwortet man auf diese Mail, geht
+die Antwort direkt an den Kunden (Reply-To ist dessen Adresse).
 
 ### Damit das funktioniert – zwei Voraussetzungen
 
@@ -57,7 +70,7 @@ Mail-Empfänger einschleusen kann.
 
 ## Preise ändern
 
-Alle Preise stehen in **`js/preise.js`**. Dort einfach die Zahl überschreiben:
+Alle Preise stehen in **`js/preise.js`** (auf dem Server: `preise.js`). Dort einfach die Zahl überschreiben:
 
 ```js
 'iPhone 13': { display: 109, akku: 59, ... }
@@ -68,78 +81,59 @@ Nur die Zahl ändern – ohne Euro-Zeichen, ohne Komma. `null` zeigt
 
 ---
 
-## Website live schalten auf phonetastic.at
+## Hosting: All-Inkl
 
-### Schritt 1 – GitHub Pages aktivieren
+Die Seite liegt bei All-Inkl, wo auch die Domain registriert ist. Deshalb sind
+keine DNS-Änderungen nötig – die Domain zeigt bereits auf den richtigen Server.
 
-1. Repo auf GitHub → **Settings** → **Pages**
-2. **Source:** „Deploy from a branch"
-3. **Branch:** `claude/handyshop-favoriten-website-eyi3gg`, Ordner **`/ (root)`** → **Save**
-4. Unter **Custom domain** `phonetastic.at` eintragen → **Save**
-   (Die Datei `CNAME` im Repo setzt das bereits – der Eintrag sollte automatisch erscheinen.)
-5. Nach erfolgreicher DNS-Prüfung **„Enforce HTTPS"** aktivieren.
+### Dateien auf den Server bringen
 
-### Schritt 2 – DNS beim Domain-Anbieter eintragen
+Hochgeladen wird das Paket aus dem Ordner `upload/`. Dort sind CSS und
+`main.js` in `index.html` eingebettet, damit keine Unterordner angelegt werden
+müssen:
 
-Im DNS-Verwaltungsbereich des Anbieters, bei dem `phonetastic.at` gekauft wurde:
+```
+index.html      preise.js      kontakt.php      robots.txt      sitemap.xml
+```
 
-**Für die Hauptdomain (phonetastic.at) – vier A-Records:**
+Alle fünf Dateien kommen flach in das Verzeichnis der Domain (über
+[webftp.all-inkl.com](https://webftp.all-inkl.com) oder FileZilla). Eine
+eventuell vorhandene `index.htm` von All-Inkl löschen, sonst wird sie
+statt der eigenen Startseite ausgeliefert.
 
-| Typ | Name/Host | Wert |
-|-----|-----------|------|
-| A | `@` | `185.199.108.153` |
-| A | `@` | `185.199.109.153` |
-| A | `@` | `185.199.110.153` |
-| A | `@` | `185.199.111.153` |
+### Einstellungen im KAS
 
-**Für www (www.phonetastic.at) – ein CNAME-Record:**
+| Bereich | Einstellung |
+|---|---|
+| FTP | eigener FTP-Nutzer nötig – die KAS-Zugangsdaten funktionieren dafür nicht |
+| Domain → SSL-Schutz | Reiter **Let's Encrypt**, Zertifikat beziehen und binden. Das Server-Zertifikat (`kasserver.com`) reicht nicht, es löst eine Browser-Warnung aus. |
+| Domain | **SSL erzwingen** erst einschalten, wenn das Zertifikat gebunden ist – sonst schlägt schon die Domain-Prüfung von Let's Encrypt fehl |
+| E-Mail | Postfach `noreply@phonetastic.at` (Absender) und `info@phonetastic.at` (Weiterleitung aufs Outlook-Postfach) |
 
-| Typ | Name/Host | Wert |
-|-----|-----------|------|
-| CNAME | `www` | `<github-benutzername>.github.io.` |
+### Änderungen später
 
-> Den Benutzernamen aus der eigenen Repo-URL übernehmen (der Teil zwischen
-> `github.com/` und dem Repo-Namen) und den Punkt am Ende mitschreiben.
-> Beim letzten Push meldete GitHub den Umzug des Repos nach
-> `sesolarwien/Bot-sesolarwien` – dann lautet der Wert `sesolarwien.github.io.`
-> Die vier A-Records oben sind davon unabhängig und bleiben gleich.
-
-> DNS-Änderungen brauchen typischerweise 15 Minuten bis 24 Stunden, bis sie
-> überall greifen. Danach prüft GitHub die Domain automatisch und stellt ein
-> kostenloses SSL-Zertifikat aus (https).
-
-### Schritt 3 – Prüfen
-
-- `https://phonetastic.at` aufrufen
-- In den Pages-Settings muss „DNS check successful" stehen
-- Erst danach lässt sich **Enforce HTTPS** einschalten
-
-### Empfehlung: auf `main` mergen
-
-Für den Dauerbetrieb die Änderungen in den `main`-Branch mergen und GitHub Pages
-von `main` / `root` ausliefern lassen. Dann bleibt die Seite unabhängig vom
-Feature-Branch online.
+Nur die geänderte Datei neu hochladen. Für Preise genügt `preise.js` – die
+lässt sich im WebFTP direkt im Browser bearbeiten.
 
 ---
 
 ## Nach dem Livegang bei Google eintragen
 
-1. **Google Search Console** → Property `phonetastic.at` anlegen, Domain per
+1. **Google Search Console** → Property `phonetastic.at` anlegen, per
    DNS-TXT-Eintrag verifizieren, danach `https://phonetastic.at/sitemap.xml` einreichen.
-2. **Google Business Profil** anlegen (wichtiger als die Website für Laufkundschaft):
-   Adresse Quellenstraße 111, Kategorie „Handyreparatur", Öffnungszeiten, Fotos.
+2. **Google Business Profil** anlegen – für Laufkundschaft wichtiger als die
+   Website selbst: Adresse Quellenstraße 111, Kategorie „Handyreparatur",
+   Öffnungszeiten, Fotos.
 
 ---
 
-## Noch anzupassen (Platzhalter)
+## Noch offen
 
-| Platzhalter | ändern auf |
+| Punkt | Status |
 |---|---|
-| `01 234 56 78` / `+43123456780` | echte Telefonnummer |
-| `info@phonetastic.at` | E-Mail-Postfach zur Domain einrichten |
-| Preise (49/35/39 €) | echte Preise |
-| Öffnungszeiten | echte Zeiten |
-| Impressum / Datenschutz (Footer) | Pflichtseiten – in Österreich gesetzlich erforderlich |
+| Preise | Platzhalter aus Marktpreisen – noch durch die echten ersetzen |
+| Öffnungszeiten | derzeit Mo–Fr 09:00–18:30, Sa 09:00–13:00 |
+| Impressum / Datenschutz | fehlen noch – in Österreich gesetzlich erforderlich |
 
 ## Lokal testen
 

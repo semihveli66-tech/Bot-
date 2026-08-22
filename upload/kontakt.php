@@ -10,6 +10,10 @@
    ============================================================ */
 
 // An welche Adresse sollen die Anfragen gehen?
+// Bewusst direkt das Outlook-Postfach und nicht info@phonetastic.at:
+// so entfaellt der Umweg ueber die Weiterleitung und die Mail kommt
+// auf dem kuerzesten Weg an. Auf der Website steht trotzdem
+// info@phonetastic.at - das ist die Adresse fuer die Kunden.
 $EMPFAENGER = 'phonetastic1@outlook.com';
 
 // Absenderadresse. WICHTIG: Muss eine Adresse der EIGENEN Domain

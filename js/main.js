@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
         `Name: ${d.name}\nE-Mail: ${d.email}\nTelefon: ${d.phone || '-'}\n` +
         `Gerät/Problem: ${d.device || '-'}\n\nNachricht:\n${d.message}`
       );
-      window.location.href = `mailto:phonetastic1@outlook.com?subject=${betreff}&body=${inhalt}`;
+      window.location.href = `mailto:info@phonetastic.at?subject=${betreff}&body=${inhalt}`;
       status.textContent = 'Dein E-Mail-Programm öffnet sich. Klappt das nicht, ruf uns an: 0660 651 12 62';
       status.className = 'form-status ok';
     };
