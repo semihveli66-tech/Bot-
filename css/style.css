@@ -118,6 +118,8 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
     linear-gradient(160deg, #0b1220 0%, #111c2e 55%, #0e1a2b 100%);
 }
 .hero__inner { display: grid; grid-template-columns: 1.15fr .85fr; gap: 50px; align-items: center; }
+/* Grid-Spalten duerfen nicht durch lange Button-Texte aufgeblaeht werden */
+.hero__inner > * { min-width: 0; }
 .hero__badge {
   display: inline-block; background: rgba(255,255,255,.06); border: 1px solid rgba(56,189,248,.3); color: #a5f3fc;
   padding: 7px 16px; border-radius: 999px; font-size: .85rem; font-weight: 600; margin-bottom: 20px;
@@ -327,10 +329,27 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
 @media (max-width: 560px) {
   .section { padding: 60px 0; }
   .cards, .pricing, .about__grid, .footer__inner { grid-template-columns: 1fr; }
-  .shop-grid { grid-template-columns: 1fr 1fr; }
+  .shop-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .shop-card { padding: 18px 14px; }
+  .shop-card h3 { font-size: 1rem; }
+  .shop-card p { font-size: .85rem; }
   .form-row { grid-template-columns: 1fr; }
-  .hero__stats { grid-template-columns: repeat(3, 1fr); }
+  /* minmax(0,...) verhindert, dass lange Zahlen die Spalten aufblaehen */
+  .hero__stats { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .hero__stats strong { font-size: 1.05rem; }
+  .hero__stats span { font-size: .7rem; }
+  .hero__card { padding: 24px 18px; }
   .hero__actions { flex-direction: column; }
   .hero__actions .btn { width: 100%; }
+  /* Lange Beschriftungen duerfen auf kleinen Displays umbrechen */
+  .btn { white-space: normal; text-align: center; }
   .footer__bottom .container { flex-direction: column; text-align: center; }
+}
+
+/* Sehr schmale Geraete (iPhone SE & aehnliche) */
+@media (max-width: 400px) {
+  .container { padding: 0 14px; }
+  .shop-grid { grid-template-columns: 1fr; }
+  .brand__main { font-size: 1.3rem; }
+  .hero__stats strong { font-size: .95rem; }
 }

@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PHONETASTIC | Handy Reparatur in Wien-Favoriten · Reumannplatz</title>
+  <meta name="description" content="PHONETASTIC – Handy Reparatur am Reumannplatz in Wien-Favoriten. Displaytausch, Akkuwechsel, Verkauf von Smartphones & Zubehör. Faire Preise, Reparatur oft in 30 Minuten." />
+  <meta name="keywords" content="PHONETASTIC, Handy Reparatur Wien, Handyshop Favoriten, Reumannplatz, Displaytausch, Akku wechseln, Smartphone Reparatur, iPhone Reparatur Wien, Samsung Reparatur" />
+  <meta name="author" content="PHONETASTIC" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#0b1220" />
+  <link rel="canonical" href="https://phonetastic.at/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="business.business" />
+  <meta property="og:site_name" content="PHONETASTIC" />
+  <meta property="og:url" content="https://phonetastic.at/" />
+  <meta property="og:title" content="PHONETASTIC – Handy Reparatur in Wien-Favoriten" />
+  <meta property="og:description" content="Schnelle & faire Handy-Reparatur am Reumannplatz. Displaytausch, Akkuwechsel, Verkauf & Zubehör." />
+  <meta property="og:locale" content="de_AT" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="PHONETASTIC – Handy Reparatur in Wien-Favoriten" />
+  <meta name="twitter:description" content="Schnelle & faire Handy-Reparatur am Reumannplatz. Displaytausch, Akkuwechsel, Verkauf & Zubehör." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+/* ============================================================
+   PHONETASTIC – Handy Reparatur · Stylesheet
+   ============================================================ */
+
+:root {
+  /* Marken-Neon: Grün -> Blau (aus dem Logo) */
+  --neon-green: #34d399;
+  --neon-teal: #22d3ee;
+  --neon-blue: #38bdf8;
+  --brand: #14b8c4;
+  --brand-dark: #0e7490;
+  --brand-light: #cffafe;
+  --grad: linear-gradient(100deg, #22c55e 0%, #34d399 30%, #22d3ee 60%, #38bdf8 100%);
+
+  --accent: #f59e0b;
+  --ink: #0b1220;
+  --steel: #111c2e;
+  --steel-2: #16233a;
+  --body: #334155;
+  --muted: #64748b;
+  --line: #e2e8f0;
+  --bg: #ffffff;
+  --bg-alt: #f4f9fb;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 20px 50px rgba(15, 23, 42, 0.18);
+  --max: 1160px;
+  --header-h: 76px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; scroll-padding-top: var(--header-h); }
+
+body {
+  font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  color: var(--body);
+  background: var(--bg);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+img, iframe { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
+
+.container { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 20px; }
+
+h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
+.txt-accent { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+/* ============================================================
+   Marken-Logo (Neon PHONETASTIC – aus dem Original nachgebaut)
+   ============================================================ */
+.brand { display: inline-flex; flex-direction: column; line-height: 1; text-align: left; }
+.brand__top {
+  font-size: .62rem; font-weight: 700; letter-spacing: .32em; color: #9fb3c8;
+  text-transform: uppercase; margin-bottom: 3px; padding-left: 2px;
+}
+.brand__main {
+  font-size: 1.5rem; font-weight: 900; letter-spacing: .01em; text-transform: uppercase;
+  background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(0 0 10px rgba(52, 211, 153, .35)) drop-shadow(0 0 16px rgba(56, 189, 248, .3));
+}
+.brand__main span { color: transparent; } /* zweite Worthälfte, gleicher Verlauf */
+.brand__main--xl { font-size: clamp(2.2rem, 6vw, 3.4rem); }
+.hero__logo { text-align: center; margin-bottom: 8px; }
+.hero__logo .brand__top { display: block; letter-spacing: .4em; font-size: .72rem; margin-bottom: 8px; }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 14px 26px; border-radius: 999px; font-weight: 600; font-size: .98rem;
+  cursor: pointer; border: 2px solid transparent; transition: .2s ease; white-space: nowrap;
+}
+.btn--primary { background: var(--grad); color: #04121a; box-shadow: 0 8px 22px rgba(34, 211, 238, .35); }
+.btn--primary:hover { filter: brightness(1.06); transform: translateY(-2px); }
+.btn--ghost { background: transparent; color: var(--brand-dark); border-color: var(--brand); }
+.btn--ghost:hover { background: var(--brand); color: #04121a; }
+.btn--ghost.btn--light { color: #d7f6ff; border-color: rgba(56, 189, 248, .6); }
+.btn--ghost.btn--light:hover { background: var(--neon-blue); color: #04121a; border-color: var(--neon-blue); }
+.btn--block { width: 100%; }
+
+/* ---------- Header ---------- */
+.header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(11, 18, 32, .92); backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(56, 189, 248, .18); height: var(--header-h);
+  transition: box-shadow .3s;
+}
+.header.scrolled { box-shadow: 0 8px 30px rgba(0, 0, 0, .4); }
+.header__inner { display: flex; align-items: center; justify-content: space-between; height: 100%; }
+
+.nav__list { display: flex; align-items: center; gap: 6px; }
+.nav__link {
+  padding: 8px 14px; border-radius: 999px; font-weight: 500; color: #cbd5e1; transition: .2s;
+}
+.nav__link:hover { color: #fff; background: rgba(56, 189, 248, .14); }
+.nav__cta {
+  margin-left: 8px; padding: 10px 18px; border-radius: 999px; background: var(--grad);
+  color: #04121a !important; font-weight: 700; box-shadow: 0 6px 16px rgba(34, 211, 238, .35);
+}
+.nav__cta:hover { filter: brightness(1.06); }
+
+.nav__toggle { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 8px; }
+.nav__toggle span { width: 26px; height: 3px; background: #e2e8f0; border-radius: 2px; transition: .3s; }
+.nav__toggle.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.nav__toggle.open span:nth-child(2) { opacity: 0; }
+.nav__toggle.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+/* ---------- Hero (dunkler Metallic-Look wie das Logo) ---------- */
+.hero {
+  position: relative; padding: calc(var(--header-h) + 70px) 0 80px; color: #e2e8f0;
+  background:
+    radial-gradient(900px 500px at 82% -5%, rgba(56, 189, 248, .18), transparent 60%),
+    radial-gradient(700px 500px at 10% 20%, rgba(52, 211, 153, .14), transparent 55%),
+    linear-gradient(160deg, #0b1220 0%, #111c2e 55%, #0e1a2b 100%);
+}
+.hero__inner { display: grid; grid-template-columns: 1.15fr .85fr; gap: 50px; align-items: center; }
+/* Grid-Spalten duerfen nicht durch lange Button-Texte aufgeblaeht werden */
+.hero__inner > * { min-width: 0; }
+.hero__badge {
+  display: inline-block; background: rgba(255,255,255,.06); border: 1px solid rgba(56,189,248,.3); color: #a5f3fc;
+  padding: 7px 16px; border-radius: 999px; font-size: .85rem; font-weight: 600; margin-bottom: 20px;
+}
+.hero__title { font-size: clamp(2rem, 4.5vw, 3.2rem); font-weight: 800; margin-bottom: 18px; color: #f8fafc; }
+.hero__text { font-size: 1.1rem; color: #b6c2d4; margin-bottom: 28px; max-width: 540px; }
+.hero__actions { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 28px; }
+.hero__points { display: grid; gap: 8px; font-weight: 500; color: #d7e0ec; }
+
+.hero__card {
+  background: linear-gradient(160deg, #16233a, #0e1a2b);
+  border: 1px solid rgba(56, 189, 248, .25); border-radius: var(--radius);
+  padding: 32px; box-shadow: var(--shadow-lg);
+}
+.hero__card > p { color: #b6c2d4; margin: 4px 0 22px; text-align: center; }
+.hero__stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 22px; text-align: center; }
+.hero__stats div { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); border-radius: var(--radius-sm); padding: 14px 6px; }
+.hero__stats strong { display: block; font-size: 1.25rem; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero__stats span { font-size: .78rem; color: #93a3b8; }
+
+/* ---------- Trust bar ---------- */
+.trustbar { background: #04121a; color: #9fd8e6; }
+.trustbar__inner { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 34px; padding: 16px 20px; font-size: .92rem; font-weight: 500; }
+
+/* ---------- Sections ---------- */
+.section { padding: 84px 0; }
+.section--alt { background: var(--bg-alt); }
+.section__head { text-align: center; max-width: 660px; margin: 0 auto 50px; }
+.eyebrow { color: var(--brand-dark); font-weight: 700; font-size: .82rem; letter-spacing: 1.5px; text-transform: uppercase; }
+.section__head h2 { font-size: clamp(1.7rem, 3.5vw, 2.4rem); margin: 10px 0 12px; }
+.section__head p { color: var(--muted); font-size: 1.05rem; }
+
+/* ---------- Cards ---------- */
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.card {
+  background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 30px; transition: .25s; box-shadow: var(--shadow);
+}
+.card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); border-color: rgba(34, 211, 238, .5); }
+.card__icon {
+  width: 60px; height: 60px; display: grid; place-items: center; font-size: 1.7rem;
+  background: var(--brand-light); border-radius: 14px; margin-bottom: 16px;
+}
+.card h3 { font-size: 1.2rem; margin-bottom: 8px; }
+.card p { color: var(--muted); }
+
+/* ---------- Shop / Zubehör (dunkler Bereich) ---------- */
+.section--dark {
+  color: #e2e8f0;
+  background:
+    radial-gradient(800px 500px at 85% -10%, rgba(56, 189, 248, .16), transparent 60%),
+    radial-gradient(700px 500px at 5% 10%, rgba(52, 211, 153, .12), transparent 55%),
+    linear-gradient(160deg, #0b1220 0%, #111c2e 60%, #0e1a2b 100%);
+}
+.section__head--light h2 { color: #f8fafc; }
+.section__head--light p { color: #b6c2d4; }
+.eyebrow--neon { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+.shop-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.shop-card {
+  background: linear-gradient(160deg, rgba(22,35,58,.9), rgba(14,26,43,.9));
+  border: 1px solid rgba(56, 189, 248, .18); border-radius: var(--radius);
+  padding: 26px 22px; transition: .25s;
+}
+.shop-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(52, 211, 153, .55);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, .35);
+}
+.shop-card__icon {
+  width: 54px; height: 54px; display: grid; place-items: center; font-size: 1.5rem;
+  border-radius: 14px; margin-bottom: 14px;
+  background: rgba(56, 189, 248, .12); border: 1px solid rgba(56, 189, 248, .25);
+}
+.shop-card h3 { color: #f1f5f9; font-size: 1.08rem; margin-bottom: 6px; }
+.shop-card p { color: #93a3b8; font-size: .92rem; }
+.shop__note { text-align: center; margin-top: 30px; color: #b6c2d4; }
+.shop__note a { color: #67e8f9; font-weight: 600; }
+
+/* ---------- Pricing ---------- */
+.pricing { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; align-items: stretch; }
+.price-card {
+  position: relative; background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 34px 28px; box-shadow: var(--shadow); display: flex; flex-direction: column;
+}
+.price-card--featured { border: 2px solid transparent; background:
+  linear-gradient(#fff, #fff) padding-box, var(--grad) border-box; transform: scale(1.03); }
+.price-card__tag {
+  position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+  background: var(--grad); color: #04121a; font-size: .78rem; font-weight: 700;
+  padding: 5px 16px; border-radius: 999px;
+}
+.price-card h3 { font-size: 1.25rem; margin-bottom: 6px; }
+.price-card__price { font-size: 1rem; color: var(--muted); margin-bottom: 18px; }
+.price-card__price strong { font-size: 2.1rem; color: var(--ink); }
+.price-card ul { display: grid; gap: 10px; margin-bottom: 24px; flex: 1; }
+.price-card li { padding-left: 26px; position: relative; color: var(--body); }
+.price-card li::before { content: "✔"; position: absolute; left: 0; color: var(--brand); font-weight: 700; }
+.pricing__note { text-align: center; margin-top: 30px; color: var(--muted); }
+.pricing__note a { color: var(--brand-dark); font-weight: 600; }
+
+/* ---------- About ---------- */
+.about { display: grid; grid-template-columns: 1.3fr .9fr; gap: 44px; align-items: start; }
+.about__text h2 { font-size: clamp(1.7rem, 3.2vw, 2.3rem); margin: 10px 0 16px; }
+.about__text p { color: var(--muted); margin-bottom: 14px; }
+.about__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 26px; }
+.about__grid div { background: var(--bg-alt); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 16px; }
+.about__grid strong { display: block; color: var(--brand-dark); font-size: 1.05rem; }
+.about__grid span { font-size: .9rem; color: var(--muted); }
+
+.about__box { background: linear-gradient(160deg, #16233a, #0b1220); color: #e2e8f0; border-radius: var(--radius); padding: 32px; box-shadow: var(--shadow-lg); border: 1px solid rgba(56,189,248,.2); }
+.about__box h3 { color: #fff; font-size: 1.2rem; margin-bottom: 14px; }
+.about__box p { color: #cbd5e1; }
+.about__box hr { border: none; border-top: 1px solid rgba(255,255,255,.15); margin: 24px 0; }
+.hours { display: grid; gap: 10px; }
+.hours li { display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,.15); padding-bottom: 8px; }
+.hours span:last-child { color: #a5f3fc; font-weight: 600; }
+
+/* ---------- Contact ---------- */
+.contact { display: grid; grid-template-columns: 1.1fr .9fr; gap: 34px; align-items: start; }
+.contact__form { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 32px; box-shadow: var(--shadow); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-group { margin-bottom: 16px; display: flex; flex-direction: column; }
+.form-group label { font-weight: 600; font-size: .9rem; margin-bottom: 6px; color: var(--ink); }
+.form-group input, .form-group textarea {
+  padding: 12px 14px; border: 1.5px solid var(--line); border-radius: var(--radius-sm);
+  font-family: inherit; font-size: .95rem; color: var(--ink); background: var(--bg-alt); transition: .2s;
+}
+.form-group input:focus, .form-group textarea:focus {
+  outline: none; border-color: var(--brand); background: #fff; box-shadow: 0 0 0 3px var(--brand-light);
+}
+.form-group textarea { resize: vertical; }
+.form-group.error input, .form-group.error textarea { border-color: #ef4444; background: #fef2f2; }
+.form-status { margin-top: 12px; font-weight: 600; text-align: center; min-height: 1.2em; }
+.form-status.ok { color: #16a34a; }
+.form-status.bad { color: #ef4444; }
+
+.contact__info { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 32px; box-shadow: var(--shadow); }
+.contact__info h3 { font-size: 1.2rem; margin-bottom: 18px; }
+.contact__list { display: grid; gap: 16px; margin-bottom: 24px; }
+.contact__list li { display: flex; gap: 14px; align-items: flex-start; }
+.ci { font-size: 1.3rem; width: 42px; height: 42px; flex: none; display: grid; place-items: center; background: var(--brand-light); border-radius: 12px; }
+.contact__list strong { display: block; color: var(--ink); font-size: .9rem; }
+.contact__list a { color: var(--brand-dark); font-weight: 500; }
+.map { border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--line); }
+.map iframe { width: 100%; height: 220px; border: 0; }
+.map__link { display: inline-block; margin-top: 12px; color: var(--brand-dark); font-weight: 600; font-size: .9rem; }
+
+/* ---------- CTA ---------- */
+.cta { position: relative; color: #eafcff; padding: 74px 0; text-align: center;
+  background:
+    radial-gradient(700px 400px at 80% 0%, rgba(56,189,248,.25), transparent 60%),
+    linear-gradient(135deg, #0e7490 0%, #0b1220 100%); }
+.cta h2 { color: #fff; font-size: clamp(1.6rem, 3.2vw, 2.2rem); margin-bottom: 12px; }
+.cta p { color: rgba(255,255,255,.9); margin-bottom: 28px; font-size: 1.05rem; }
+.cta__actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+/* ---------- Footer ---------- */
+.footer { background: #04121a; color: #94a3b8; padding: 56px 0 0; }
+.footer__inner { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 30px; padding-bottom: 40px; }
+.footer__col p { margin-top: 12px; font-size: .92rem; }
+.footer__col h4 { color: #fff; margin-bottom: 14px; font-size: 1rem; }
+.footer__col ul { display: grid; gap: 8px; font-size: .92rem; }
+.footer__col a:hover { color: #a5f3fc; }
+.footer__bottom { border-top: 1px solid rgba(255,255,255,.1); padding: 18px 0; }
+.footer__bottom .container { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: .85rem; }
+.footer__bottom a:hover { color: #a5f3fc; }
+
+/* ---------- Floating call button ---------- */
+.fab {
+  position: fixed; bottom: 22px; right: 22px; z-index: 90;
+  width: 58px; height: 58px; border-radius: 50%; background: var(--grad); color: #04121a;
+  display: grid; place-items: center; font-size: 1.5rem; box-shadow: var(--shadow-lg);
+  transition: .2s;
+}
+.fab:hover { transform: scale(1.08); filter: brightness(1.05); }
+
+/* ---------- Reveal animation ---------- */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width: 960px) {
+  .hero__inner { grid-template-columns: 1fr; }
+  .about { grid-template-columns: 1fr; }
+  .contact { grid-template-columns: 1fr; }
+  .cards, .pricing { grid-template-columns: 1fr 1fr; }
+  .shop-grid { grid-template-columns: 1fr 1fr; }
+  .price-card--featured { transform: none; }
+  .footer__inner { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 760px) {
+  .nav {
+    position: fixed; top: var(--header-h); left: 0; right: 0;
+    background: #0b1220; border-bottom: 1px solid rgba(56,189,248,.2); box-shadow: var(--shadow-lg);
+    transform: translateY(-140%); transition: transform .35s ease; max-height: calc(100vh - var(--header-h)); overflow-y: auto;
+  }
+  .nav.open { transform: translateY(0); }
+  .nav__list { flex-direction: column; align-items: stretch; padding: 14px; gap: 4px; }
+  .nav__link, .nav__cta { padding: 14px; border-radius: var(--radius-sm); text-align: center; margin: 0; }
+  .nav__toggle { display: flex; }
+}
+
+@media (max-width: 560px) {
+  .section { padding: 60px 0; }
+  .cards, .pricing, .about__grid, .footer__inner { grid-template-columns: 1fr; }
+  .shop-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .shop-card { padding: 18px 14px; }
+  .shop-card h3 { font-size: 1rem; }
+  .shop-card p { font-size: .85rem; }
+  .form-row { grid-template-columns: 1fr; }
+  /* minmax(0,...) verhindert, dass lange Zahlen die Spalten aufblaehen */
+  .hero__stats { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .hero__stats strong { font-size: 1.05rem; }
+  .hero__stats span { font-size: .7rem; }
+  .hero__card { padding: 24px 18px; }
+  .hero__actions { flex-direction: column; }
+  .hero__actions .btn { width: 100%; }
+  /* Lange Beschriftungen duerfen auf kleinen Displays umbrechen */
+  .btn { white-space: normal; text-align: center; }
+  .footer__bottom .container { flex-direction: column; text-align: center; }
+}
+
+/* Sehr schmale Geraete (iPhone SE & aehnliche) */
+@media (max-width: 400px) {
+  .container { padding: 0 14px; }
+  .shop-grid { grid-template-columns: 1fr; }
+  .brand__main { font-size: 1.3rem; }
+  .hero__stats strong { font-size: .95rem; }
+}
+
+  </style>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📱</text></svg>" />
+
+  <!-- Local Business structured data (SEO) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "MobilePhoneStore",
+    "name": "PHONETASTIC",
+    "description": "Handy-Reparatur, Verkauf von Smartphones und Zubehör beim Reumannplatz in Wien-Favoriten.",
+    "url": "https://phonetastic.at/",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Quellenstraße 111",
+      "addressLocality": "Wien",
+      "postalCode": "1100",
+      "addressCountry": "AT"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 48.1748,
+      "longitude": 16.3766
+    },
+    "areaServed": "Wien",
+    "telephone": "+43 1 234 56 78",
+    "priceRange": "€€",
+    "openingHoursSpecification": [
+      { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"], "opens": "09:00", "closes": "18:30" },
+      { "@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "09:00", "closes": "13:00" }
+    ]
+  }
+  </script>
+</head>
+<body>
+
+  <!-- ============ HEADER ============ -->
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <a href="#home" class="brand" aria-label="PHONETASTIC Startseite">
+        <span class="brand__top">HANDY REPARATUR</span>
+        <span class="brand__main">PHONE<span>TASTIC</span></span>
+      </a>
+
+      <nav class="nav" id="nav">
+        <ul class="nav__list">
+          <li><a href="#home" class="nav__link">Start</a></li>
+          <li><a href="#services" class="nav__link">Leistungen</a></li>
+          <li><a href="#shop" class="nav__link">Shop</a></li>
+          <li><a href="#preise" class="nav__link">Preise</a></li>
+          <li><a href="#about" class="nav__link">Über uns</a></li>
+          <li><a href="#kontakt" class="nav__link">Kontakt</a></li>
+          <li><a href="tel:+43123456780" class="nav__cta">📞 Anrufen</a></li>
+        </ul>
+      </nav>
+
+      <button class="nav__toggle" id="navToggle" aria-label="Menü öffnen" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="home">
+    <div class="container hero__inner">
+      <div class="hero__content">
+        <span class="hero__badge">📍 Quellenstraße 111 · beim Reumannplatz · 1100 Wien</span>
+        <h1 class="hero__title">Reparatur &amp; alles rund ums Handy – <span class="txt-accent">an einem Ort.</span></h1>
+        <p class="hero__text">
+          PHONETASTIC in Wien-Favoriten: schnelle Handy-Reparatur <strong>und</strong> Shop für
+          Kabel, Kopfhörer, Hüllen, Ladegeräte, Panzerglas &amp; Zubehör – fair und sofort verfügbar.
+        </p>
+        <div class="hero__actions">
+          <a href="#kontakt" class="btn btn--primary">Kostenlosen Kostenvoranschlag holen</a>
+          <a href="#preise" class="btn btn--ghost btn--light">Preise ansehen</a>
+        </div>
+        <ul class="hero__points">
+          <li>✔ 12 Monate Garantie auf Reparaturen</li>
+          <li>✔ Originalteile &amp; Premium-Ersatzteile</li>
+          <li>✔ Alle Marken: iPhone, Samsung, Xiaomi &amp; Co.</li>
+        </ul>
+      </div>
+
+      <div class="hero__card">
+        <div class="hero__logo">
+          <span class="brand__top">HANDY REPARATUR</span>
+          <span class="brand__main brand__main--xl">PHONE<span>TASTIC</span></span>
+        </div>
+        <p>Bring dein Gerät vorbei – die häufigsten Reparaturen erledigen wir, während du wartest.</p>
+        <div class="hero__stats">
+          <div><strong>30 Min</strong><span>Ø Reparaturzeit</span></div>
+          <div><strong>4.9 ★</strong><span>Kundenbewertung</span></div>
+          <div><strong>10.000+</strong><span>Reparaturen</span></div>
+        </div>
+        <a href="tel:+43123456780" class="btn btn--primary btn--block">Jetzt anrufen: 01 234 56 78</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TRUST BAR ============ -->
+  <div class="trustbar">
+    <div class="container trustbar__inner">
+      <span>🔧 Reparatur aller Marken</span>
+      <span>🎧 Zubehör &amp; Elektronik</span>
+      <span>💳 Karten- &amp; Barzahlung</span>
+      <span>📦 Ankauf gebrauchter Geräte</span>
+    </div>
+  </div>
+
+  <!-- ============ SERVICES ============ -->
+  <section class="section" id="services">
+    <div class="container">
+      <div class="section__head">
+        <span class="eyebrow">Unsere Leistungen</span>
+        <h2>Alles rund ums Handy – unter einem Dach</h2>
+        <p>Von der schnellen Reparatur bis zum neuen Smartphone. Wir helfen dir weiter.</p>
+      </div>
+
+      <div class="cards">
+        <article class="card">
+          <div class="card__icon">📱</div>
+          <h3>Display-Reparatur</h3>
+          <p>Zerbrochenes oder schwarzes Display? Wir tauschen es fachgerecht mit hochwertigen Ersatzteilen.</p>
+        </article>
+        <article class="card">
+          <div class="card__icon">🔋</div>
+          <h3>Akku-Wechsel</h3>
+          <p>Hält dein Akku nicht mehr durch? Neuer Akku in wenigen Minuten – wieder volle Laufzeit.</p>
+        </article>
+        <article class="card">
+          <div class="card__icon">💧</div>
+          <h3>Wasserschaden</h3>
+          <p>Handy ins Wasser gefallen? Professionelle Reinigung und Rettung deiner Daten.</p>
+        </article>
+        <article class="card">
+          <div class="card__icon">🔌</div>
+          <h3>Ladebuchse &amp; Ports</h3>
+          <p>Gerät lädt nicht mehr richtig? Wir reparieren Ladebuchse, Buttons und Anschlüsse.</p>
+        </article>
+        <article class="card">
+          <div class="card__icon">🛒</div>
+          <h3>Verkauf &amp; Ankauf</h3>
+          <p>Neue &amp; generalüberholte Smartphones. Wir kaufen auch dein altes Gerät fair an.</p>
+        </article>
+        <article class="card">
+          <div class="card__icon">🎧</div>
+          <h3>Zubehör</h3>
+          <p>Hüllen, Panzerglas, Ladekabel, Kopfhörer &amp; mehr – passend für jedes Modell.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SHOP / ZUBEHÖR ============ -->
+  <section class="section section--dark" id="shop">
+    <div class="container">
+      <div class="section__head section__head--light">
+        <span class="eyebrow eyebrow--neon">Unser Shop</span>
+        <h2>Alles rund ums Handy – direkt zum Mitnehmen</h2>
+        <p>Nicht nur Reparatur: Bei uns findest du Zubehör &amp; Elektronik für jedes Modell – zu fairen Preisen.</p>
+      </div>
+
+      <div class="shop-grid">
+        <article class="shop-card">
+          <div class="shop-card__icon">🔌</div>
+          <h3>Kabel &amp; Ladegeräte</h3>
+          <p>USB-C, Lightning, Micro-USB, Schnellladegeräte &amp; Netzteile.</p>
+        </article>
+        <article class="shop-card">
+          <div class="shop-card__icon">🎧</div>
+          <h3>Kopfhörer</h3>
+          <p>In-Ear, Over-Ear, Bluetooth-Kopfhörer &amp; kabelgebundene Modelle.</p>
+        </article>
+        <article class="shop-card">
+          <div class="shop-card__icon">📱</div>
+          <h3>Handyhüllen</h3>
+          <p>Silikon, Leder, Book-Cases &amp; stoßfeste Hüllen für jedes Modell.</p>
+        </article>
+        <article class="shop-card">
+          <div class="shop-card__icon">🛡️</div>
+          <h3>Panzerglas &amp; Folien</h3>
+          <p>Displayschutz aus Panzerglas – auf Wunsch gleich fachgerecht aufgeklebt.</p>
+        </article>
+        <article class="shop-card">
+          <div class="shop-card__icon">🔋</div>
+          <h3>Powerbanks</h3>
+          <p>Mobile Akkus in allen Größen – nie wieder ohne Strom unterwegs.</p>
+        </article>
+        <article class="shop-card">
+          <div class="shop-card__icon">🚗</div>
+          <h3>Halterungen &amp; Adapter</h3>
+          <p>KFZ-Halterungen, Ständer, OTG- &amp; Audio-Adapter und mehr.</p>
+        </article>
+        <article class="shop-card">
+          <div class="shop-card__icon">💾</div>
+          <h3>Speicher &amp; SIM</h3>
+          <p>Speicherkarten, USB-Sticks, SIM-Adapter &amp; praktisches Zubehör.</p>
+        </article>
+        <article class="shop-card">
+          <div class="shop-card__icon">🔊</div>
+          <h3>Elektronik</h3>
+          <p>Bluetooth-Lautsprecher, Smartwatches-Zubehör &amp; weitere Gadgets.</p>
+        </article>
+      </div>
+
+      <p class="shop__note">Du suchst etwas Bestimmtes? <a href="#kontakt">Frag uns – wir besorgen es dir gern.</a></p>
+    </div>
+  </section>
+
+  <!-- ============ PREISE ============ -->
+  <section class="section section--alt" id="preise">
+    <div class="container">
+      <div class="section__head">
+        <span class="eyebrow">Transparente Preise</span>
+        <h2>Richtwerte für unsere häufigsten Reparaturen</h2>
+        <p>Endpreise abhängig vom Modell. Kostenvoranschlag immer gratis &amp; unverbindlich.</p>
+      </div>
+
+      <div class="pricing">
+        <div class="price-card">
+          <h3>Displaytausch</h3>
+          <div class="price-card__price">ab <strong>49&nbsp;€</strong></div>
+          <ul>
+            <li>Original- oder Premium-Display</li>
+            <li>Meist fertig in 30–60 Min</li>
+            <li>12 Monate Garantie</li>
+          </ul>
+          <a href="#kontakt" class="btn btn--ghost btn--block">Termin anfragen</a>
+        </div>
+
+        <div class="price-card price-card--featured">
+          <span class="price-card__tag">Beliebt</span>
+          <h3>Akku-Wechsel</h3>
+          <div class="price-card__price">ab <strong>35&nbsp;€</strong></div>
+          <ul>
+            <li>Hochwertiger Ersatz-Akku</li>
+            <li>Fertig, während du wartest</li>
+            <li>Inklusive Funktionstest</li>
+          </ul>
+          <a href="#kontakt" class="btn btn--primary btn--block">Termin anfragen</a>
+        </div>
+
+        <div class="price-card">
+          <h3>Ladebuchse</h3>
+          <div class="price-card__price">ab <strong>39&nbsp;€</strong></div>
+          <ul>
+            <li>Reinigung oder Austausch</li>
+            <li>Diagnose inklusive</li>
+            <li>Schnelle Erledigung</li>
+          </ul>
+          <a href="#kontakt" class="btn btn--ghost btn--block">Termin anfragen</a>
+        </div>
+      </div>
+
+      <p class="pricing__note">
+        Weitere Reparaturen (Kamera, Lautsprecher, Software, Datenrettung) auf Anfrage.
+        <a href="#kontakt">Frag einfach nach deinem Modell →</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="section" id="about">
+    <div class="container about">
+      <div class="about__text">
+        <span class="eyebrow">Über uns</span>
+        <h2>Dein Handy-Profi mitten in Favoriten</h2>
+        <p>
+          <strong>PHONETASTIC</strong> ist deine erste Adresse am <strong>Reumannplatz</strong> für alle,
+          die ihr Handy schnell und zuverlässig repariert haben möchten. Unser eingespieltes
+          Team kennt jedes Modell und arbeitet mit hochwertigen Ersatzteilen.
+        </p>
+        <p>
+          Ehrliche Beratung, faire Preise und Reparaturen, die halten – dafür stehen wir.
+          Ob iPhone, Samsung, Xiaomi oder ein anderes Gerät: Bei uns bist du richtig.
+        </p>
+        <div class="about__grid">
+          <div><strong>Schnell</strong><span>Viele Reparaturen sofort</span></div>
+          <div><strong>Ehrlich</strong><span>Transparente Kostenvoranschläge</span></div>
+          <div><strong>Kompetent</strong><span>Erfahrenes Fach-Team</span></div>
+          <div><strong>Garantiert</strong><span>12 Monate Garantie</span></div>
+        </div>
+      </div>
+      <div class="about__box">
+        <h3>⏰ Öffnungszeiten</h3>
+        <ul class="hours">
+          <li><span>Mo – Fr</span><span>09:00 – 18:30</span></li>
+          <li><span>Samstag</span><span>09:00 – 13:00</span></li>
+          <li><span>Sonn- &amp; Feiertag</span><span>geschlossen</span></li>
+        </ul>
+        <hr />
+        <h3>📍 So findest du uns</h3>
+        <p>Quellenstraße 111<br />1100 Wien (Favoriten)<br />Ecke Favoritenstraße – U1 Reumannplatz, 2 Minuten zu Fuß</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ KONTAKT ============ -->
+  <section class="section section--alt" id="kontakt">
+    <div class="container">
+      <div class="section__head">
+        <span class="eyebrow">Kontakt</span>
+        <h2>Schreib uns oder komm einfach vorbei</h2>
+        <p>Wir melden uns schnellstmöglich mit einem unverbindlichen Kostenvoranschlag.</p>
+      </div>
+
+      <div class="contact">
+        <form class="contact__form" id="contactForm" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Name *</label>
+              <input type="text" id="name" name="name" placeholder="Dein Name" required />
+            </div>
+            <div class="form-group">
+              <label for="phone">Telefon</label>
+              <input type="tel" id="phone" name="phone" placeholder="Für Rückfragen" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email">E-Mail *</label>
+            <input type="email" id="email" name="email" placeholder="name@beispiel.at" required />
+          </div>
+          <div class="form-group">
+            <label for="device">Gerät / Problem</label>
+            <input type="text" id="device" name="device" placeholder="z.B. iPhone 13 – Display gebrochen" />
+          </div>
+          <div class="form-group">
+            <label for="message">Nachricht *</label>
+            <textarea id="message" name="message" rows="4" placeholder="Beschreibe kurz dein Anliegen" required></textarea>
+          </div>
+          <button type="submit" class="btn btn--primary btn--block">Anfrage senden</button>
+          <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+        </form>
+
+        <aside class="contact__info">
+          <h3>Direkter Draht</h3>
+          <ul class="contact__list">
+            <li><span class="ci">📞</span><div><strong>Telefon</strong><a href="tel:+43123456780">01 234 56 78</a></div></li>
+            <li><span class="ci">✉️</span><div><strong>E-Mail</strong><a href="mailto:info@phonetastic.at">info@phonetastic.at</a></div></li>
+            <li><span class="ci">📍</span><div><strong>Adresse</strong>Quellenstraße 111, 1100 Wien</div></li>
+            <li><span class="ci">💬</span><div><strong>WhatsApp</strong><a href="https://wa.me/43123456780" target="_blank" rel="noopener">Nachricht senden</a></div></li>
+          </ul>
+
+          <div class="map">
+            <iframe
+              title="Standort PHONETASTIC – Quellenstraße 111, 1100 Wien"
+              src="https://www.openstreetmap.org/export/embed.html?bbox=16.3716%2C48.1723%2C16.3816%2C48.1773&amp;layer=mapnik&amp;marker=48.1748%2C16.3766"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+          <a class="map__link" href="https://www.openstreetmap.org/?mlat=48.1748&mlon=16.3766#map=18/48.1748/16.3766" target="_blank" rel="noopener">Größere Karte öffnen →</a>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CTA ============ -->
+  <section class="cta">
+    <div class="container cta__inner">
+      <h2>Handy-Problem? Wir sind gleich um die Ecke.</h2>
+      <p>Komm vorbei zum Reumannplatz oder ruf uns an – wir helfen dir sofort weiter.</p>
+      <div class="cta__actions">
+        <a href="tel:+43123456780" class="btn btn--primary">📞 Jetzt anrufen</a>
+        <a href="#kontakt" class="btn btn--ghost btn--light">Anfrage schreiben</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__col">
+        <a href="#home" class="brand">
+          <span class="brand__top">HANDY REPARATUR</span>
+          <span class="brand__main">PHONE<span>TASTIC</span></span>
+        </a>
+        <p>Dein Handy-Reparatur- und Verkaufsprofi in Wien-Favoriten.</p>
+      </div>
+      <div class="footer__col">
+        <h4>Leistungen</h4>
+        <ul>
+          <li><a href="#services">Display-Reparatur</a></li>
+          <li><a href="#services">Akku-Wechsel</a></li>
+          <li><a href="#shop">Zubehör &amp; Elektronik</a></li>
+          <li><a href="#shop">Kabel, Kopfhörer, Hüllen</a></li>
+          <li><a href="#services">Verkauf &amp; Ankauf</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Kontakt</h4>
+        <ul>
+          <li>Quellenstraße 111, 1100 Wien</li>
+          <li><a href="tel:+43123456780">01 234 56 78</a></li>
+          <li><a href="mailto:info@phonetastic.at">info@phonetastic.at</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Öffnungszeiten</h4>
+        <ul>
+          <li>Mo – Fr: 09:00 – 18:30</li>
+          <li>Sa: 09:00 – 13:00</li>
+          <li>So: geschlossen</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <div class="container">
+        <p>© <span id="year"></span> PHONETASTIC · Alle Rechte vorbehalten</p>
+        <p><a href="#">Impressum</a> · <a href="#">Datenschutz</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <a href="tel:+43123456780" class="fab" aria-label="Anrufen">📞</a>
+
+  <script>
+/* ============================================================
+   PHONETASTIC – main.js
+   Mobile-Navigation, Header-Effekt, Scroll-Reveal, Formular
+   ============================================================ */
+
+document.addEventListener('DOMContentLoaded', () => {
+
+  /* ---- Jahr im Footer ---- */
+  const yearEl = document.getElementById('year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+  /* ---- Mobile Navigation ---- */
+  const toggle = document.getElementById('navToggle');
+  const nav = document.getElementById('nav');
+
+  const closeNav = () => {
+    nav.classList.remove('open');
+    toggle.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  };
+
+  if (toggle && nav) {
+    toggle.addEventListener('click', () => {
+      const isOpen = nav.classList.toggle('open');
+      toggle.classList.toggle('open', isOpen);
+      toggle.setAttribute('aria-expanded', String(isOpen));
+    });
+    // Menü schließen bei Klick auf einen Link
+    nav.querySelectorAll('a').forEach(link => link.addEventListener('click', closeNav));
+    // Schließen bei Klick außerhalb
+    document.addEventListener('click', (e) => {
+      if (nav.classList.contains('open') && !nav.contains(e.target) && !toggle.contains(e.target)) closeNav();
+    });
+  }
+
+  /* ---- Header-Schatten beim Scrollen ---- */
+  const header = document.getElementById('header');
+  const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 10);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  /* ---- Scroll-Reveal-Animation ---- */
+  const revealEls = document.querySelectorAll(
+    '.card, .shop-card, .price-card, .about__text, .about__box, .contact__form, .contact__info, .section__head'
+  );
+  revealEls.forEach(el => el.classList.add('reveal'));
+
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    revealEls.forEach(el => io.observe(el));
+  } else {
+    revealEls.forEach(el => el.classList.add('visible'));
+  }
+
+  /* ---- Kontaktformular ---- */
+  const form = document.getElementById('contactForm');
+  const status = document.getElementById('formStatus');
+
+  if (form) {
+    const showError = (id, on) => {
+      const group = document.getElementById(id)?.closest('.form-group');
+      if (group) group.classList.toggle('error', on);
+    };
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const name = form.name.value.trim();
+      const email = form.email.value.trim();
+      const message = form.message.value.trim();
+      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+      let valid = true;
+      showError('name', !name); if (!name) valid = false;
+      showError('email', !emailOk); if (!emailOk) valid = false;
+      showError('message', !message); if (!message) valid = false;
+
+      if (!valid) {
+        status.textContent = 'Bitte fülle die markierten Pflichtfelder korrekt aus.';
+        status.className = 'form-status bad';
+        return;
+      }
+
+      /* Ohne Backend: Anfrage per E-Mail-Programm vorbereiten (mailto).
+         Für echten Versand hier eine Form-API (z.B. Formspree) eintragen. */
+      const subject = encodeURIComponent('Anfrage über die Website – ' + name);
+      const body = encodeURIComponent(
+        `Name: ${name}\n` +
+        `E-Mail: ${email}\n` +
+        `Telefon: ${form.phone.value.trim() || '-'}\n` +
+        `Gerät/Problem: ${form.device.value.trim() || '-'}\n\n` +
+        `Nachricht:\n${message}`
+      );
+
+      window.location.href =
+        `mailto:info@phonetastic.at?subject=${subject}&body=${body}`;
+
+      status.textContent = 'Danke! Dein E-Mail-Programm öffnet sich – oder ruf uns direkt an: 01 234 56 78';
+      status.className = 'form-status ok';
+      form.reset();
+    });
+
+    // Fehler-Markierung beim Tippen entfernen
+    form.querySelectorAll('input, textarea').forEach(el => {
+      el.addEventListener('input', () => el.closest('.form-group')?.classList.remove('error'));
+    });
+  }
+});
+
+  </script>
+</body>
+</html>
