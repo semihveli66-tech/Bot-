@@ -7,8 +7,8 @@ Aufruf:  python3 build.py
 Ergebnis im Ordner upload/ – genau diese Dateien kommen per FTP auf den
 Server, alle flach in dasselbe Verzeichnis (keine Unterordner noetig):
 
-    index.html  impressum.html  datenschutz.html
-    preise.js   kontakt.php     robots.txt      sitemap.xml
+    index.html  impressum.html  datenschutz.html  fonts.css
+    preise.js   kontakt.php     robots.txt        sitemap.xml
 """
 
 import os
@@ -54,6 +54,7 @@ for quelle, ziel in [('src-impressum.html', 'impressum.html'),
 
 # ---- Dateien, die unveraendert uebernommen werden ----
 for name, pfad in [('preise.js', ('js', 'preise.js')),
+                   ('fonts.css', ('fonts.css',)),
                    ('kontakt.php', ('kontakt.php',)),
                    ('robots.txt', ('robots.txt',)),
                    ('sitemap.xml', ('sitemap.xml',))]:
