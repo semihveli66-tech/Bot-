@@ -241,9 +241,6 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
   font-weight: 800; font-size: 1.12rem; white-space: nowrap; font-variant-numeric: tabular-nums;
   background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent;
 }
-/* "ab" steht ausserhalb des Farbverlaufs, sonst waere es unsichtbar */
-.pr-preis { display: inline-flex; align-items: baseline; gap: 5px; white-space: nowrap; }
-.pr-ab { font-style: normal; font-weight: 600; font-size: .82rem; color: #93a3b8; }
 .pr-ask { font-size: .86rem; color: #93a3b8; white-space: nowrap; }
 
 .calc__foot { margin-top: 22px; text-align: center; }

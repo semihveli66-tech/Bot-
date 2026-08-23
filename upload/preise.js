@@ -6,19 +6,20 @@
 
    So funktioniert es:
 
-   'iPhone 13': { display: 120, akku: 80, ... }
-                            ^^^        ^^
-                     Einfach die Zahl ueberschreiben. Fertig.
+   Drei Schreibweisen sind moeglich:
+
+   H([120, 270], [80, 160])   Preisspanne von-bis  ->  "120 - 270 EUR"
+   H(270, 80)                 fester Preis         ->  "270 EUR"
+   H(null, null)              kein Preis           ->  "auf Anfrage"
+
+   Die Spanne kommt von der Ersatzteil-Qualitaet: der niedrige Wert
+   gilt fuer kompatible Teile, der hohe fuer Originalteile.
 
    Regeln:
-   - Nur die Zahl aendern, alles andere so lassen
+   - Nur die Zahlen aendern, Klammern und Kommas so lassen
    - Zahlen OHNE Euro-Zeichen und OHNE Komma:  120   richtig
                                                120 € falsch
                                                120,- falsch
-   - Kein Komma nach der Zahl vergessen, wenn noch etwas folgt
-   - null  = zeigt "auf Anfrage" statt einem Preis an
-   - Auf der Website erscheint vor jedem Preis ein "ab", weil der
-     Endpreis von der gewaehlten Ersatzteil-Qualitaet abhaengt
 
    Neues Modell anlegen: eine bestehende Zeile kopieren, den Namen
    in den Anfuehrungszeichen aendern und die Preise anpassen.
@@ -65,29 +66,29 @@ const PREISE = {
     'iPhone XR':             H(null, null),
     'iPhone XS':             H(null, null),
     'iPhone XS Max':         H(null, null),
-    'iPhone 11':             H(110, 70),
+    'iPhone 11':             H([110, 130], [70, 100]),
     'iPhone 11 Pro':         H(null, null),
     'iPhone 11 Pro Max':     H(null, null),
-    'iPhone 12':             H(120, 80),
+    'iPhone 12':             H([120, 240], [80, 160]),
     'iPhone 12 mini':        H(null, null),
     'iPhone 12 Pro':         H(null, null),
     'iPhone 12 Pro Max':     H(null, null),
-    'iPhone 13':             H(120, 80),
+    'iPhone 13':             H([120, 270], [80, 160]),
     'iPhone 13 mini':        H(null, null),
     'iPhone 13 Pro':         H(null, null),
-    'iPhone 13 Pro Max':     H(180, 89),
-    'iPhone 14':             H(110, 89),
+    'iPhone 13 Pro Max':     H([180, 420], [89, 170]),
+    'iPhone 14':             H([110, 370], [89, 180]),
     'iPhone 14 Plus':        H(null, null),
     'iPhone 14 Pro':         H(null, null),
     'iPhone 14 Pro Max':     H(null, null),
-    'iPhone 15':             H(280, 100),
+    'iPhone 15':             H([280, 430], [100, 230]),
     'iPhone 15 Plus':        H(null, null),
     'iPhone 15 Pro':         H(null, null),
-    'iPhone 15 Pro Max':     H(360, 110),
-    'iPhone 16':             H(239, 129),
+    'iPhone 15 Pro Max':     H([360, 550], [110, 180]),
+    'iPhone 16':             H([239, 459], [129, 199]),
     'iPhone 16 Plus':        H(null, null),
     'iPhone 16 Pro':         H(null, null),
-    'iPhone 16 Pro Max':     H(410, 110),
+    'iPhone 16 Pro Max':     H([410, 580], [110, 250]),
     'iPhone 17':             H(null, null),
     'iPhone 17 Pro':         H(null, null),
     'iPhone 17 Pro Max':     H(null, null)
@@ -97,17 +98,17 @@ const PREISE = {
     'Galaxy A13':            H(null, null),
     'Galaxy A14':            H(null, null),
     'Galaxy A15':            H(null, null),
-    'Galaxy A52':            H(170, 60),
-    'Galaxy A53':            H(165, 60),
-    'Galaxy A54':            H(155, 60),
+    'Galaxy A52':            H(170, [60, 80]),
+    'Galaxy A53':            H(165, [60, 80]),
+    'Galaxy A54':            H(155, [60, 80]),
     'Galaxy A55':            H(null, null),
     'Galaxy S20 / S20 FE':   H(null, null),
-    'Galaxy S21':            H(220, 80),
-    'Galaxy S22':            H(270, 80),
-    'Galaxy S23':            H(270, 80),
-    'Galaxy S23 Ultra':      H(380, 80),
-    'Galaxy S24':            H(290, 80),
-    'Galaxy S24 Ultra':      H(360, 80),
+    'Galaxy S21':            H([220, 270], [80, 110]),
+    'Galaxy S22':            H(270, [80, 110]),
+    'Galaxy S23':            H(270, [80, 110]),
+    'Galaxy S23 Ultra':      H(380, [80, 110]),
+    'Galaxy S24':            H(290, [80, 110]),
+    'Galaxy S24 Ultra':      H(360, [80, 110]),
     'Galaxy S25':            H(null, null),
     'Galaxy Z Flip (alle)':  H(null, null),
     'Galaxy Z Fold (alle)':  H(null, null)

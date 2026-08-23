@@ -267,9 +267,6 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
   font-weight: 800; font-size: 1.12rem; white-space: nowrap; font-variant-numeric: tabular-nums;
   background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent;
 }
-/* "ab" steht ausserhalb des Farbverlaufs, sonst waere es unsichtbar */
-.pr-preis { display: inline-flex; align-items: baseline; gap: 5px; white-space: nowrap; }
-.pr-ab { font-style: normal; font-weight: 600; font-size: .82rem; color: #93a3b8; }
 .pr-ask { font-size: .86rem; color: #93a3b8; white-space: nowrap; }
 
 .calc__foot { margin-top: 22px; text-align: center; }
@@ -1272,10 +1269,13 @@ document.addEventListener('DOMContentLoaded', () => {
       brandSel.insertAdjacentHTML('beforeend', `<option value="${brand}">${brand}</option>`);
     });
 
-    // "ab", weil der Endpreis von der gewaehlten Ersatzteil-Qualitaet abhaengt
-    const fmt = (v) => v === null || v === undefined
-      ? '<span class="pr-ask">auf Anfrage</span>'
-      : `<span class="pr-preis"><em class="pr-ab">ab</em><span class="pr-val">${v},–&nbsp;€</span></span>`;
+    /* Preis kann eine Zahl (fester Preis), ein Paar [von, bis]
+       (Spanne je nach Ersatzteil-Qualitaet) oder null sein. */
+    const fmt = (v) => {
+      if (v === null || v === undefined) return '<span class="pr-ask">auf Anfrage</span>';
+      if (Array.isArray(v)) return `<span class="pr-val">${v[0]}&nbsp;–&nbsp;${v[1]},–&nbsp;€</span>`;
+      return `<span class="pr-val">${v},–&nbsp;€</span>`;
+    };
 
     const renderEmpty = (msg) => {
       results.innerHTML = `<p class="calc__hint">${msg}</p>`;
@@ -1298,7 +1298,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const foerderbar = typeof PRAEMIE_GRUPPEN !== 'undefined'
         && PRAEMIE_GRUPPEN.indexOf(brand) !== -1;
 
-      const preise = Object.keys(data).map(k => data[k]).filter(v => typeof v === 'number');
+      // Spannen mit einbeziehen: [von, bis] wird zu zwei Einzelwerten
+      const preise = Object.keys(data)
+        .map(k => data[k])
+        .reduce((alle, v) => alle.concat(Array.isArray(v) ? v : [v]), [])
+        .filter(v => typeof v === 'number');
       // Ersparnis nur beziffern, wenn ueberhaupt Preise hinterlegt sind
       const spanne = preise.length
         ? ` Bei den Preisen oben sind das rund <strong>${Math.round(Math.min.apply(null, preise) / 2)}–${Math.min(130, Math.round(Math.max.apply(null, preise) / 2))}&nbsp;€</strong> Ersparnis.`
@@ -1315,7 +1319,7 @@ document.addEventListener('DOMContentLoaded', () => {
       results.innerHTML = `
         <div class="calc__head">
           <h3>${brand} ${model}</h3>
-          <p>Preise inklusive Arbeitszeit &amp; 12 Monate Garantie. Der Endpreis hängt von der gewählten Ersatzteil-Qualität ab.</p>
+          <p>Preise inklusive Arbeitszeit &amp; 12 Monate Garantie. Die Spanne ergibt sich aus der Ersatzteil-Qualität – vom günstigen kompatiblen Teil bis zum Originalteil. Was für dich sinnvoll ist, besprechen wir vor Ort.</p>
         </div>
         <ul class="pr-list">${rows}</ul>
         ${foerderBlock}
