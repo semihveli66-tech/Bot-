@@ -90,7 +90,7 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
   filter: drop-shadow(0 0 10px rgba(52, 211, 153, .35)) drop-shadow(0 0 16px rgba(56, 189, 248, .3));
 }
 .brand__main span { color: transparent; } /* zweite Worthälfte, gleicher Verlauf */
-.brand__main--xl { font-size: clamp(2.2rem, 6vw, 3.4rem); }
+.brand__main--xl { font-size: clamp(1.9rem, 4.4vw, 3.2rem); }
 .hero__logo { text-align: center; margin-bottom: 8px; }
 .hero__logo .brand__top { display: block; letter-spacing: .4em; font-size: .72rem; margin-bottom: 8px; }
 
@@ -267,6 +267,9 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
   font-weight: 800; font-size: 1.12rem; white-space: nowrap; font-variant-numeric: tabular-nums;
   background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent;
 }
+/* "ab" steht ausserhalb des Farbverlaufs, sonst waere es unsichtbar */
+.pr-preis { display: inline-flex; align-items: baseline; gap: 5px; white-space: nowrap; }
+.pr-ab { font-style: normal; font-weight: 600; font-size: .82rem; color: #93a3b8; }
 .pr-ask { font-size: .86rem; color: #93a3b8; white-space: nowrap; }
 
 .calc__foot { margin-top: 22px; text-align: center; }
@@ -434,10 +437,11 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
 .contact__list div { min-width: 0; }
 .contact__list a { overflow-wrap: anywhere; }
 .contact__form { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 32px; box-shadow: var(--shadow); }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.form-group { margin-bottom: 16px; display: flex; flex-direction: column; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; min-width: 0; }
+.form-group { margin-bottom: 16px; display: flex; flex-direction: column; min-width: 0; }
 .form-group label { font-weight: 600; font-size: .9rem; margin-bottom: 6px; color: var(--ink); }
 .form-group input, .form-group textarea {
+  width: 100%; min-width: 0;
   padding: 12px 14px; border: 1.5px solid var(--line); border-radius: var(--radius-sm);
   font-family: inherit; font-size: .95rem; color: var(--ink); background: var(--bg-alt); transition: .2s;
 }
@@ -567,6 +571,7 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
 /* Sehr schmale Geraete (iPhone SE & aehnliche) */
 @media (max-width: 400px) {
   .container { padding: 0 14px; }
+  .contact__form, .contact__info { padding: 20px 16px; }
   .shop-grid { grid-template-columns: 1fr; }
   .brand__main { font-size: 1.3rem; }
   .hero__stats strong { font-size: .95rem; }
@@ -1200,19 +1205,19 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
 
    So funktioniert es:
 
-   'iPhone 13': { display: 109, akku: 59, ladebuchse: 69, ... }
+   'iPhone 13': { display: 120, akku: 80, ... }
                             ^^^        ^^
                      Einfach die Zahl ueberschreiben. Fertig.
 
    Regeln:
    - Nur die Zahl aendern, alles andere so lassen
-   - Zahlen OHNE Euro-Zeichen und OHNE Komma:  109   richtig
-                                               109 € falsch
-                                               109,- falsch
+   - Zahlen OHNE Euro-Zeichen und OHNE Komma:  120   richtig
+                                               120 € falsch
+                                               120,- falsch
    - Kein Komma nach der Zahl vergessen, wenn noch etwas folgt
    - null  = zeigt "auf Anfrage" statt einem Preis an
-   - Eine Reparaturart ganz weglassen = sie erscheint bei dem
-     Geraet nicht in der Liste
+   - Auf der Website erscheint vor jedem Preis ein "ab", weil der
+     Endpreis von der gewaehlten Ersatzteil-Qualitaet abhaengt
 
    Neues Modell anlegen: eine bestehende Zeile kopieren, den Namen
    in den Anfuehrungszeichen aendern und die Preise anpassen.
@@ -1237,112 +1242,133 @@ const REPARATUR_LABELS = {
    Stand 2026: Handys und Tablets sind ausdruecklich AUSGENOMMEN. */
 const PRAEMIE_GRUPPEN = ['Laptop / Notebook'];
 
+/* Reparaturarten, die bei Handys und Tablets angeboten werden.
+   Preise gibt es derzeit nur fuer Display und Akku. */
+const H = (display, akku) => ({
+  display: display, akku: akku,
+  ladebuchse: null, kamera: null, rueckglas: null,
+  lautsprecher: null, wasser: null, software: null
+});
+
+/* Dasselbe fuer Laptops (andere Reparaturarten). */
+const L = (display, akku) => ({
+  display: display, akku: akku,
+  ladebuchse: null, lautsprecher: null, wasser: null,
+  software: null, tastatur: null, luefter: null
+});
+
 const PREISE = {
   'Apple': {
-    'iPhone SE (2020/2022)': { display: 59,  akku: 39, ladebuchse: 49, kamera: 59,  rueckglas: 49,  lautsprecher: 49, wasser: 49, software: 39 },
-    'iPhone X':              { display: 79,  akku: 45, ladebuchse: 55, kamera: 69,  rueckglas: 69,  lautsprecher: 55, wasser: 49, software: 39 },
-    'iPhone XR':             { display: 79,  akku: 45, ladebuchse: 55, kamera: 69,  rueckglas: 69,  lautsprecher: 55, wasser: 49, software: 39 },
-    'iPhone XS':             { display: 89,  akku: 45, ladebuchse: 55, kamera: 69,  rueckglas: 79,  lautsprecher: 55, wasser: 49, software: 39 },
-    'iPhone XS Max':         { display: 99,  akku: 49, ladebuchse: 59, kamera: 79,  rueckglas: 89,  lautsprecher: 59, wasser: 49, software: 39 },
-    'iPhone 11':             { display: 79,  akku: 49, ladebuchse: 59, kamera: 79,  rueckglas: 79,  lautsprecher: 59, wasser: 49, software: 39 },
-    'iPhone 11 Pro':         { display: 109, akku: 49, ladebuchse: 59, kamera: 89,  rueckglas: 89,  lautsprecher: 59, wasser: 49, software: 39 },
-    'iPhone 11 Pro Max':     { display: 129, akku: 55, ladebuchse: 65, kamera: 99,  rueckglas: 99,  lautsprecher: 65, wasser: 49, software: 39 },
-    'iPhone 12 / 12 Pro':    { display: 99,  akku: 55, ladebuchse: 65, kamera: 89,  rueckglas: 99,  lautsprecher: 65, wasser: 49, software: 39 },
-    'iPhone 12 mini':        { display: 99,  akku: 55, ladebuchse: 65, kamera: 89,  rueckglas: 89,  lautsprecher: 65, wasser: 49, software: 39 },
-    'iPhone 12 Pro Max':     { display: 129, akku: 59, ladebuchse: 69, kamera: 99,  rueckglas: 109, lautsprecher: 69, wasser: 49, software: 39 },
-    'iPhone 13':             { display: 109, akku: 59, ladebuchse: 69, kamera: 99,  rueckglas: 99,  lautsprecher: 69, wasser: 49, software: 39 },
-    'iPhone 13 mini':        { display: 109, akku: 59, ladebuchse: 69, kamera: 99,  rueckglas: 99,  lautsprecher: 69, wasser: 49, software: 39 },
-    'iPhone 13 Pro':         { display: 149, akku: 65, ladebuchse: 75, kamera: 119, rueckglas: 119, lautsprecher: 75, wasser: 59, software: 39 },
-    'iPhone 13 Pro Max':     { display: 169, akku: 69, ladebuchse: 79, kamera: 129, rueckglas: 129, lautsprecher: 79, wasser: 59, software: 39 },
-    'iPhone 14':             { display: 119, akku: 65, ladebuchse: 75, kamera: 109, rueckglas: 109, lautsprecher: 75, wasser: 59, software: 39 },
-    'iPhone 14 Plus':        { display: 139, akku: 69, ladebuchse: 79, kamera: 119, rueckglas: 119, lautsprecher: 79, wasser: 59, software: 39 },
-    'iPhone 14 Pro':         { display: 189, akku: 75, ladebuchse: 85, kamera: 139, rueckglas: 139, lautsprecher: 85, wasser: 59, software: 39 },
-    'iPhone 14 Pro Max':     { display: 209, akku: 79, ladebuchse: 89, kamera: 149, rueckglas: 149, lautsprecher: 89, wasser: 59, software: 39 },
-    'iPhone 15':             { display: 149, akku: 75, ladebuchse: 85, kamera: 129, rueckglas: 119, lautsprecher: 85, wasser: 59, software: 39 },
-    'iPhone 15 Plus':        { display: 169, akku: 79, ladebuchse: 89, kamera: 139, rueckglas: 129, lautsprecher: 89, wasser: 59, software: 39 },
-    'iPhone 15 Pro':         { display: 219, akku: 85, ladebuchse: 95, kamera: 159, rueckglas: 149, lautsprecher: 95, wasser: 69, software: 39 },
-    'iPhone 15 Pro Max':     { display: 239, akku: 89, ladebuchse: 99, kamera: 169, rueckglas: 159, lautsprecher: 99, wasser: 69, software: 39 },
-    'iPhone 16':             { display: 179, akku: 85, ladebuchse: 95, kamera: 149, rueckglas: 139, lautsprecher: 95, wasser: 69, software: 39 },
-    'iPhone 16 Pro':         { display: 249, akku: 89, ladebuchse: 99, kamera: 179, rueckglas: 159, lautsprecher: 99, wasser: 69, software: 39 },
-    'iPhone 16 Pro Max':     { display: 269, akku: 95, ladebuchse: 105, kamera: 189, rueckglas: 169, lautsprecher: 105, wasser: 69, software: 39 },
-    'iPhone 17':             { display: 189, akku: 89, ladebuchse: 99, kamera: 169, rueckglas: 139, lautsprecher: 99, wasser: 69, software: 39 },
-    'iPhone 17 Pro':         { display: 189, akku: 89, ladebuchse: 129, kamera: 209, rueckglas: 139, lautsprecher: 119, wasser: 69, software: 39 },
-    'iPhone 17 Pro Max':     { display: 289, akku: 99, ladebuchse: 135, kamera: 219, rueckglas: 159, lautsprecher: 125, wasser: 79, software: 39 }
+    'iPhone SE (2020/2022)': H(null, null),
+    'iPhone X':              H(null, null),
+    'iPhone XR':             H(null, null),
+    'iPhone XS':             H(null, null),
+    'iPhone XS Max':         H(null, null),
+    'iPhone 11':             H(110, 70),
+    'iPhone 11 Pro':         H(null, null),
+    'iPhone 11 Pro Max':     H(null, null),
+    'iPhone 12':             H(120, 80),
+    'iPhone 12 mini':        H(null, null),
+    'iPhone 12 Pro':         H(null, null),
+    'iPhone 12 Pro Max':     H(null, null),
+    'iPhone 13':             H(120, 80),
+    'iPhone 13 mini':        H(null, null),
+    'iPhone 13 Pro':         H(null, null),
+    'iPhone 13 Pro Max':     H(180, 89),
+    'iPhone 14':             H(110, 89),
+    'iPhone 14 Plus':        H(null, null),
+    'iPhone 14 Pro':         H(null, null),
+    'iPhone 14 Pro Max':     H(null, null),
+    'iPhone 15':             H(280, 100),
+    'iPhone 15 Plus':        H(null, null),
+    'iPhone 15 Pro':         H(null, null),
+    'iPhone 15 Pro Max':     H(360, 110),
+    'iPhone 16':             H(239, 129),
+    'iPhone 16 Plus':        H(null, null),
+    'iPhone 16 Pro':         H(null, null),
+    'iPhone 16 Pro Max':     H(410, 110),
+    'iPhone 17':             H(null, null),
+    'iPhone 17 Pro':         H(null, null),
+    'iPhone 17 Pro Max':     H(null, null)
   },
 
   'Samsung': {
-    'Galaxy A13 / A14':      { display: 79,  akku: 49, ladebuchse: 55, kamera: 65, rueckglas: 55, lautsprecher: 55, wasser: 49, software: 39 },
-    'Galaxy A15 / A16':      { display: 89,  akku: 49, ladebuchse: 55, kamera: 69, rueckglas: 59, lautsprecher: 55, wasser: 49, software: 39 },
-    'Galaxy A34 / A35':      { display: 119, akku: 55, ladebuchse: 59, kamera: 79, rueckglas: 69, lautsprecher: 59, wasser: 49, software: 39 },
-    'Galaxy A54 / A55':      { display: 139, akku: 59, ladebuchse: 65, kamera: 89, rueckglas: 79, lautsprecher: 65, wasser: 49, software: 39 },
-    'Galaxy S20 / S20 FE':   { display: 149, akku: 65, ladebuchse: 69, kamera: 99, rueckglas: 79, lautsprecher: 69, wasser: 59, software: 39 },
-    'Galaxy S21':            { display: 169, akku: 69, ladebuchse: 75, kamera: 109, rueckglas: 89, lautsprecher: 75, wasser: 59, software: 39 },
-    'Galaxy S22':            { display: 189, akku: 75, ladebuchse: 79, kamera: 119, rueckglas: 99, lautsprecher: 79, wasser: 59, software: 39 },
-    'Galaxy S23':            { display: 209, akku: 79, ladebuchse: 85, kamera: 129, rueckglas: 109, lautsprecher: 85, wasser: 69, software: 39 },
-    'Galaxy S24':            { display: 239, akku: 85, ladebuchse: 89, kamera: 139, rueckglas: 119, lautsprecher: 89, wasser: 69, software: 39 },
-    'Galaxy S24 Ultra':      { display: 289, akku: 95, ladebuchse: 99, kamera: 169, rueckglas: 139, lautsprecher: 99, wasser: 79, software: 39 },
-    'Galaxy S25':            { display: 259, akku: 89, ladebuchse: 95, kamera: 149, rueckglas: 129, lautsprecher: 95, wasser: 79, software: 39 },
-    'Galaxy Z Flip (alle)':  { display: null, akku: 99, ladebuchse: 109, kamera: 149, rueckglas: 149, lautsprecher: 99, wasser: 89, software: 39 },
-    'Galaxy Z Fold (alle)':  { display: null, akku: 119, ladebuchse: 119, kamera: 169, rueckglas: 169, lautsprecher: 109, wasser: 89, software: 39 }
+    'Galaxy A13':            H(null, null),
+    'Galaxy A14':            H(null, null),
+    'Galaxy A15':            H(null, null),
+    'Galaxy A52':            H(170, 60),
+    'Galaxy A53':            H(165, 60),
+    'Galaxy A54':            H(155, 60),
+    'Galaxy A55':            H(null, null),
+    'Galaxy S20 / S20 FE':   H(null, null),
+    'Galaxy S21':            H(220, 80),
+    'Galaxy S22':            H(270, 80),
+    'Galaxy S23':            H(270, 80),
+    'Galaxy S23 Ultra':      H(380, 80),
+    'Galaxy S24':            H(290, 80),
+    'Galaxy S24 Ultra':      H(360, 80),
+    'Galaxy S25':            H(null, null),
+    'Galaxy Z Flip (alle)':  H(null, null),
+    'Galaxy Z Fold (alle)':  H(null, null)
   },
 
   'Xiaomi': {
-    'Redmi Note 11 / 12':    { display: 69, akku: 45, ladebuchse: 49, kamera: 59, rueckglas: 49, lautsprecher: 49, wasser: 49, software: 39 },
-    'Redmi Note 13 / 14':    { display: 79, akku: 49, ladebuchse: 55, kamera: 65, rueckglas: 55, lautsprecher: 55, wasser: 49, software: 39 },
-    'Xiaomi 13 / 14':        { display: 149, akku: 65, ladebuchse: 69, kamera: 99, rueckglas: 79, lautsprecher: 69, wasser: 59, software: 39 },
-    'Poco (alle Modelle)':   { display: 79, akku: 49, ladebuchse: 55, kamera: 65, rueckglas: 55, lautsprecher: 55, wasser: 49, software: 39 }
+    'Redmi Note 11 / 12':    H(null, null),
+    'Redmi Note 13 / 14':    H(null, null),
+    'Xiaomi 13 / 14':        H(null, null),
+    'Poco (alle Modelle)':   H(null, null)
   },
 
   'Huawei': {
-    'P30 / P40 Serie':       { display: 99,  akku: 55, ladebuchse: 59, kamera: 79, rueckglas: 69, lautsprecher: 59, wasser: 49, software: 39 },
-    'Mate Serie':            { display: 129, akku: 65, ladebuchse: 69, kamera: 89, rueckglas: 79, lautsprecher: 69, wasser: 59, software: 39 },
-    'Nova Serie':            { display: 89,  akku: 49, ladebuchse: 55, kamera: 69, rueckglas: 59, lautsprecher: 55, wasser: 49, software: 39 }
+    'P30 / P40 Serie':       H(null, null),
+    'Mate Serie':            H(null, null),
+    'Nova Serie':            H(null, null)
   },
 
   'Google': {
-    'Pixel 6 / 7':           { display: 139, akku: 65, ladebuchse: 69, kamera: 99,  rueckglas: 79, lautsprecher: 69, wasser: 59, software: 39 },
-    'Pixel 8 / 9':           { display: 179, akku: 75, ladebuchse: 79, kamera: 119, rueckglas: 89, lautsprecher: 79, wasser: 69, software: 39 }
+    'Pixel 6 / 7':           H(null, null),
+    'Pixel 8 / 9':           H(null, null)
   },
 
-  /* Tablets: NICHT von der Geraete-Retter-Praemie gedeckt (seit 2026 ausgenommen). */
+  'OnePlus / Oppo / Motorola': {
+    'OnePlus (alle Modelle)':  H(null, null),
+    'Oppo (alle Modelle)':     H(null, null),
+    'Motorola (alle Modelle)': H(null, null)
+  },
+
+  /* Tablets: NICHT von der Geraete-Retter-Praemie gedeckt. */
   'Tablet / iPad': {
-    'iPad (9./10. Generation)':   { display: 129, akku: 99,  ladebuchse: 89, lautsprecher: 79, wasser: 89, software: 49 },
-    'iPad Air':                   { display: 199, akku: 119, ladebuchse: 99, lautsprecher: 89, wasser: 99, software: 49 },
-    'iPad Pro 11"':               { display: 299, akku: 149, ladebuchse: 119, lautsprecher: 99, wasser: 119, software: 49 },
-    'iPad Pro 12,9"':             { display: 379, akku: 169, ladebuchse: 129, lautsprecher: 109, wasser: 129, software: 49 },
-    'iPad mini':                  { display: 149, akku: 109, ladebuchse: 89, lautsprecher: 79, wasser: 89, software: 49 },
-    'Samsung Galaxy Tab A':       { display: 119, akku: 89,  ladebuchse: 79, lautsprecher: 69, wasser: 79, software: 49 },
-    'Samsung Galaxy Tab S':       { display: 219, akku: 119, ladebuchse: 99, lautsprecher: 89, wasser: 99, software: 49 },
-    'Android-Tablet (sonstige)':  { display: 109, akku: 79,  ladebuchse: 69, lautsprecher: 59, wasser: 69, software: 49 }
+    'iPad (9./10. Generation)':  H(null, null),
+    'iPad Air':                  H(null, null),
+    'iPad Pro 11"':              H(null, null),
+    'iPad Pro 12,9"':            H(null, null),
+    'iPad mini':                 H(null, null),
+    'Samsung Galaxy Tab A':      H(null, null),
+    'Samsung Galaxy Tab S':      H(null, null),
+    'Android-Tablet (sonstige)': H(null, null)
   },
 
   /* Laptops: einzige Geraetegruppe hier, die unter die
      Geraete-Retter-Praemie faellt (50 %, max. 130 EUR). */
   'Laptop / Notebook': {
-    'Apple MacBook Air':                 { display: 349, akku: 149, ladebuchse: 129, lautsprecher: 99,  wasser: 129, software: 79, tastatur: 179, luefter: 99 },
-    'Apple MacBook Pro':                 { display: 429, akku: 179, ladebuchse: 149, lautsprecher: 119, wasser: 149, software: 79, tastatur: 199, luefter: 109 },
-    'Lenovo ThinkPad':                   { display: 189, akku: 119, ladebuchse: 99,  lautsprecher: 89,  wasser: 99,  software: 59, tastatur: 99,  luefter: 89 },
-    'Lenovo IdeaPad / Yoga':             { display: 149, akku: 99,  ladebuchse: 89,  lautsprecher: 79,  wasser: 89,  software: 59, tastatur: 89,  luefter: 79 },
-    'HP EliteBook / ProBook':            { display: 189, akku: 119, ladebuchse: 99,  lautsprecher: 89,  wasser: 99,  software: 59, tastatur: 99,  luefter: 89 },
-    'HP Pavilion / Envy':                { display: 149, akku: 99,  ladebuchse: 89,  lautsprecher: 79,  wasser: 89,  software: 59, tastatur: 89,  luefter: 79 },
-    'Dell Latitude / XPS':               { display: 229, akku: 139, ladebuchse: 109, lautsprecher: 99,  wasser: 109, software: 59, tastatur: 109, luefter: 89 },
-    'Dell Inspiron / Vostro':            { display: 149, akku: 99,  ladebuchse: 89,  lautsprecher: 79,  wasser: 89,  software: 59, tastatur: 89,  luefter: 79 },
-    'Acer Aspire / Swift':               { display: 139, akku: 95,  ladebuchse: 85,  lautsprecher: 75,  wasser: 89,  software: 59, tastatur: 85,  luefter: 75 },
-    'Acer Predator / Nitro (Gaming)':    { display: 229, akku: 139, ladebuchse: 109, lautsprecher: 95,  wasser: 119, software: 69, tastatur: 119, luefter: 95 },
-    'Asus VivoBook / ZenBook':           { display: 149, akku: 99,  ladebuchse: 89,  lautsprecher: 79,  wasser: 89,  software: 59, tastatur: 89,  luefter: 79 },
-    'Asus ROG / TUF (Gaming)':           { display: 249, akku: 149, ladebuchse: 119, lautsprecher: 99,  wasser: 129, software: 69, tastatur: 129, luefter: 99 },
-    'MSI (Gaming)':                      { display: 249, akku: 149, ladebuchse: 119, lautsprecher: 99,  wasser: 129, software: 69, tastatur: 129, luefter: 99 },
-    'Razer (Gaming)':                    { display: 289, akku: 169, ladebuchse: 129, lautsprecher: 109, wasser: 139, software: 69, tastatur: 149, luefter: 109 },
-    'Microsoft Surface':                 { display: 349, akku: 199, ladebuchse: 139, lautsprecher: 109, wasser: 149, software: 69, tastatur: null, luefter: 109 },
-    'Samsung Galaxy Book':               { display: 199, akku: 119, ladebuchse: 99,  lautsprecher: 89,  wasser: 99,  software: 59, tastatur: 99,  luefter: 89 },
-    'Chromebook (alle Marken)':          { display: 129, akku: 89,  ladebuchse: 79,  lautsprecher: 69,  wasser: 79,  software: 49, tastatur: 79,  luefter: 69 },
-    'Anderes Notebook':                  { display: null, akku: null, ladebuchse: null, lautsprecher: null, wasser: 89, software: 59, tastatur: null, luefter: 79 }
-  },
-
-  'OnePlus / Oppo / Motorola': {
-    'OnePlus (alle Modelle)':  { display: 129, akku: 59, ladebuchse: 65, kamera: 89, rueckglas: 69, lautsprecher: 65, wasser: 59, software: 39 },
-    'Oppo (alle Modelle)':     { display: 99,  akku: 55, ladebuchse: 59, kamera: 79, rueckglas: 59, lautsprecher: 59, wasser: 49, software: 39 },
-    'Motorola (alle Modelle)': { display: 89,  akku: 49, ladebuchse: 55, kamera: 69, rueckglas: 59, lautsprecher: 55, wasser: 49, software: 39 }
+    'Apple MacBook Air':              L(null, null),
+    'Apple MacBook Pro':              L(null, null),
+    'Lenovo ThinkPad':                L(null, null),
+    'Lenovo IdeaPad / Yoga':          L(null, null),
+    'HP EliteBook / ProBook':         L(null, null),
+    'HP Pavilion / Envy':             L(null, null),
+    'Dell Latitude / XPS':            L(null, null),
+    'Dell Inspiron / Vostro':         L(null, null),
+    'Acer Aspire / Swift':            L(null, null),
+    'Acer Predator / Nitro (Gaming)': L(null, null),
+    'Asus VivoBook / ZenBook':        L(null, null),
+    'Asus ROG / TUF (Gaming)':        L(null, null),
+    'MSI (Gaming)':                   L(null, null),
+    'Razer (Gaming)':                 L(null, null),
+    'Microsoft Surface':              L(null, null),
+    'Samsung Galaxy Book':            L(null, null),
+    'Chromebook (alle Marken)':       L(null, null),
+    'Anderes Notebook':               L(null, null)
   }
 };
 
@@ -1420,9 +1446,10 @@ document.addEventListener('DOMContentLoaded', () => {
       brandSel.insertAdjacentHTML('beforeend', `<option value="${brand}">${brand}</option>`);
     });
 
+    // "ab", weil der Endpreis von der gewaehlten Ersatzteil-Qualitaet abhaengt
     const fmt = (v) => v === null || v === undefined
       ? '<span class="pr-ask">auf Anfrage</span>'
-      : `<span class="pr-val">${v},–&nbsp;€</span>`;
+      : `<span class="pr-preis"><em class="pr-ab">ab</em><span class="pr-val">${v},–&nbsp;€</span></span>`;
 
     const renderEmpty = (msg) => {
       results.innerHTML = `<p class="calc__hint">${msg}</p>`;
@@ -1446,29 +1473,29 @@ document.addEventListener('DOMContentLoaded', () => {
         && PRAEMIE_GRUPPEN.indexOf(brand) !== -1;
 
       const preise = Object.keys(data).map(k => data[k]).filter(v => typeof v === 'number');
-      const guenstigster = preise.length ? Math.min.apply(null, preise) : 0;
-      const teuerster = preise.length ? Math.max.apply(null, preise) : 0;
+      // Ersparnis nur beziffern, wenn ueberhaupt Preise hinterlegt sind
+      const spanne = preise.length
+        ? ` Bei den Preisen oben sind das rund <strong>${Math.round(Math.min.apply(null, preise) / 2)}–${Math.min(130, Math.round(Math.max.apply(null, preise) / 2))}&nbsp;€</strong> Ersparnis.`
+        : '';
       const foerderBlock = foerderbar ? `
         <div class="calc__foerderung">
           <strong>🇦🇹 Geräte-Retter-Prämie möglich</strong>
           <p>
             Für Laptop-Reparaturen bekommst du <strong>50 % der Kosten zurück</strong>,
-            maximal 130&nbsp;€. Bei den Preisen oben sind das rund
-            <strong>${Math.round(guenstigster / 2)}–${Math.min(130, Math.round(teuerster / 2))}&nbsp;€</strong>
-            Ersparnis. Wir helfen dir beim Antrag.
+            maximal 130&nbsp;€.${spanne} Wir helfen dir beim Antrag.
           </p>
         </div>` : '';
 
       results.innerHTML = `
         <div class="calc__head">
           <h3>${brand} ${model}</h3>
-          <p>Alle Preise inklusive Arbeitszeit &amp; 12 Monate Garantie.</p>
+          <p>Preise inklusive Arbeitszeit &amp; 12 Monate Garantie. Der Endpreis hängt von der gewählten Ersatzteil-Qualität ab.</p>
         </div>
         <ul class="pr-list">${rows}</ul>
         ${foerderBlock}
         <div class="calc__foot">
           <a href="#kontakt" class="btn btn--primary">Termin für dieses Gerät anfragen</a>
-          <p class="calc__note">Endpreis abhängig vom tatsächlichen Schaden – die Diagnose ist bei uns gratis.</p>
+          <p class="calc__note">Steht bei deiner Reparatur „auf Anfrage“? Ruf kurz an – wir nennen dir den Preis sofort. Die Diagnose ist immer gratis.</p>
         </div>`;
     };
 

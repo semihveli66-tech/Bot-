@@ -90,7 +90,7 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
   filter: drop-shadow(0 0 10px rgba(52, 211, 153, .35)) drop-shadow(0 0 16px rgba(56, 189, 248, .3));
 }
 .brand__main span { color: transparent; } /* zweite Worthälfte, gleicher Verlauf */
-.brand__main--xl { font-size: clamp(2.2rem, 6vw, 3.4rem); }
+.brand__main--xl { font-size: clamp(1.9rem, 4.4vw, 3.2rem); }
 .hero__logo { text-align: center; margin-bottom: 8px; }
 .hero__logo .brand__top { display: block; letter-spacing: .4em; font-size: .72rem; margin-bottom: 8px; }
 
@@ -267,6 +267,9 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
   font-weight: 800; font-size: 1.12rem; white-space: nowrap; font-variant-numeric: tabular-nums;
   background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent;
 }
+/* "ab" steht ausserhalb des Farbverlaufs, sonst waere es unsichtbar */
+.pr-preis { display: inline-flex; align-items: baseline; gap: 5px; white-space: nowrap; }
+.pr-ab { font-style: normal; font-weight: 600; font-size: .82rem; color: #93a3b8; }
 .pr-ask { font-size: .86rem; color: #93a3b8; white-space: nowrap; }
 
 .calc__foot { margin-top: 22px; text-align: center; }
@@ -434,10 +437,11 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
 .contact__list div { min-width: 0; }
 .contact__list a { overflow-wrap: anywhere; }
 .contact__form { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 32px; box-shadow: var(--shadow); }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.form-group { margin-bottom: 16px; display: flex; flex-direction: column; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; min-width: 0; }
+.form-group { margin-bottom: 16px; display: flex; flex-direction: column; min-width: 0; }
 .form-group label { font-weight: 600; font-size: .9rem; margin-bottom: 6px; color: var(--ink); }
 .form-group input, .form-group textarea {
+  width: 100%; min-width: 0;
   padding: 12px 14px; border: 1.5px solid var(--line); border-radius: var(--radius-sm);
   font-family: inherit; font-size: .95rem; color: var(--ink); background: var(--bg-alt); transition: .2s;
 }
@@ -567,6 +571,7 @@ h1, h2, h3, h4 { color: var(--ink); line-height: 1.2; font-weight: 700; }
 /* Sehr schmale Geraete (iPhone SE & aehnliche) */
 @media (max-width: 400px) {
   .container { padding: 0 14px; }
+  .contact__form, .contact__info { padding: 20px 16px; }
   .shop-grid { grid-template-columns: 1fr; }
   .brand__main { font-size: 1.3rem; }
   .hero__stats strong { font-size: .95rem; }
@@ -1267,9 +1272,10 @@ document.addEventListener('DOMContentLoaded', () => {
       brandSel.insertAdjacentHTML('beforeend', `<option value="${brand}">${brand}</option>`);
     });
 
+    // "ab", weil der Endpreis von der gewaehlten Ersatzteil-Qualitaet abhaengt
     const fmt = (v) => v === null || v === undefined
       ? '<span class="pr-ask">auf Anfrage</span>'
-      : `<span class="pr-val">${v},–&nbsp;€</span>`;
+      : `<span class="pr-preis"><em class="pr-ab">ab</em><span class="pr-val">${v},–&nbsp;€</span></span>`;
 
     const renderEmpty = (msg) => {
       results.innerHTML = `<p class="calc__hint">${msg}</p>`;
@@ -1293,29 +1299,29 @@ document.addEventListener('DOMContentLoaded', () => {
         && PRAEMIE_GRUPPEN.indexOf(brand) !== -1;
 
       const preise = Object.keys(data).map(k => data[k]).filter(v => typeof v === 'number');
-      const guenstigster = preise.length ? Math.min.apply(null, preise) : 0;
-      const teuerster = preise.length ? Math.max.apply(null, preise) : 0;
+      // Ersparnis nur beziffern, wenn ueberhaupt Preise hinterlegt sind
+      const spanne = preise.length
+        ? ` Bei den Preisen oben sind das rund <strong>${Math.round(Math.min.apply(null, preise) / 2)}–${Math.min(130, Math.round(Math.max.apply(null, preise) / 2))}&nbsp;€</strong> Ersparnis.`
+        : '';
       const foerderBlock = foerderbar ? `
         <div class="calc__foerderung">
           <strong>🇦🇹 Geräte-Retter-Prämie möglich</strong>
           <p>
             Für Laptop-Reparaturen bekommst du <strong>50 % der Kosten zurück</strong>,
-            maximal 130&nbsp;€. Bei den Preisen oben sind das rund
-            <strong>${Math.round(guenstigster / 2)}–${Math.min(130, Math.round(teuerster / 2))}&nbsp;€</strong>
-            Ersparnis. Wir helfen dir beim Antrag.
+            maximal 130&nbsp;€.${spanne} Wir helfen dir beim Antrag.
           </p>
         </div>` : '';
 
       results.innerHTML = `
         <div class="calc__head">
           <h3>${brand} ${model}</h3>
-          <p>Alle Preise inklusive Arbeitszeit &amp; 12 Monate Garantie.</p>
+          <p>Preise inklusive Arbeitszeit &amp; 12 Monate Garantie. Der Endpreis hängt von der gewählten Ersatzteil-Qualität ab.</p>
         </div>
         <ul class="pr-list">${rows}</ul>
         ${foerderBlock}
         <div class="calc__foot">
           <a href="#kontakt" class="btn btn--primary">Termin für dieses Gerät anfragen</a>
-          <p class="calc__note">Endpreis abhängig vom tatsächlichen Schaden – die Diagnose ist bei uns gratis.</p>
+          <p class="calc__note">Steht bei deiner Reparatur „auf Anfrage“? Ruf kurz an – wir nennen dir den Preis sofort. Die Diagnose ist immer gratis.</p>
         </div>`;
     };
 

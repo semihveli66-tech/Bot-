@@ -72,9 +72,10 @@ document.addEventListener('DOMContentLoaded', () => {
       brandSel.insertAdjacentHTML('beforeend', `<option value="${brand}">${brand}</option>`);
     });
 
+    // "ab", weil der Endpreis von der gewaehlten Ersatzteil-Qualitaet abhaengt
     const fmt = (v) => v === null || v === undefined
       ? '<span class="pr-ask">auf Anfrage</span>'
-      : `<span class="pr-val">${v},–&nbsp;€</span>`;
+      : `<span class="pr-preis"><em class="pr-ab">ab</em><span class="pr-val">${v},–&nbsp;€</span></span>`;
 
     const renderEmpty = (msg) => {
       results.innerHTML = `<p class="calc__hint">${msg}</p>`;
@@ -98,29 +99,29 @@ document.addEventListener('DOMContentLoaded', () => {
         && PRAEMIE_GRUPPEN.indexOf(brand) !== -1;
 
       const preise = Object.keys(data).map(k => data[k]).filter(v => typeof v === 'number');
-      const guenstigster = preise.length ? Math.min.apply(null, preise) : 0;
-      const teuerster = preise.length ? Math.max.apply(null, preise) : 0;
+      // Ersparnis nur beziffern, wenn ueberhaupt Preise hinterlegt sind
+      const spanne = preise.length
+        ? ` Bei den Preisen oben sind das rund <strong>${Math.round(Math.min.apply(null, preise) / 2)}–${Math.min(130, Math.round(Math.max.apply(null, preise) / 2))}&nbsp;€</strong> Ersparnis.`
+        : '';
       const foerderBlock = foerderbar ? `
         <div class="calc__foerderung">
           <strong>🇦🇹 Geräte-Retter-Prämie möglich</strong>
           <p>
             Für Laptop-Reparaturen bekommst du <strong>50 % der Kosten zurück</strong>,
-            maximal 130&nbsp;€. Bei den Preisen oben sind das rund
-            <strong>${Math.round(guenstigster / 2)}–${Math.min(130, Math.round(teuerster / 2))}&nbsp;€</strong>
-            Ersparnis. Wir helfen dir beim Antrag.
+            maximal 130&nbsp;€.${spanne} Wir helfen dir beim Antrag.
           </p>
         </div>` : '';
 
       results.innerHTML = `
         <div class="calc__head">
           <h3>${brand} ${model}</h3>
-          <p>Alle Preise inklusive Arbeitszeit &amp; 12 Monate Garantie.</p>
+          <p>Preise inklusive Arbeitszeit &amp; 12 Monate Garantie. Der Endpreis hängt von der gewählten Ersatzteil-Qualität ab.</p>
         </div>
         <ul class="pr-list">${rows}</ul>
         ${foerderBlock}
         <div class="calc__foot">
           <a href="#kontakt" class="btn btn--primary">Termin für dieses Gerät anfragen</a>
-          <p class="calc__note">Endpreis abhängig vom tatsächlichen Schaden – die Diagnose ist bei uns gratis.</p>
+          <p class="calc__note">Steht bei deiner Reparatur „auf Anfrage“? Ruf kurz an – wir nennen dir den Preis sofort. Die Diagnose ist immer gratis.</p>
         </div>`;
     };
 
