@@ -1,6 +1,6 @@
 # Einladung zur Neueröffnung
 
-Grafiken zur Eröffnung am **Samstag, 12.09.2026, ab 8:00 Uhr**, gestaltet
+Grafiken zur Eröffnung am **Samstag, 12.09.2026, ab 9:00 Uhr**, gestaltet
 als Einladung: weißer Grund, feiner Doppelrahmen im Neon-Verlauf,
 Einladungssatz in Serifenschrift. Der Schriftzug PHONETASTIC steht im
 Neon-Verlauf grün → blau, alle Informationen darunter in Schwarz.
@@ -62,7 +62,7 @@ python3 -c "import segno; segno.make('https://phonetastic.at', error='m').save('
 
 > ✨ Wir laden Sie herzlich zur Eröffnung ein!
 >
-> **Samstag, 12. September 2026, ab 8:00 Uhr**
+> **Samstag, 12. September 2026, ab 9:00 Uhr**
 > PHONETASTIC · Quellenstraße 111, 1100 Wien · beim Reumannplatz
 >
 > Bei uns finden Sie **Reparaturen** für Handy, Tablet und Laptop –
@@ -86,7 +86,7 @@ python3 -c "import segno; segno.make('https://phonetastic.at', error='m').save('
 
 > 🎉 NEUERÖFFNUNG – wir sind ab Samstag für euch da!
 >
-> Ab **Samstag, 12.09.2026, 8:00 Uhr** findet ihr PHONETASTIC in der
+> Ab **Samstag, 12.09.2026, 9:00 Uhr** findet ihr PHONETASTIC in der
 > **Quellenstraße 111, 1100 Wien** – direkt beim Reumannplatz.
 >
 > 🔧 REPARATUR für Handy, Tablet und Laptop
@@ -113,14 +113,14 @@ python3 -c "import segno; segno.make('https://phonetastic.at', error='m').save('
 
 ### WhatsApp-Status / kurze Version
 
-> 🎉 Morgen geht's los! Ab Samstag, 12.09., 8:00 Uhr:
+> 🎉 Morgen geht's los! Ab Samstag, 12.09., 9:00 Uhr:
 > PHONETASTIC, Quellenstraße 111, 1100 Wien (beim Reumannplatz).
 > Reparatur für Handy, Tablet & Laptop + Zubehör aller Art.
 > Diagnose gratis, 12 Monate Garantie. 📞 0660 651 12 62
 
 ### Google-Business-Beitrag
 
-> Wir eröffnen am Samstag, 12.09.2026, um 8:00 Uhr in der Quellenstraße
+> Wir eröffnen am Samstag, 12.09.2026, um 9:00 Uhr in der Quellenstraße
 > 111 beim Reumannplatz. Bei PHONETASTIC bekommst du Reparaturen für
 > Handy, Tablet und Laptop – Display, Akku, Ladebuchse, Rückglas,
 > Kamera, Wasserschaden – und Zubehör aller Art: Hüllen, Panzerglas,
