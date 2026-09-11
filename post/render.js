@@ -4,9 +4,14 @@ const path = require('path');
 const DIR = __dirname;
 
 const JOBS = [
+  // Schlichte Einladung auf Weiß
   { file: 'post-quadrat.html',  out: 'phonetastic-eroeffnung-post.png',  w: 1080, h: 1080, scale: 1 },
   { file: 'post-story.html',    out: 'phonetastic-eroeffnung-story.png', w: 1080, h: 1920, scale: 1 },
   { file: 'post-flyer-a4.html', out: 'phonetastic-eroeffnung-flyer-a4.png', w: 1240, h: 1754, scale: 2 },
+  // Einladung im Kalligrafie-Stil auf Creme
+  { file: 'elegant-quadrat.html',  out: 'phonetastic-einladung-post.png',  w: 1080, h: 1080, scale: 1 },
+  { file: 'elegant-story.html',    out: 'phonetastic-einladung-story.png', w: 1080, h: 1920, scale: 1 },
+  { file: 'elegant-flyer-a4.html', out: 'phonetastic-einladung-flyer-a4.png', w: 1240, h: 1754, scale: 2 },
 ];
 
 (async () => {
@@ -47,11 +52,21 @@ const JOBS = [
         if (r.top < sr.top - 1) out.push(`oben raus: ${tag} (${Math.round(r.top)} < ${Math.round(sr.top)})`);
       });
 
-      // Abgeschnittener Text?
+      // Abgeschnittener oder überlaufender Text – auch in Elementen,
+      // die selbst wieder Elemente enthalten (z. B. Zeilen mit <span>).
       document.querySelectorAll('.inner *').forEach((el) => {
-        if (el.children.length) return;
         if (el.scrollWidth > el.clientWidth + 1) {
-          out.push(`Text abgeschnitten: "${(el.textContent || '').trim().slice(0, 34)}" (${el.scrollWidth} > ${el.clientWidth})`);
+          out.push(`zu breit: "${(el.textContent || '').trim().slice(0, 34)}" (${el.scrollWidth} > ${el.clientWidth})`);
+        }
+        // Bei zentriertem Text ohne Umbruch ragt der Inhalt über beide
+        // Seiten hinaus; das misst nur der Textbereich selbst.
+        if (el.firstChild && el.textContent.trim()) {
+          const range = document.createRange();
+          range.selectNodeContents(el);
+          const tr = range.getBoundingClientRect();
+          if (tr.width && (tr.right > sr.right + 1 || tr.left < sr.left - 1)) {
+            out.push(`Text aus der Leinwand: "${el.textContent.trim().slice(0, 34)}" (${Math.round(tr.left)} … ${Math.round(tr.right)})`);
+          }
         }
       });
 

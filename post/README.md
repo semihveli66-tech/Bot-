@@ -7,6 +7,10 @@ Neon-Verlauf grün → blau, alle Informationen darunter in Schwarz.
 
 ## Fertige Dateien
 
+Es gibt zwei Fassungen derselben Einladung.
+
+**Schlicht auf Weiß** (`post-*.html`)
+
 | Datei | Größe | Wofür |
 |---|---|---|
 | `phonetastic-eroeffnung-post.png` | 1080 × 1080 | Instagram- und Facebook-Beitrag, Google-Business-Beitrag |
@@ -14,18 +18,33 @@ Neon-Verlauf grün → blau, alle Informationen darunter in Schwarz.
 | `phonetastic-eroeffnung-flyer-a4.png` | 2480 × 3508 (300 dpi) | Aushang im Schaufenster, Flyer |
 | `phonetastic-eroeffnung-flyer-a4.pdf` | A4 | Datei für die Druckerei |
 
+**Kalligrafie-Stil auf Creme** (`elegant-*.html`) – große Schreibschrift,
+Band mit Schere, Abschlusssatz
+
+| Datei | Größe | Wofür |
+|---|---|---|
+| `phonetastic-einladung-post.png` | 1080 × 1080 | Instagram- und Facebook-Beitrag |
+| `phonetastic-einladung-story.png` | 1080 × 1920 | Story, WhatsApp-Status |
+| `phonetastic-einladung-flyer-a4.png` | 2480 × 3508 (300 dpi) | Aushang, Flyer |
+| `phonetastic-einladung-flyer-a4.pdf` | A4 | Datei für die Druckerei |
+
+Schriften der Kalligrafie-Fassung: Great Vibes (Schreibschrift) und
+Cormorant Garamond (Serifen-Kursive), beide SIL Open Font License,
+als Base64 in `fonts-einladung.css` eingebettet.
+
 Der QR-Code auf dem Flyer führt auf `https://phonetastic.at` (geprüft:
 aus dem fertigen Bild wieder auslesbar).
 
 ## Neu erzeugen / ändern
 
 Texte und Größen stehen in den HTML-Dateien, die gemeinsame Optik in
-`post.css`. Die Schrift kommt aus `../fonts.css`.
+`post.css` (weiße Fassung) und `elegant.css` (Kalligrafie-Fassung).
+Die Grundschrift kommt aus `../fonts.css`.
 
 ```bash
 cd post
-node render.js   # erzeugt die drei PNG und prüft auf Überläufe
-node pdf.js      # erzeugt das A4-PDF
+node render.js   # erzeugt alle sechs PNG und prüft auf Überläufe
+node pdf.js      # erzeugt die beiden A4-PDF
 ```
 
 `render.js` meldet, wenn Inhalt über die Leinwand hinausragt oder Text
