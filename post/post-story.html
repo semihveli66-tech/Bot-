@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<title>PHONETASTIC – Neueröffnung (Story 1080 × 1920)</title>
+<link rel="stylesheet" href="../fonts.css" />
+<link rel="stylesheet" href="post.css" />
+<style>
+  /* Oben und unten viel Luft: dort liegen bei Instagram/WhatsApp
+     die Bedienelemente über dem Bild. */
+  .stage { width: 1080px; height: 1920px; padding: 172px 80px 192px; }
+  .frame { inset: 44px; border-radius: 34px; }
+
+  .kicker { font-size: 27px; letter-spacing: .2em; padding: 17px 36px; align-self: center; }
+  .kicker::before { content: '★'; font-size: 22px; }
+
+  .brand { margin-top: 44px; align-items: center; text-align: center; }
+  .brand__top { font-size: 23px; letter-spacing: .46em; margin-bottom: 14px; }
+  .brand__main { font-size: 124px; letter-spacing: .012em; }
+
+  .tagline {
+    color: var(--pale); font-size: 29px; font-weight: 500; line-height: 1.5;
+    margin-top: 26px; text-align: center; max-width: 780px;
+    margin-left: auto; margin-right: auto;
+  }
+  .tagline b { color: #fff; font-weight: 700; }
+
+  .date { margin-top: 44px; padding: 34px 30px; }
+  .date__day { font-size: 25px; letter-spacing: .28em; }
+  .date__num { font-size: 96px; margin-top: 10px; }
+  .date__time { font-size: 40px; margin-top: 10px; }
+
+  .cols { margin-top: 42px; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 24px; }
+  .col { padding: 28px 28px 30px; }
+  .col__head { font-size: 30px; letter-spacing: .06em; gap: 12px; }
+  .col__head i { font-size: 30px; }
+  .col__sub { font-size: 19px; margin-top: 6px; letter-spacing: .04em; }
+  .col ul { margin-top: 18px; display: flex; flex-direction: column; gap: 11px; }
+  .col li { font-size: 23px; line-height: 1.32; gap: 12px; }
+  .col li::before { width: 10px; height: 10px; margin-top: 10px; }
+
+  .chips { margin-top: 36px; gap: 13px; }
+  .chip { font-size: 20px; padding: 12px 22px; }
+
+  .foot { margin-top: auto; padding-top: 40px; flex-direction: column; text-align: center; gap: 16px; }
+  .foot__label { font-size: 16px; letter-spacing: .22em; margin-bottom: 8px; }
+  .foot__value { font-size: 27px; line-height: 1.45; }
+  .web { font-size: 42px; }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="frame"></div>
+  <div class="inner">
+
+    <span class="kicker">Neueröffnung in Favoriten</span>
+
+    <div class="brand">
+      <span class="brand__top">Handy Reparatur</span>
+      <span class="brand__main">Phonetastic</span>
+    </div>
+
+    <p class="tagline">
+      <b>Reparatur &amp; Zubehör</b> für Handy, Tablet und Laptop –<br />
+      direkt beim Reumannplatz.
+    </p>
+
+    <div class="date">
+      <div class="date__day">Samstag – wir eröffnen</div>
+      <div class="date__num">12.09.2026</div>
+      <div class="date__time">ab <b>8:00 Uhr</b></div>
+    </div>
+
+    <div class="cols">
+      <div class="col">
+        <div class="col__head"><i>✦</i> Reparatur</div>
+        <div class="col__sub">Handy · Tablet · Laptop</div>
+        <ul>
+          <li>Display &amp; Touch</li>
+          <li>Akkutausch</li>
+          <li>Ladebuchse</li>
+          <li>Rückglas &amp; Kamera</li>
+          <li>Wasserschaden</li>
+          <li>Software &amp; Datenrettung</li>
+        </ul>
+      </div>
+      <div class="col">
+        <div class="col__head"><i>✦</i> Zubehör</div>
+        <div class="col__sub">Alles rund ums Gerät</div>
+        <ul>
+          <li>Hüllen &amp; Panzerglas</li>
+          <li>Kabel &amp; Ladegeräte</li>
+          <li>Powerbanks</li>
+          <li>Kopfhörer &amp; Lautsprecher</li>
+          <li>Halterungen &amp; Adapter</li>
+          <li>Speicherkarten</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="chips">
+      <span class="chip">Gratis Diagnose</span>
+      <span class="chip">Viele Reparaturen in 30 Min.</span>
+      <span class="chip">12 Monate Garantie</span>
+    </div>
+
+    <div class="foot">
+      <div class="foot__block">
+        <div class="foot__label">Wo du uns findest</div>
+        <div class="foot__value">
+          Quellenstraße 111, 1100 Wien<br />
+          <span>Mo – Sa 08:00 – 19:30</span><br />
+          0660 651 12 62
+        </div>
+      </div>
+      <div class="web">phonetastic.at</div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
