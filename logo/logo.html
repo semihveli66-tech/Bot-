@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<title>PHONETASTIC – Profilbild-Varianten</title>
+<link rel="stylesheet" href="../fonts.css" />
+<style>
+  :root {
+    --grad: linear-gradient(100deg, #22c55e 0%, #34d399 30%, #22d3ee 60%, #38bdf8 100%);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Poppins', system-ui, sans-serif; background: #555; }
+
+  /* Jede Variante ist 1080 × 1080. Instagram beschneidet das Quadrat
+     zum Kreis – alles Wichtige bleibt darum im inneren Kreis. */
+  .stage {
+    width: 1080px; height: 1080px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+
+  /* Dunkler Grund wie beim Original-Logo */
+  .stage--dark {
+    background:
+      radial-gradient(620px 620px at 30% 18%, rgba(52, 211, 153, .22), transparent 62%),
+      radial-gradient(640px 640px at 78% 82%, rgba(56, 189, 248, .24), transparent 62%),
+      linear-gradient(150deg, #0b1220 0%, #16233a 55%, #0a1526 100%);
+  }
+  /* Heller Grund passend zur Einladung */
+  .stage--light {
+    background:
+      radial-gradient(600px 600px at 28% 16%, rgba(34, 197, 94, .12), transparent 64%),
+      radial-gradient(600px 600px at 80% 84%, rgba(56, 189, 248, .14), transparent 64%),
+      #ffffff;
+  }
+
+  .grad {
+    background: var(--grad);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .stage--dark .glow { filter: drop-shadow(0 0 46px rgba(52, 211, 153, .42)); }
+
+  /* --- A: Monogramm P --- */
+  .mono {
+    font-weight: 900; font-size: 860px; line-height: .78; letter-spacing: -.02em;
+    /* optisch mittig: gemessener Versatz des Buchstabens im Kasten */
+    transform: translate(-.0236em, .00625em);
+  }
+
+  /* --- B: Wortmarke zweizeilig --- */
+  .stack { display: flex; flex-direction: column; align-items: center; line-height: .94; }
+  .stack { transform: translateX(6.5px); }
+  .stack span { font-weight: 900; font-size: 196px; letter-spacing: .04em; }
+
+  /* --- C: Handy-Symbol mit P --- */
+  .icon { width: 760px; height: 760px; display: block; }
+
+  /* --- D: Monogramm P auf Weiß --- */
+  /* ohne Ring: dünne Linien verschwinden bei 32 px vollständig */
+</style>
+</head>
+<body>
+
+<!-- A – Monogramm auf Dunkel -->
+<div class="stage stage--dark" id="a">
+  <div class="mono grad glow">P</div>
+</div>
+
+<!-- B – Wortmarke zweizeilig auf Dunkel -->
+<div class="stage stage--dark" id="b">
+  <div class="stack glow">
+    <span class="grad">PHONE</span>
+    <span class="grad">TASTIC</span>
+  </div>
+</div>
+
+<!-- C – Handy-Symbol mit P auf Dunkel -->
+<div class="stage stage--dark" id="c">
+  <svg class="icon glow" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="g" x1="30" y1="20" x2="170" y2="180" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#22c55e" />
+        <stop offset=".32" stop-color="#34d399" />
+        <stop offset=".66" stop-color="#22d3ee" />
+        <stop offset="1" stop-color="#38bdf8" />
+      </linearGradient>
+    </defs>
+    <rect x="52" y="10" width="96" height="180" rx="22" fill="url(#g)" />
+    <text x="100" y="141" text-anchor="middle" fill="#0b1220"
+          font-family="Poppins" font-weight="900" font-size="124">P</text>
+  </svg>
+</div>
+
+<!-- D – Monogramm auf Weiß mit Ring -->
+<div class="stage stage--light" id="d">
+  <div class="mono grad">P</div>
+</div>
+
+</body>
+</html>
