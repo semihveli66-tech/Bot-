@@ -1,0 +1,171 @@
+/* ============================================================
+   PHONETASTIC – Einladung zur Neueröffnung
+   Heller Einladungs-Look: weißer Grund, Schriftzug im
+   Neon-Verlauf, alle Informationen in Schwarz.
+   Gemeinsame Basis für Post, Story und Flyer.
+   ============================================================ */
+
+:root {
+  --grad: linear-gradient(100deg, #22c55e 0%, #34d399 30%, #22d3ee 60%, #38bdf8 100%);
+  --rule: linear-gradient(90deg, rgba(34,197,94,0) 0%, #22c55e 22%, #22d3ee 62%, rgba(56,189,248,0) 100%);
+
+  --accent: #0f9d63;   /* Grün, auf Weiß gut lesbar */
+  --accent-2: #0e7490; /* Türkis, auf Weiß gut lesbar */
+
+  --black: #0c0d10;    /* Informationen */
+  --soft: #3f4650;     /* Nebentext */
+  --grey: #79818d;     /* kleine Beschriftungen */
+  --line: #e4e7ec;     /* feine Linien */
+
+  --serif: 'Bitstream Charter', 'Liberation Serif', Georgia, 'Times New Roman', serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: #d8dde4;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --- Leinwand --- */
+.stage {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(620px 460px at 8% 0%, rgba(34, 197, 94, .085), transparent 66%),
+    radial-gradient(620px 520px at 100% 6%, rgba(56, 189, 248, .10), transparent 64%),
+    radial-gradient(680px 480px at 50% 104%, rgba(34, 211, 238, .075), transparent 68%),
+    #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Doppelter Einladungsrahmen: feine Linie plus Verlaufslinie */
+.frame, .frame-2 { position: absolute; pointer-events: none; }
+.frame {
+  border-radius: 4px;
+  border: 2px solid transparent;
+  background: var(--grad) border-box;
+  -webkit-mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: .85;
+}
+.frame-2 { border: 1px solid var(--line); border-radius: 2px; }
+
+.inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  height: 100%;
+  width: 100%;
+}
+/* Nichts darf zusammengequetscht werden – sonst verschwinden die
+   feinen Linien und der Text rutscht aus dem Bild. */
+.inner > * { flex: none; }
+
+/* --- Ornament: drei Rauten im Verlauf --- */
+.orn { display: flex; align-items: center; justify-content: center; }
+.orn i {
+  display: block;
+  background: var(--grad);
+  transform: rotate(45deg);
+  border-radius: 1px;
+}
+.orn i:nth-child(2) { opacity: .55; }
+.orn i:nth-child(3) { opacity: .3; }
+
+/* --- „Einladung zur Neueröffnung" --- */
+.eyebrow {
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--accent-2);
+}
+
+/* --- Logo --- */
+.brand { display: flex; flex-direction: column; align-items: center; line-height: 1; }
+.brand__top {
+  font-weight: 700;
+  color: var(--grey);
+  text-transform: uppercase;
+}
+.brand__main {
+  font-weight: 900;
+  text-transform: uppercase;
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* --- Einladungssatz in Serifenschrift --- */
+.invite {
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--black);
+  line-height: 1.45;
+}
+.invite b { font-style: normal; font-weight: 700; }
+
+/* --- Feine Verlaufslinie --- */
+.rule { background: var(--rule); width: 100%; }
+.rule--short { width: 46%; }
+
+/* --- Datum --- */
+.datum { width: 100%; }
+.datum__day { color: var(--grey); font-weight: 700; text-transform: uppercase; }
+.datum__date { color: var(--black); font-weight: 800; line-height: 1.08; }
+.datum__time { color: var(--black); font-weight: 600; }
+.datum__time b { color: var(--accent); font-weight: 800; }
+
+/* --- Zwei Listen mit Trennlinie --- */
+.lists {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr);
+  width: 100%;
+  text-align: left;
+}
+.lists__div { background: var(--line); }
+.lists h3 {
+  color: var(--black);
+  font-weight: 800;
+  text-transform: uppercase;
+}
+.lists__sub { color: var(--accent-2); font-weight: 600; }
+.lists ul { list-style: none; }
+.lists li {
+  color: var(--black);
+  display: flex;
+  align-items: flex-start;
+  font-weight: 500;
+}
+.lists li::before {
+  content: '';
+  flex: none;
+  background: var(--grad);
+  transform: rotate(45deg);
+  border-radius: 1px;
+}
+
+/* --- Vorteilszeile --- */
+.perks { color: var(--soft); font-weight: 600; }
+.perks span { color: var(--black); font-weight: 700; }
+.perks i { font-style: normal; color: var(--accent); margin: 0 .55em; }
+
+/* --- Adresse --- */
+.addr { color: var(--black); }
+.addr strong { font-weight: 800; }
+.addr__label {
+  color: var(--grey); font-weight: 700; text-transform: uppercase;
+}
+.web {
+  font-weight: 900;
+  background: var(--grad);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  white-space: nowrap;
+}

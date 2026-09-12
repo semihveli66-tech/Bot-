@@ -1,0 +1,147 @@
+/* ============================================================
+   PHONETASTIC – Einladung im Kalligrafie-Stil
+   Cremefarbener Grund, große Schreibschrift, Band mit Schere,
+   Informationen in gesperrten Kapitälchen.
+   Gemeinsame Basis für Post, Story und Flyer.
+   ============================================================ */
+
+:root {
+  --grad: linear-gradient(100deg, #22c55e 0%, #34d399 30%, #22d3ee 60%, #38bdf8 100%);
+
+  --cream: #f7f3ec;
+  --cream-2: #f2ece2;
+  --ink: #14161a;      /* Informationen */
+  --soft: #4d5158;     /* Nebentext */
+  --tiny: #8b8e95;     /* kleinste Beschriftungen */
+  --hair: #d9d2c6;     /* feine Linien auf Creme */
+
+  --script: 'Great Vibes', 'Segoe Script', cursive;
+  --serif: 'Cormorant Garamond', 'Bitstream Charter', Georgia, serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: #ddd6ca;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --- Leinwand: warmes Papier --- */
+.stage {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(760px 620px at 50% -6%, rgba(255, 255, 255, .75), transparent 70%),
+    radial-gradient(680px 560px at 100% 104%, rgba(226, 216, 200, .55), transparent 68%),
+    var(--cream);
+  display: flex;
+  flex-direction: column;
+}
+
+.inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  height: 100%;
+  width: 100%;
+}
+.inner > * { flex: none; }
+
+/* --- Senkrechte Haarlinie als Auftakt und Abschluss --- */
+.tick { width: 1px; background: var(--ink); opacity: .55; }
+
+/* --- Kleinste gesperrte Zeile --- */
+.tiny {
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--soft);
+}
+
+/* --- Wortmarke --- */
+.brand { display: flex; flex-direction: column; align-items: center; line-height: 1; }
+.brand__top { font-weight: 600; color: var(--tiny); text-transform: uppercase; }
+.brand__main {
+  font-weight: 800;
+  text-transform: uppercase;
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* --- Einladungszeile in Serifenschrift --- */
+.serif {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 300;
+  color: var(--ink);
+  line-height: 1.1;
+}
+
+/* --- Großes Wort in Schreibschrift --- */
+.script {
+  font-family: var(--script);
+  font-weight: 400;
+  line-height: .92;
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  padding: 0 .08em .12em;   /* Platz für die Schwünge */
+}
+
+/* --- Datum in gesperrten Kapitälchen --- */
+.datum {
+  color: var(--ink);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.datum b { font-weight: 700; }
+
+/* --- Band mit Schere --- */
+.ribbon { width: 100%; display: block; }
+
+/* --- Angebot: zwei kompakte Zeilen --- */
+.offer { width: 100%; }
+.offer__row + .offer__row { margin-top: 0; }
+.offer__head {
+  color: var(--ink);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.offer__items { color: var(--soft); font-weight: 500; }
+
+/* --- Trennstrich aus Rauten --- */
+.orn { display: flex; align-items: center; justify-content: center; }
+.orn i {
+  display: block;
+  background: var(--grad);
+  transform: rotate(45deg);
+  border-radius: 1px;
+}
+.orn i:nth-child(2) { opacity: .55; }
+.orn i:nth-child(3) { opacity: .3; }
+
+/* --- Abschlusssatz --- */
+.closing {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 300;
+  color: var(--ink);
+}
+
+/* --- Adresse --- */
+.addr { color: var(--ink); }
+.addr strong { font-weight: 700; }
+.addr .line { color: var(--soft); font-weight: 500; }
+.web {
+  font-weight: 800;
+  letter-spacing: .02em;
+  background: var(--grad);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  white-space: nowrap;
+}

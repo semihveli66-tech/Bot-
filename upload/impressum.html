@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Impressum | PHONETASTIC</title>
+  <meta name="description" content="Impressum und Offenlegung von PHONETASTIC – Salih Özdemir, Quellenstraße 111, 1100 Wien." />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#0b1220" />
+  <link rel="stylesheet" href="fonts.css" />
+  <style>
+/* ============================================================
+   PHONETASTIC – Stil für Impressum und Datenschutz
+   Wird in beide Seiten eingebettet (siehe build.py)
+   ============================================================ */
+
+:root {
+  --neon-green: #34d399;
+  --brand: #14b8c4;
+  --brand-dark: #0e7490;
+  --grad: linear-gradient(100deg, #22c55e 0%, #34d399 30%, #22d3ee 60%, #38bdf8 100%);
+  --ink: #0b1220;
+  --body: #334155;
+  --muted: #64748b;
+  --line: #e2e8f0;
+  --bg: #ffffff;
+  --bg-alt: #f4f9fb;
+  --radius: 14px;
+  --max: 760px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  color: var(--body); background: var(--bg-alt); line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--brand-dark); }
+
+/* Kopfzeile */
+.lhead { background: linear-gradient(160deg, #0b1220 0%, #111c2e 60%, #0e1a2b 100%); padding: 22px 0; }
+.lhead__inner {
+  max-width: var(--max); margin: 0 auto; padding: 0 20px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+}
+.brand { display: inline-flex; flex-direction: column; line-height: 1; text-decoration: none; }
+.brand__top {
+  font-size: .6rem; font-weight: 700; letter-spacing: .3em; color: #9fb3c8;
+  text-transform: uppercase; margin-bottom: 3px;
+}
+.brand__main {
+  font-size: 1.4rem; font-weight: 900; text-transform: uppercase;
+  background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(0 0 10px rgba(52,211,153,.3));
+}
+.lhead a.back { color: #cbd5e1; text-decoration: none; font-size: .9rem; font-weight: 500; }
+.lhead a.back:hover { color: #a5f3fc; }
+
+/* Inhalt */
+main { max-width: var(--max); margin: 0 auto; padding: 40px 20px 60px; }
+.card {
+  background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 34px; box-shadow: 0 10px 30px rgba(15,23,42,.06);
+}
+h1 { color: var(--ink); font-size: clamp(1.6rem, 4vw, 2.1rem); margin-bottom: 6px; }
+.updated { color: var(--muted); font-size: .85rem; margin-bottom: 28px; }
+h2 {
+  color: var(--ink); font-size: 1.12rem; margin: 30px 0 10px;
+  padding-top: 20px; border-top: 1px solid var(--line);
+}
+h2:first-of-type { border-top: none; padding-top: 0; margin-top: 20px; }
+h3 { color: var(--ink); font-size: .98rem; margin: 18px 0 6px; }
+p { margin-bottom: 12px; }
+ul { margin: 0 0 14px 20px; }
+li { margin-bottom: 6px; }
+
+dl.data { display: grid; grid-template-columns: auto 1fr; gap: 8px 20px; margin-bottom: 16px; }
+dl.data dt { color: var(--muted); font-size: .88rem; }
+dl.data dd { color: var(--ink); font-weight: 600; }
+
+.note {
+  background: var(--bg-alt); border-left: 3px solid var(--brand);
+  padding: 14px 16px; border-radius: 0 8px 8px 0; margin: 16px 0; font-size: .93rem;
+}
+
+footer.lfoot {
+  background: #04121a; color: #94a3b8; padding: 26px 0; margin-top: 40px;
+  font-size: .85rem; text-align: center;
+}
+footer.lfoot a { color: #94a3b8; }
+footer.lfoot a:hover { color: #a5f3fc; }
+footer.lfoot .sep { opacity: .4; margin: 0 8px; }
+
+@media (max-width: 560px) {
+  .card { padding: 22px 18px; }
+  dl.data { grid-template-columns: 1fr; gap: 2px 0; }
+  dl.data dd { margin-bottom: 10px; }
+  main { padding: 26px 14px 40px; }
+}
+
+  </style>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📱</text></svg>" />
+</head>
+<body>
+
+  <header class="lhead">
+    <div class="lhead__inner">
+      <a href="index.html" class="brand">
+        <span class="brand__top">HANDY REPARATUR</span>
+        <span class="brand__main">PHONETASTIC</span>
+      </a>
+      <a href="index.html" class="back">← Zurück zur Startseite</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="card">
+      <h1>Impressum</h1>
+      <p class="updated">Offenlegung gemäß § 5 E-Commerce-Gesetz und § 25 Mediengesetz</p>
+
+      <h2>Medieninhaber und Diensteanbieter</h2>
+      <dl class="data">
+        <dt>Inhaber</dt><dd>Salih Özdemir</dd>
+        <dt>Unternehmen</dt><dd>PHONETASTIC</dd>
+        <dt>Rechtsform</dt><dd>Einzelunternehmen</dd>
+        <dt>Anschrift</dt><dd>Quellenstraße 111<br />1100 Wien, Österreich</dd>
+        <dt>Telefon</dt><dd><a href="tel:+436606511262">0660 651 12 62</a></dd>
+        <dt>E-Mail</dt><dd><a href="mailto:info@phonetastic.at">info@phonetastic.at</a></dd>
+      </dl>
+
+      <h2>Unternehmensgegenstand</h2>
+      <p>Handel und Reparatur von Elektronikgeräten.</p>
+
+      <h2>Gewerbe und Aufsicht</h2>
+      <dl class="data">
+        <dt>Gewerbe</dt><dd>Handel und Reparatur von Elektronikgeräten</dd>
+        <dt>Gewerbebehörde</dt><dd>Magistratisches Bezirksamt für den 10. Bezirk, Wien</dd>
+        <dt>Kammer</dt><dd>Mitglied der Wirtschaftskammer Wien</dd>
+        <dt>Rechtsvorschriften</dt><dd>Gewerbeordnung, abrufbar unter <a href="https://www.ris.bka.gv.at" target="_blank" rel="noopener">ris.bka.gv.at</a></dd>
+      </dl>
+
+      <h2>Verbraucherinformation</h2>
+      <p>
+        Für Reparaturen und gekaufte Waren gelten die gesetzlichen Gewährleistungsbestimmungen.
+        Zusätzlich gewähren wir auf durchgeführte Reparaturen eine Garantie von zwölf Monaten
+        auf das eingebaute Ersatzteil und unsere Arbeitsleistung. Nicht umfasst sind neue
+        Sturz- oder Flüssigkeitsschäden nach der Reparatur.
+      </p>
+      <p>
+        Bei Streitigkeiten bemühen wir uns um eine einvernehmliche Lösung. Bitte wenden Sie
+        sich zuerst direkt an uns – die meisten Anliegen lassen sich unkompliziert klären.
+      </p>
+
+      <h2>Haftung für Inhalte</h2>
+      <p>
+        Die Inhalte dieser Website werden mit Sorgfalt erstellt. Die angegebenen Preise sind
+        Richtwerte; der verbindliche Preis wird nach der kostenlosen Diagnose des Geräts genannt.
+        Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir keine Gewähr
+        übernehmen.
+      </p>
+
+      <h2>Haftung für Links</h2>
+      <p>
+        Diese Website enthält Verweise auf Websites Dritter. Auf deren Inhalte haben wir keinen
+        Einfluss, weshalb wir dafür keine Haftung übernehmen. Für die Inhalte verlinkter Seiten
+        ist stets deren Betreiber verantwortlich.
+      </p>
+
+      <h2>Urheberrecht</h2>
+      <p>
+        Die auf dieser Website erstellten Inhalte unterliegen dem österreichischen Urheberrecht.
+        Eine Vervielfältigung oder Verwendung außerhalb der gesetzlich erlaubten Fälle bedarf
+        unserer schriftlichen Zustimmung.
+      </p>
+    </div>
+  </main>
+
+  <footer class="lfoot">
+    <p>
+      © <span id="year">2026</span> PHONETASTIC · Quellenstraße 111, 1100 Wien
+    </p>
+    <p style="margin-top:8px">
+      <a href="index.html">Startseite</a><span class="sep">·</span>
+      <a href="impressum.html">Impressum</a><span class="sep">·</span>
+      <a href="datenschutz.html">Datenschutz</a>
+    </p>
+  </footer>
+
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

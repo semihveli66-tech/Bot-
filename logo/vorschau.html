@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<title>PHONETASTIC – Profilbilder in Originalgröße</title>
+<link rel="stylesheet" href="../fonts.css" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Poppins', system-ui, sans-serif;
+    background: #ffffff; color: #0c0d10;
+    width: 1500px; padding: 40px 44px;
+  }
+  h1 { font-size: 26px; font-weight: 800; }
+  .hint { color: #6b7280; font-size: 15px; margin-top: 6px; margin-bottom: 26px; }
+
+  table { border-collapse: collapse; width: 100%; }
+  th, td { padding: 14px 10px; text-align: center; vertical-align: middle; }
+  th { font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: #6b7280; font-weight: 700; }
+  tbody tr + tr { border-top: 1px solid #e5e7eb; }
+  td.name { text-align: left; font-size: 15px; font-weight: 700; width: 250px; }
+  td.name small { display: block; font-weight: 500; color: #6b7280; margin-top: 3px; font-size: 13px; }
+
+  img { border-radius: 50%; display: block; margin: 0 auto; }
+  .s150 { width: 150px; height: 150px; }
+  .s110 { width: 110px; height: 110px; }
+  .s56  { width: 56px;  height: 56px; }
+  .s32  { width: 32px;  height: 32px; }
+
+  /* So sieht es im Story-Ring bzw. auf dunklem Grund aus */
+  .dark { background: #101418; border-radius: 14px; padding: 12px 0; }
+  .storyring {
+    display: inline-block; padding: 4px; border-radius: 50%;
+    background: linear-gradient(45deg, #f09433, #dc2743, #bc1888);
+  }
+  .storyring img { border: 3px solid #fff; }
+</style>
+</head>
+<body>
+
+<h1>Profilbild-Varianten in Originalgröße</h1>
+<p class="hint">
+  Instagram schneidet das Bild rund zu: 150 px im Profil am Rechner,
+  110 px in der App, 56 px im Feed und 32 px in Kommentaren.
+  Entscheidend ist, ob die kleinste Größe noch erkennbar ist.
+</p>
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>150 px<br />Profil</th>
+      <th>110 px<br />App</th>
+      <th>56 px<br />Feed</th>
+      <th>32 px<br />Kommentar</th>
+      <th>im Story-Ring</th>
+      <th>auf dunklem Grund</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="name">A – Monogramm<small>P auf Dunkel</small></td>
+      <td><img class="s150" src="phonetastic-profilbild-a-monogramm.png" alt="" /></td>
+      <td><img class="s110" src="phonetastic-profilbild-a-monogramm.png" alt="" /></td>
+      <td><img class="s56" src="phonetastic-profilbild-a-monogramm.png" alt="" /></td>
+      <td><img class="s32" src="phonetastic-profilbild-a-monogramm.png" alt="" /></td>
+      <td><span class="storyring"><img class="s110" src="phonetastic-profilbild-a-monogramm.png" alt="" /></span></td>
+      <td class="dark"><img class="s110" src="phonetastic-profilbild-a-monogramm.png" alt="" /></td>
+    </tr>
+    <tr>
+      <td class="name">B – Wortmarke<small>PHONE / TASTIC</small></td>
+      <td><img class="s150" src="phonetastic-profilbild-b-wortmarke.png" alt="" /></td>
+      <td><img class="s110" src="phonetastic-profilbild-b-wortmarke.png" alt="" /></td>
+      <td><img class="s56" src="phonetastic-profilbild-b-wortmarke.png" alt="" /></td>
+      <td><img class="s32" src="phonetastic-profilbild-b-wortmarke.png" alt="" /></td>
+      <td><span class="storyring"><img class="s110" src="phonetastic-profilbild-b-wortmarke.png" alt="" /></span></td>
+      <td class="dark"><img class="s110" src="phonetastic-profilbild-b-wortmarke.png" alt="" /></td>
+    </tr>
+    <tr>
+      <td class="name">C – Handy-Symbol<small>P im Gerät</small></td>
+      <td><img class="s150" src="phonetastic-profilbild-c-handy.png" alt="" /></td>
+      <td><img class="s110" src="phonetastic-profilbild-c-handy.png" alt="" /></td>
+      <td><img class="s56" src="phonetastic-profilbild-c-handy.png" alt="" /></td>
+      <td><img class="s32" src="phonetastic-profilbild-c-handy.png" alt="" /></td>
+      <td><span class="storyring"><img class="s110" src="phonetastic-profilbild-c-handy.png" alt="" /></span></td>
+      <td class="dark"><img class="s110" src="phonetastic-profilbild-c-handy.png" alt="" /></td>
+    </tr>
+    <tr>
+      <td class="name">D – Monogramm hell<small>P auf Weiß</small></td>
+      <td><img class="s150" src="phonetastic-profilbild-d-hell.png" alt="" /></td>
+      <td><img class="s110" src="phonetastic-profilbild-d-hell.png" alt="" /></td>
+      <td><img class="s56" src="phonetastic-profilbild-d-hell.png" alt="" /></td>
+      <td><img class="s32" src="phonetastic-profilbild-d-hell.png" alt="" /></td>
+      <td><span class="storyring"><img class="s110" src="phonetastic-profilbild-d-hell.png" alt="" /></span></td>
+      <td class="dark"><img class="s110" src="phonetastic-profilbild-d-hell.png" alt="" /></td>
+    </tr>
+  </tbody>
+</table>
+
+</body>
+</html>
